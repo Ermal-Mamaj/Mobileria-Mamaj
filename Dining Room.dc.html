@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mobilie për Dhomën e Ngrënies | MAMAJ</title>
+<meta name="description" content="Tavolina ngrënieje, karrige dhe bufe të punuara me dorë e me porosi në punishten MAMAJ.">
+<meta property="og:title" content="Mobilie për Dhomën e Ngrënies | MAMAJ">
+<meta property="og:description" content="Tavolina, karrige dhe bufe të punuara me porosi.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="MAMAJ">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<dc-import name="RoomPage" title="Dhoma e Ngrënies" tagline="Tavolina dhe karrige të krijuara për të bashkuar familjen rreth çdo vakti." hero-id="room-dining-hero" products="{{ products }}" hint-size="100%,100%"></dc-import>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      products: [
+        { name: 'Tavolinë Ngrënieje', desc: 'Me Porosi', tag: 'ME POROSI', imageId: 'dr-table' },
+        { name: 'Karrige Ngrënieje', desc: 'Set prej Katër Copash · Lis', tag: 'E RE', imageId: 'dr-chair' },
+        { name: 'Bufe', desc: 'Arrë · Tunxh', tag: 'E RE', imageId: 'dr-sideboard' },
+        { name: 'Stol', desc: 'Lis Masiv', tag: 'ME POROSI', imageId: 'dr-bench' },
+      ],
+    };
+  }
+}
+
+</script>
+</body>
+</html>

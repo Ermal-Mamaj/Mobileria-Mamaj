@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Poppins:wght@700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; }
+    image-slot { display: block; width: 100%; height: 100%; }
+  </style>
+</helmet>
+
+<div style="width: 100%; min-height: 100vh; background: #F6F2E9; display: flex; flex-direction: column; position: relative; font-family: 'Inter', sans-serif;">
+  <dc-import name="NavHeader" active="categories" hint-size="100%,66px"></dc-import>
+
+  <div style="flex: 1;">
+    <!-- Breadcrumb -->
+    <div style="padding: {{ crumbPadding }}; max-width: 1280px; margin: 0 auto; box-sizing: border-box;">
+      <a href="Categories.dc.html" style="font-size: 10.5px; color: #8A6E1B; font-weight: 700; letter-spacing: 1.5px; text-decoration: none; border-bottom: 1px solid #C9A227; padding-bottom: 2px; white-space: nowrap;">← AMBIENTET</a>
+    </div>
+
+    <!-- Hero -->
+    <div style="height: {{ heroHeight }}; position: relative; overflow: hidden; background: #16222F;">
+      <div style="position:absolute; inset:0;"><x-import component-from-global-scope="image-slot" from="./image-slot.js" style="width: 100%; height: 100%;" id="{{ heroId }}" placeholder="Photo" shape="rect" hint-size="100%,220px"></x-import></div>
+      <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(15,22,30,0.9) 0%, rgba(15,22,30,0.25) 60%, rgba(15,22,30,0.1) 100%); pointer-events: none;"></div>
+      <div style="position: absolute; inset: 0; max-width: 1280px; margin: 0 auto;">
+        <div style="position: absolute; left: {{ heroSideInset }}; right: {{ heroSideInset }}; bottom: {{ heroBottomInset }};">
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
+            <div style="width: 20px; height: 1.5px; background: #EBC84C;"></div>
+            <span style="font-size: 10px; font-weight: 600; letter-spacing: 2px; color: #EBC84C;">KOLEKSION</span>
+          </div>
+          <h1 style="font-family: 'Cormorant Garamond', serif; font-size: {{ heroTitleSize }}; font-weight: 600; color: #FFFFFF; line-height: 1.05; margin: 0 0 8px;">{{ title }}</h1>
+          <p style="font-size: 12.5px; color: rgba(255,255,255,0.75); margin: 0; max-width: 420px;">{{ tagline }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Products -->
+    <div style="padding: {{ gridPadding }}; max-width: 1280px; margin: 0 auto; box-sizing: border-box;">
+      <div style="display: grid; grid-template-columns: {{ gridColumns }}; gap: 18px;">
+        <sc-for list="{{ products }}" as="p" hint-placeholder-count="4">
+          <div onclick="{{ viewProduct }}" data-product="{{ p.name }}" data-desc="{{ p.desc }}" style="position: relative; border: 1px solid #16222F; background: #FFFDF8; padding: 6px; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s;" style-hover="transform:translate(-2px,-2px);box-shadow:5px 5px 0 rgba(22,34,47,0.12)">
+            <span style="position: absolute; top: 0; left: 50%; transform: translate(-50%,-50%); background: #FFFDF8; border: 1px solid #C9A227; color: #8A6E1B; padding: 3px 12px; font-size: 10px; font-weight: 700; letter-spacing: 2px; z-index: 3;">{{ p.tag }}</span>
+            <div style="border: 1px solid rgba(201,162,39,0.55); padding: {{ frameInnerPad }}; display: flex; flex-direction: column; height: 100%; box-sizing: border-box;">
+              <div style="height: {{ cardImgHeight }}; position: relative; overflow: hidden; flex: none;">
+                <x-import component-from-global-scope="image-slot" from="./image-slot.js" style="width: 100%; height: 100%;" id="{{ p.imageId }}" placeholder="Photo" shape="rect" hint-size="100%,150px"></x-import>
+              </div>
+              <div style="text-align: center; padding: 13px 4px 4px; display: flex; flex-direction: column; flex: 1;">
+                <h3 style="font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; color: #22303F; line-height: 1; margin: 0;">{{ p.name }}</h3>
+                <p style="font-size: 10px; font-weight: 600; letter-spacing: 2px; color: #7E7666; margin: 7px 0 12px; text-transform: uppercase;">{{ p.desc }}</p>
+                <button data-magnet="line" style="width: 100%; margin-top: auto; padding: 10px 0; background: transparent; border-top: 1px solid #16222F; border-bottom: 1px solid #16222F; border-left: none; border-right: none; font-family: 'Cormorant Garamond', serif; font-size: 13px; font-weight: 600; letter-spacing: 3px; color: #16222F; cursor: pointer;" style-hover="background:#16222F;color:#EBC84C">SHIKO</button>
+              </div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <div style="height: {{ bottomSpacer }};"></div>
+    <dc-import name="SiteFooter" hint-size="100%,220px"></dc-import>
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;title&quot;: {&quot;editor&quot;: null, &quot;tsType&quot;: &quot;string&quot;}, &quot;tagline&quot;: {&quot;editor&quot;: null, &quot;tsType&quot;: &quot;string&quot;}, &quot;heroId&quot;: {&quot;editor&quot;: null, &quot;tsType&quot;: &quot;string&quot;}, &quot;products&quot;: {&quot;editor&quot;: null, &quot;tsType&quot;: &quot;Array&lt;{name:string,desc:string,tag:string,imageId:string}&gt;&quot;}}">
+class Component extends DCLogic {
+  state = { isDesktop: typeof window !== 'undefined' ? window.innerWidth >= 880 : false };
+
+  // Product cards have no detail pages — VIEW takes the visitor to the Home
+  // contact form with the product prefilled.
+  viewProduct = (e) => {
+    const d = e.currentTarget.dataset;
+    const what = d.product + (d.desc ? ' (' + d.desc + ')' : '');
+    window.location.href = 'Home.dc.html?interest=' + encodeURIComponent(what);
+  };
+
+  componentDidMount() {
+    this.onResize = () => this.setState({ isDesktop: window.innerWidth >= 880 });
+    window.addEventListener('resize', this.onResize);
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    this.raf = null;
+    this.onMove = (e) => {
+      if (this.raf) return;
+      const x = e.clientX, y = e.clientY;
+      this.raf = requestAnimationFrame(() => {
+        this.raf = null;
+        document.querySelectorAll('[data-magnet]').forEach((el) => {
+          const r = el.getBoundingClientRect();
+          const nx = Math.max(r.left, Math.min(x, r.right));
+          const ny = Math.max(r.top, Math.min(y, r.bottom));
+          const t = Math.max(0, 1 - Math.hypot(x - nx, y - ny) / 170);
+          const kind = el.getAttribute('data-magnet');
+          const inside = x >= r.left && x <= r.right && y >= r.top && y <= r.bottom;
+          if (kind === 'gold') {
+            el.style.boxShadow =
+              'inset 0 0 0 3px #16222F, inset 0 0 0 4px rgba(201,162,39,' + (0.55 + 0.3 * t).toFixed(3) + ')' +
+              ', 0 0 ' + Math.round(14 * t) + 'px rgba(235,200,76,' + (0.22 * t).toFixed(3) + ')';
+            if (inside) {
+              const lx = x - r.left, ly = y - r.top;
+              el.style.background = 'radial-gradient(circle 90px at ' + lx.toFixed(0) + 'px ' + ly.toFixed(0) + 'px, #24374A 0%, #1A2836 50%, #16222F 100%)';
+              el.style.color = '#F5D96B';
+            } else {
+              el.style.background = '#16222F';
+              el.style.color = '#EBC84C';
+            }
+          } else if (kind === 'line' && !el.matches(':hover')) {
+            el.style.background = 'rgba(235,200,76,' + (0.16 * t).toFixed(3) + ')';
+            el.style.letterSpacing = (3 + t).toFixed(2) + 'px';
+          }
+        });
+      });
+    };
+    window.addEventListener('mousemove', this.onMove);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.onResize);
+    if (this.onMove) window.removeEventListener('mousemove', this.onMove);
+    if (this.raf) cancelAnimationFrame(this.raf);
+  }
+
+  renderVals() {
+    const d = this.state.isDesktop;
+    return {
+      title: this.props.title ?? 'Koleksion',
+      tagline: this.props.tagline ?? '',
+      heroId: this.props.heroId ?? 'room-hero',
+      products: this.props.products ?? [],
+      viewProduct: this.viewProduct,
+
+      crumbPadding: d ? '22px 48px 0' : '16px 20px 0',
+      heroHeight: d ? '340px' : '220px',
+      heroSideInset: d ? '48px' : '24px',
+      heroBottomInset: d ? '40px' : '26px',
+      heroTitleSize: d ? '52px' : '36px',
+
+      gridPadding: d ? '52px 48px 12px' : '32px 20px 8px',
+      gridColumns: d ? 'repeat(4, 1fr)' : 'repeat(2, 1fr)',
+      cardImgHeight: d ? '170px' : '120px',
+      frameInnerPad: d ? '9px' : '7px',
+      bottomSpacer: d ? '40px' : '24px',
+    };
+  }
+}
+
+</script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mobilie për Dhomën e Gjumit | MAMAJ</title>
+<meta name="description" content="Krevate, garderoba, komodina dhe komoda të punuara me dorë e me porosi në punishten MAMAJ.">
+<meta property="og:title" content="Mobilie për Dhomën e Gjumit | MAMAJ">
+<meta property="og:description" content="Krevate, garderoba dhe komodina të punuara me porosi.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="MAMAJ">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<dc-import name="RoomPage" title="Dhoma e Gjumit" tagline="Krevate, garderoba dhe komodina të ndërtuara për të zgjatur me breza." hero-id="room-bedroom-hero" products="{{ products }}" hint-size="100%,100%"></dc-import>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      products: [
+        { name: 'Krevat prej Lisi', desc: 'Lis Masiv · Punuar me Dorë', tag: 'E RE', imageId: 'br-bed-frame' },
+        { name: 'Komodinë', desc: 'Rimeso Arre', tag: 'E RE', imageId: 'br-nightstand' },
+        { name: 'Garderobë', desc: 'Me Porosi', tag: 'ME POROSI', imageId: 'br-wardrobe' },
+        { name: 'Komodë', desc: 'Lis · Doreza prej Tunxhi', tag: 'E RE', imageId: 'br-dresser' },
+      ],
+    };
+  }
+}
+
+</script>
+</body>
+</html>

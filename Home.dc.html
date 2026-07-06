@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MAMAJ | Mobilie të Punuara me Dorë</title>
+<meta name="description" content="Mobilie të punuara me dorë e me porosi në punishten MAMAJ — divane, krevate, kuzhina dhe tavolina të ndërtuara për breza.">
+<meta property="og:title" content="MAMAJ | Mobilie të Punuara me Dorë">
+<meta property="og:description" content="Mobilie të punuara me dorë e me porosi — divane, krevate, kuzhina dhe tavolina.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="MAMAJ">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MAMAJ | Mobilie të Punuara me Dorë</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Poppins:wght@700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; }
+    image-slot { display: block; width: 100%; height: 100%; }
+  </style>
+</helmet>
+
+<div style="width: 100%; min-height: 100vh; background: #F6F2E9; display: flex; flex-direction: column; position: relative; font-family: 'Inter', sans-serif;">
+  <dc-import name="NavHeader" active="home" hint-size="100%,66px"></dc-import>
+
+  <div style="flex: 1;">
+    <!-- Hero -->
+    <div style="height: {{ heroHeight }}; position: relative; overflow: hidden; background: #16222F;">
+      <div style="position:absolute; inset:0;"><x-import component-from-global-scope="image-slot" from="./image-slot.js" style="width: 100%; height: 100%;" id="hero-image" placeholder="Photo" shape="rect" hint-size="100%,380px"></x-import></div>
+      <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(15,22,30,0.92) 0%, rgba(15,22,30,0.35) 50%, rgba(15,22,30,0.15) 100%); pointer-events: none;"></div>
+      <div style="position: absolute; inset: 0; max-width: 1280px; margin: 0 auto; pointer-events: none;">
+        <div style="position: absolute; left: {{ heroSideInset }}; right: {{ heroSideInset }}; bottom: {{ heroBottomInset }}; max-width: {{ heroTextMaxWidth }}; z-index: 2; pointer-events: none;">
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: {{ heroKickerGap }};">
+            <div style="width: 26px; height: 1.5px; background: #EBC84C;"></div>
+            <span style="font-size: 10.5px; font-weight: 600; letter-spacing: 2.5px; color: #EBC84C;">MOBILIE TË PUNUARA ME DORË</span>
+          </div>
+          <h1 style="font-family: 'Cormorant Garamond', serif; font-size: {{ heroTitleSize }}; font-weight: 600; color: #FFFFFF; line-height: 1.08; letter-spacing: 0.3px; margin: 0 0 {{ heroTitleGap }};">Mjeshtëri në çdo detaj.<br>Elegancë në çdo ambient.</h1>
+          <button data-magnet="gold" onclick="{{ scrollToRooms }}" style="pointer-events: auto; padding: {{ heroButtonPadding }}; background: #16222F; color: #EBC84C; border: 1px solid #C9A227; box-shadow: inset 0 0 0 3px #16222F, inset 0 0 0 4px rgba(201,162,39,0.55); font-family: 'Cormorant Garamond', serif; font-size: {{ heroButtonFontSize }}; font-weight: 600; letter-spacing: 3px; cursor: pointer; transition: transform 0.18s ease-out, color 0.2s;">EKSPLORO KOLEKSIONET</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Shop by Room -->
+    <div id="rooms" style="padding: {{ sectionPadding }}; max-width: 1280px; margin: 0 auto; box-sizing: border-box;">
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+        <div style="width: 20px; height: 1.5px; background: #C9A227;"></div>
+        <span style="font-size: 10px; font-weight: 600; letter-spacing: 2px; color: #8A6E1B;">KOLEKSIONET</span>
+      </div>
+      <div style="display: flex; align-items: baseline; justify-content: space-between; margin-bottom: {{ headingGap }};">
+        <h2 style="font-family: 'Cormorant Garamond', serif; font-size: {{ h2Size }}; font-weight: 600; color: #22303F; margin: 0;">Zgjidh sipas Ambientit</h2>
+        <a href="Categories.dc.html" style="font-size: 10.5px; color: #8A6E1B; font-weight: 700; letter-spacing: 1.5px; text-decoration: none; border-bottom: 1px solid #C9A227; padding-bottom: 2px; white-space: nowrap;">SHIKO TË GJITHA →</a>
+      </div>
+
+      <div style="display: grid; grid-template-columns: {{ roomsGridColumns }}; gap: 16px; margin-bottom: 8px;">
+        <a href="Living Room.dc.html" style="display: block; text-decoration: none; border: 1px solid #16222F; background: #FFFDF8; padding: 6px; transition: transform 0.15s, box-shadow 0.15s;" style-hover="transform:translate(-2px,-2px);box-shadow:5px 5px 0 rgba(22,34,47,0.12)">
+          <div style="border: 1px solid rgba(201,162,39,0.55); padding: {{ frameInnerPad }}; display: flex; flex-direction: column; height: 100%; box-sizing: border-box;">
+            <div style="height: {{ roomCardImgHeight }}; position: relative; overflow: hidden; flex: none;"><x-import component-from-global-scope="image-slot" from="./image-slot.js" style="width: 100%; height: 100%;" id="cat-living-room" placeholder="Photo" shape="rect" hint-size="100%,108px"></x-import></div>
+            <div style="text-align: center; padding: 13px 4px 7px;">
+              <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 8px;">
+                <div style="width: 22px; height: 1px; background: #C9A227;"></div>
+                <div style="width: 4px; height: 4px; background: #C9A227; transform: rotate(45deg);"></div>
+                <div style="width: 22px; height: 1px; background: #C9A227;"></div>
+              </div>
+              <h3 style="font-family: 'Cormorant Garamond', serif; font-size: {{ roomTitleSize }}; font-weight: 600; color: #22303F; line-height: 1; margin: 0;">Dhoma e Ndenjes</h3>
+              <p style="font-size: 10px; font-weight: 600; letter-spacing: 2.2px; color: #8A6E1B; margin: 7px 0 0;">DIVANE &amp; KOLLTUKË · NR. 01</p>
+            </div>
+          </div>
+        </a>
+        <a href="Bedroom.dc.html" style="display: block; text-decoration: none; border: 1px solid #16222F; background: #FFFDF8; padding: 6px; transition: transform 0.15s, box-shadow 0.15s;" style-hover="transform:translate(-2px,-2px);box-shadow:5px 5px 0 rgba(22,34,47,0.12)">
+          <div style="border: 1px solid rgba(201,162,39,0.55); padding: {{ frameInnerPad }}; display: flex; flex-direction: column; height: 100%; box-sizing: border-box;">
+            <div style="height: {{ roomCardImgHeight }}; position: relative; overflow: hidden; flex: none;"><x-import component-from-global-scope="image-slot" from="./image-slot.js" style="width: 100%; height: 100%;" id="cat-bedroom" placeholder="Photo" shape="rect" hint-size="100%,108px"></x-import></div>
+            <div style="text-align: center; padding: 13px 4px 7px;">
+              <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 8px;">
+                <div style="width: 22px; height: 1px; background: #C9A227;"></div>
+                <div style="width: 4px; height: 4px; background: #C9A227; transform: rotate(45deg);"></div>
+                <div style="width: 22px; height: 1px; background: #C9A227;"></div>
+              </div>
+              <h3 style="font-family: 'Cormorant Garamond', serif; font-size: {{ roomTitleSize }}; font-weight: 600; color: #22303F; line-height: 1; margin: 0;">Dhoma e Gjumit</h3>
+              <p style="font-size: 10px; font-weight: 600; letter-spacing: 2.2px; color: #8A6E1B; margin: 7px 0 0;">KREVATE &amp; GARDEROBA · NR. 02</p>
+            </div>
+          </div>
+        </a>
+        <a href="Kitchen.dc.html" style="display: block; text-decoration: none; border: 1px solid #16222F; background: #FFFDF8; padding: 6px; transition: transform 0.15s, box-shadow 0.15s;" style-hover="transform:translate(-2px,-2px);box-shadow:5px 5px 0 rgba(22,34,47,0.12)">
+          <div style="border: 1px solid rgba(201,162,39,0.55); padding: {{ frameInnerPad }}; display: flex; flex-direction: column; height: 100%; box-sizing: border-box;">
+            <div style="height: {{ roomCardImgHeight }}; position: relative; overflow: hidden; flex: none;"><x-import component-from-global-scope="image-slot" from="./image-slot.js" style="width: 100%; height: 100%;" id="cat-kitchen" placeholder="Photo" shape="rect" hint-size="100%,108px"></x-import></div>
+            <div style="text-align: center; padding: 13px 4px 7px;">
+              <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 8px;">
+                <div style="width: 22px; height: 1px; background: #C9A227;"></div>
+                <div style="width: 4px; height: 4px; background: #C9A227; transform: rotate(45deg);"></div>
+                <div style="width: 22px; height: 1px; background: #C9A227;"></div>
+              </div>
+              <h3 style="font-family: 'Cormorant Garamond', serif; font-size: {{ roomTitleSize }}; font-weight: 600; color: #22303F; line-height: 1; margin: 0;">Kuzhina</h3>
+              <p style="font-size: 10px; font-weight: 600; letter-spacing: 2.2px; color: #8A6E1B; margin: 7px 0 0;">MOBILIE KUZHINE · NR. 03</p>
+            </div>
+          </div>
+        </a>
+        <a href="Dining Room.dc.html" style="display: block; text-decoration: none; border: 1px solid #16222F; background: #FFFDF8; padding: 6px; transition: transform 0.15s, box-shadow 0.15s;" style-hover="transform:translate(-2px,-2px);box-shadow:5px 5px 0 rgba(22,34,47,0.12)">
+          <div style="border: 1px solid rgba(201,162,39,0.55); padding: {{ frameInnerPad }}; display: flex; flex-direction: column; height: 100%; box-sizing: border-box;">
+            <div style="height: {{ roomCardImgHeight }}; position: relative; overflow: hidden; flex: none;"><x-import component-from-global-scope="image-slot" from="./image-slot.js" style="width: 100%; height: 100%;" id="cat-dining" placeholder="Photo" shape="rect" hint-size="100%,108px"></x-import></div>
+            <div style="text-align: center; padding: 13px 4px 7px;">
+              <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 8px;">
+                <div style="width: 22px; height: 1px; background: #C9A227;"></div>
+                <div style="width: 4px; height: 4px; background: #C9A227; transform: rotate(45deg);"></div>
+                <div style="width: 22px; height: 1px; background: #C9A227;"></div>
+              </div>
+              <h3 style="font-family: 'Cormorant Garamond', serif; font-size: {{ roomTitleSize }}; font-weight: 600; color: #22303F; line-height: 1; margin: 0;">Dhoma e Ngrënies</h3>
+              <p style="font-size: 10px; font-weight: 600; letter-spacing: 2.2px; color: #8A6E1B; margin: 7px 0 0;">TAVOLINA &amp; KARRIGE · NR. 04</p>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Brand Band -->
+    <div style="margin: 26px 0; padding: {{ quotePadding }}; background: #16222F; position: relative; overflow: hidden;">
+      <div style="max-width: 1280px; margin: 0 auto; position: relative;">
+        <div style="font-family: 'Cormorant Garamond', serif; font-size: 90px; line-height: 0.6; color: rgba(235,200,76,0.28); position: absolute; top: -12px; left: 0;">&ldquo;</div>
+        <div style="position: relative; z-index: 2; padding-top: 14px; max-width: {{ quoteTextMaxWidth }};">
+          <p style="font-family: 'Cormorant Garamond', serif; font-size: {{ quoteFontSize }}; font-weight: 500; color: #FFFFFF; line-height: 1.35; margin: 0;">Çdo mobilie punohet me dorë në punishten tonë dhe krijohet për të zgjatur me breza.</p>
+          <div style="display: flex; align-items: center; gap: 8px; margin-top: 18px;">
+            <div style="width: 22px; height: 1.5px; background: #EBC84C;"></div>
+            <span style="font-size: 10.5px; font-weight: 600; letter-spacing: 2px; color: #EBC84C;">PUNISHTJA MAMAJ</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- New Designs -->
+    <div id="new" style="padding: {{ sectionPaddingNoBottom }}; max-width: 1280px; margin: 0 auto; box-sizing: border-box;">
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+        <div style="width: 20px; height: 1.5px; background: #C9A227;"></div>
+        <span style="font-size: 10px; font-weight: 600; letter-spacing: 2px; color: #8A6E1B;">RISITË</span>
+      </div>
+      <div style="display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 18px;">
+        <h2 style="font-family: 'Cormorant Garamond', serif; font-size: {{ h2Size }}; font-weight: 600; color: #22303F; margin: 0;">Dizajnet më të Reja</h2>
+        <a href="Categories.dc.html" style="font-size: 10.5px; color: #8A6E1B; font-weight: 700; letter-spacing: 1.5px; text-decoration: none; border-bottom: 1px solid #C9A227; padding-bottom: 2px; white-space: nowrap;">SHIKO TË GJITHA →</a>
+      </div>
+    </div>
+    <div style="display: {{ newDesignsDisplay }}; grid-template-columns: {{ newDesignsGridColumns }}; gap: 16px; overflow-x: {{ newDesignsOverflow }}; padding: 14px {{ sectionSidePadding }} 10px; max-width: 1280px; margin: 0 auto; box-sizing: border-box; scroll-behavior: smooth;">
+      <div onclick="{{ viewProduct }}" data-product="Divan Modern" data-desc="Skelet prej Lisi · Lino" style="flex: {{ newDesignCardFlex }}; position: relative; border: 1px solid #16222F; background: #FFFDF8; padding: 6px; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s;" style-hover="transform:translate(-2px,-2px);box-shadow:5px 5px 0 rgba(22,34,47,0.12)">
+        <span style="position: absolute; top: 0; left: 50%; transform: translate(-50%,-50%); background: #FFFDF8; border: 1px solid #C9A227; color: #8A6E1B; padding: 3px 12px; font-size: 10px; font-weight: 700; letter-spacing: 2px; z-index: 3;">E RE</span>
+        <div style="border: 1px solid rgba(201,162,39,0.55); padding: {{ frameInnerPad }}; display: flex; flex-direction: column; height: 100%; box-sizing: border-box;">
+          <div style="height: 150px; position: relative; overflow: hidden; flex: none;"><x-import component-from-global-scope="image-slot" from="./image-slot.js" style="width: 100%; height: 100%;" id="prod-sofa" placeholder="Photo" shape="rect" hint-size="172px,150px"></x-import></div>
+          <div style="text-align: center; padding: 13px 4px 4px; display: flex; flex-direction: column; flex: 1;">
+            <h3 style="font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; color: #22303F; line-height: 1; margin: 0;">Divan Modern</h3>
+            <p style="font-size: 10px; font-weight: 600; letter-spacing: 2px; color: #7E7666; margin: 7px 0 12px;">SKELET PREJ LISI · LINO</p>
+            <button data-magnet="line" style="width: 100%; margin-top: auto; padding: 10px 0; background: transparent; border-top: 1px solid #16222F; border-bottom: 1px solid #16222F; border-left: none; border-right: none; font-family: 'Cormorant Garamond', serif; font-size: 13px; font-weight: 600; letter-spacing: 3px; color: #16222F; cursor: pointer;" style-hover="background:#16222F;color:#EBC84C">SHIKO</button>
+          </div>
+        </div>
+      </div>
+      <div onclick="{{ viewProduct }}" data-product="Krevat prej Lisi" data-desc="Lis Masiv · Punuar me Dorë" style="flex: {{ newDesignCardFlex }}; position: relative; border: 1px solid #16222F; background: #FFFDF8; padding: 6px; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s;" style-hover="transform:translate(-2px,-2px);box-shadow:5px 5px 0 rgba(22,34,47,0.12)">
+        <span style="position: absolute; top: 0; left: 50%; transform: translate(-50%,-50%); background: #FFFDF8; border: 1px solid #C9A227; color: #8A6E1B; padding: 3px 12px; font-size: 10px; font-weight: 700; letter-spacing: 2px; z-index: 3;">E RE</span>
+        <div style="border: 1px solid rgba(201,162,39,0.55); padding: {{ frameInnerPad }}; display: flex; flex-direction: column; height: 100%; box-sizing: border-box;">
+          <div style="height: 150px; position: relative; overflow: hidden; flex: none;"><x-import component-from-global-scope="image-slot" from="./image-slot.js" style="width: 100%; height: 100%;" id="prod-bed" placeholder="Photo" shape="rect" hint-size="172px,150px"></x-import></div>
+          <div style="text-align: center; padding: 13px 4px 4px; display: flex; flex-direction: column; flex: 1;">
+            <h3 style="font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; color: #22303F; line-height: 1; margin: 0;">Krevat prej Lisi</h3>
+            <p style="font-size: 10px; font-weight: 600; letter-spacing: 2px; color: #7E7666; margin: 7px 0 12px;">LIS MASIV · PUNUAR ME DORË</p>
+            <button data-magnet="line" style="width: 100%; margin-top: auto; padding: 10px 0; background: transparent; border-top: 1px solid #16222F; border-bottom: 1px solid #16222F; border-left: none; border-right: none; font-family: 'Cormorant Garamond', serif; font-size: 13px; font-weight: 600; letter-spacing: 3px; color: #16222F; cursor: pointer;" style-hover="background:#16222F;color:#EBC84C">SHIKO</button>
+          </div>
+        </div>
+      </div>
+      <div onclick="{{ viewProduct }}" data-product="Tavolinë Ngrënieje" data-desc="Me Porosi" style="flex: {{ newDesignCardFlex }}; position: relative; border: 1px solid #16222F; background: #FFFDF8; padding: 6px; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s;" style-hover="transform:translate(-2px,-2px);box-shadow:5px 5px 0 rgba(22,34,47,0.12)">
+        <span style="position: absolute; top: 0; left: 50%; transform: translate(-50%,-50%); background: #FFFDF8; border: 1px solid #C9A227; color: #8A6E1B; padding: 3px 12px; font-size: 10px; font-weight: 700; letter-spacing: 2px; z-index: 3;">ME POROSI</span>
+        <div style="border: 1px solid rgba(201,162,39,0.55); padding: {{ frameInnerPad }}; display: flex; flex-direction: column; height: 100%; box-sizing: border-box;">
+          <div style="height: 150px; position: relative; overflow: hidden; flex: none;"><x-import component-from-global-scope="image-slot" from="./image-slot.js" style="width: 100%; height: 100%;" id="prod-dining-table" placeholder="Photo" shape="rect" hint-size="172px,150px"></x-import></div>
+          <div style="text-align: center; padding: 13px 4px 4px; display: flex; flex-direction: column; flex: 1;">
+            <h3 style="font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; color: #22303F; line-height: 1; margin: 0;">Tavolinë Ngrënieje</h3>
+            <p style="font-size: 10px; font-weight: 600; letter-spacing: 2px; color: #7E7666; margin: 7px 0 12px;">ME POROSI</p>
+            <button data-magnet="line" style="width: 100%; margin-top: auto; padding: 10px 0; background: transparent; border-top: 1px solid #16222F; border-bottom: 1px solid #16222F; border-left: none; border-right: none; font-family: 'Cormorant Garamond', serif; font-size: 13px; font-weight: 600; letter-spacing: 3px; color: #16222F; cursor: pointer;" style-hover="background:#16222F;color:#EBC84C">SHIKO</button>
+          </div>
+        </div>
+      </div>
+      <div onclick="{{ viewProduct }}" data-product="Tavolinë Kafeje" data-desc="Mermer · Tunxh" style="flex: {{ newDesignCardFlex }}; position: relative; border: 1px solid #16222F; background: #FFFDF8; padding: 6px; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s;" style-hover="transform:translate(-2px,-2px);box-shadow:5px 5px 0 rgba(22,34,47,0.12)">
+        <span style="position: absolute; top: 0; left: 50%; transform: translate(-50%,-50%); background: #FFFDF8; border: 1px solid #C9A227; color: #8A6E1B; padding: 3px 12px; font-size: 10px; font-weight: 700; letter-spacing: 2px; z-index: 3;">E RE</span>
+        <div style="border: 1px solid rgba(201,162,39,0.55); padding: {{ frameInnerPad }}; display: flex; flex-direction: column; height: 100%; box-sizing: border-box;">
+          <div style="height: 150px; position: relative; overflow: hidden; flex: none;"><x-import component-from-global-scope="image-slot" from="./image-slot.js" style="width: 100%; height: 100%;" id="prod-coffee-table" placeholder="Photo" shape="rect" hint-size="172px,150px"></x-import></div>
+          <div style="text-align: center; padding: 13px 4px 4px; display: flex; flex-direction: column; flex: 1;">
+            <h3 style="font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; color: #22303F; line-height: 1; margin: 0;">Tavolinë Kafeje</h3>
+            <p style="font-size: 10px; font-weight: 600; letter-spacing: 2px; color: #7E7666; margin: 7px 0 12px;">MERMER · TUNXH</p>
+            <button data-magnet="line" style="width: 100%; margin-top: auto; padding: 10px 0; background: transparent; border-top: 1px solid #16222F; border-bottom: 1px solid #16222F; border-left: none; border-right: none; font-family: 'Cormorant Garamond', serif; font-size: 13px; font-weight: 600; letter-spacing: 3px; color: #16222F; cursor: pointer;" style-hover="background:#16222F;color:#EBC84C">SHIKO</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contact -->
+    <div id="contactForm" style="padding: {{ contactPadding }}; max-width: 1280px; margin: 0 auto; box-sizing: border-box;">
+      <div style="display: grid; grid-template-columns: {{ contactGridColumns }}; gap: {{ contactGap }}; align-items: start;">
+        <div>
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+            <div style="width: 20px; height: 1.5px; background: #C9A227;"></div>
+            <span style="font-size: 10px; font-weight: 600; letter-spacing: 2px; color: #8A6E1B;">NA KONTAKTONI</span>
+          </div>
+          <h2 style="font-family: 'Cormorant Garamond', serif; font-size: {{ h2Size }}; font-weight: 600; color: #22303F; margin: 0 0 4px;">Le të krijojmë diçka të veçantë.</h2>
+          <p style="font-size: 12.5px; color: #7E7666; margin: 0; line-height: 1.5; max-width: 360px;">Na shkruani dhe së bashku do të krijojmë mobilien ideale për shtëpinë tuaj.</p>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <input type="text" placeholder="Emri juaj" value="{{ contactName }}" oninput="{{ onNameInput }}" style="padding: 13px 15px; border: 1px solid #16222F; box-shadow: inset 0 0 0 3px #FFFDF8, inset 0 0 0 4px rgba(201,162,39,0.4); background: #FFFDF8; font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 15px; color: #22303F; outline: none;" style-focus="box-shadow:inset 0 0 0 3px #FFFDF8, inset 0 0 0 4px #C9A227">
+          <input type="tel" placeholder="Numri i telefonit" value="{{ contactPhone }}" oninput="{{ onPhoneInput }}" style="padding: 13px 15px; border: 1px solid #16222F; box-shadow: inset 0 0 0 3px #FFFDF8, inset 0 0 0 4px rgba(201,162,39,0.4); background: #FFFDF8; font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 15px; color: #22303F; outline: none;" style-focus="box-shadow:inset 0 0 0 3px #FFFDF8, inset 0 0 0 4px #C9A227">
+          <textarea placeholder="Mesazhi juaj" value="{{ contactMessage }}" oninput="{{ onMessageInput }}" style="padding: 13px 15px; border: 1px solid #16222F; box-shadow: inset 0 0 0 3px #FFFDF8, inset 0 0 0 4px rgba(201,162,39,0.4); background: #FFFDF8; font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 15px; color: #22303F; resize: none; height: 92px; outline: none;" style-focus="box-shadow:inset 0 0 0 3px #FFFDF8, inset 0 0 0 4px #C9A227"></textarea>
+          <button data-magnet="gold" onclick="{{ sendContact }}" style="padding: 15px 16px; background: #16222F; color: #EBC84C; border: 1px solid #C9A227; box-shadow: inset 0 0 0 3px #16222F, inset 0 0 0 4px rgba(201,162,39,0.55); font-family: 'Cormorant Garamond', serif; font-size: 14px; font-weight: 600; letter-spacing: 3px; cursor: pointer; margin-top: 4px; transition: transform 0.18s ease-out, color 0.2s;">{{ sendLabel }}</button>
+          <sc-if value="{{ contactStatus }}">
+            <p style="font-size: 13px; font-weight: 600; color: {{ contactStatusColor }}; margin: 2px 0 0; font-family: 'Inter', sans-serif;">{{ contactStatus }}</p>
+          </sc-if>
+        </div>
+      </div>
+    </div>
+
+    <dc-import name="SiteFooter" hint-size="100%,220px"></dc-import>
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = {
+    isDesktop: typeof window !== 'undefined' ? window.innerWidth >= 880 : false,
+    contactName: '',
+    contactPhone: '',
+    contactMessage: '',
+    sending: false,
+    contactStatus: '',
+    contactOk: false,
+  };
+
+  onNameInput = (e) => this.setState({ contactName: e.target.value });
+  onPhoneInput = (e) => this.setState({ contactPhone: e.target.value });
+  onMessageInput = (e) => this.setState({ contactMessage: e.target.value });
+
+  scrollBehavior = () =>
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
+
+  scrollToRooms = () => {
+    const el = document.getElementById('rooms');
+    if (el) el.scrollIntoView({ behavior: this.scrollBehavior() });
+  };
+
+  // Card click on a "New Designs" product: prefill the contact form with the
+  // product and bring the visitor straight to it.
+  viewProduct = (e) => {
+    const d = e.currentTarget.dataset;
+    const what = d.product + (d.desc ? ' (' + d.desc + ')' : '');
+    this.setState({ contactMessage: "Jam i interesuar për: " + what, contactStatus: '' });
+    const el = document.getElementById('contactForm');
+    if (el) el.scrollIntoView({ behavior: this.scrollBehavior() });
+  };
+
+  sendContact = async () => {
+    if (this.state.sending) return;
+    const name = this.state.contactName.trim();
+    const phone = this.state.contactPhone.trim();
+    const message = this.state.contactMessage.trim();
+    if (!name) {
+      this.setState({ contactStatus: 'Ju lutemi shkruani emrin tuaj.', contactOk: false });
+      return;
+    }
+    if (!phone && !message) {
+      this.setState({ contactStatus: 'Ju lutemi shkruani një numër telefoni ose një mesazh.', contactOk: false });
+      return;
+    }
+    this.setState({ sending: true, contactStatus: '' });
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ name, phone, message }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || 'Diçka shkoi keq. Ju lutemi provoni përsëri.');
+      this.setState({
+        sending: false,
+        contactName: '',
+        contactPhone: '',
+        contactMessage: '',
+        contactStatus: "Mesazhi u dërgua me sukses. Do t'ju kontaktojmë së shpejti.",
+        contactOk: true,
+      });
+    } catch (err) {
+      this.setState({
+        sending: false,
+        contactStatus: (err && err.message) || 'Mesazhi nuk u dërgua. Ju lutemi provoni përsëri.',
+        contactOk: false,
+      });
+    }
+  };
+
+  componentDidMount() {
+    this.onResize = () => this.setState({ isDesktop: window.innerWidth >= 880 });
+    window.addEventListener('resize', this.onResize);
+
+    // Arriving from a room page's VIEW button: prefill and show the form.
+    const interest = new URLSearchParams(window.location.search).get('interest');
+    if (interest) {
+      this.setState({ contactMessage: "Jam i interesuar për: " + interest });
+      setTimeout(() => {
+        const el = document.getElementById('contactForm');
+        if (el) el.scrollIntoView({ behavior: this.scrollBehavior() });
+      }, 150);
+    }
+
+    // Skip the decorative cursor effect for users who prefer reduced motion.
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    // Proximity glow: gold hairlines brighten as the cursor approaches any [data-magnet] button.
+    this.raf = null;
+    this.onMove = (e) => {
+      if (this.raf) return;
+      const x = e.clientX, y = e.clientY;
+      this.raf = requestAnimationFrame(() => {
+        this.raf = null;
+        document.querySelectorAll('[data-magnet]').forEach((el) => {
+          const r = el.getBoundingClientRect();
+          const nx = Math.max(r.left, Math.min(x, r.right));
+          const ny = Math.max(r.top, Math.min(y, r.bottom));
+          const t = Math.max(0, 1 - Math.hypot(x - nx, y - ny) / 170);
+          const kind = el.getAttribute('data-magnet');
+          const inside = x >= r.left && x <= r.right && y >= r.top && y <= r.bottom;
+          if (kind === 'gold') {
+            el.style.boxShadow =
+              'inset 0 0 0 3px #16222F, inset 0 0 0 4px rgba(201,162,39,' + (0.55 + 0.3 * t).toFixed(3) + ')' +
+              ', 0 0 ' + Math.round(14 * t) + 'px rgba(235,200,76,' + (0.22 * t).toFixed(3) + ')';
+            if (inside) {
+              // Spotlight follows the cursor inside the button.
+              const lx = x - r.left, ly = y - r.top;
+              el.style.background = 'radial-gradient(circle 90px at ' + lx.toFixed(0) + 'px ' + ly.toFixed(0) + 'px, #24374A 0%, #1A2836 50%, #16222F 100%)';
+              el.style.color = '#F5D96B';
+            } else {
+              el.style.background = '#16222F';
+              el.style.color = '#EBC84C';
+            }
+          } else if (kind === 'line' && !el.matches(':hover')) {
+            el.style.background = 'rgba(235,200,76,' + (0.16 * t).toFixed(3) + ')';
+            el.style.letterSpacing = (3 + t).toFixed(2) + 'px';
+          }
+        });
+      });
+    };
+    window.addEventListener('mousemove', this.onMove);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.onResize);
+    if (this.onMove) window.removeEventListener('mousemove', this.onMove);
+    if (this.raf) cancelAnimationFrame(this.raf);
+  }
+
+  renderVals() {
+    const d = this.state.isDesktop;
+    return {
+      heroHeight: d ? '560px' : '380px',
+      heroSideInset: d ? '48px' : '24px',
+      heroBottomInset: d ? '64px' : '34px',
+      heroTextMaxWidth: d ? '560px' : 'none',
+      heroKickerGap: d ? '20px' : '14px',
+      heroTitleSize: d ? '64px' : '42px',
+      heroTitleGap: d ? '28px' : '20px',
+      heroButtonPadding: d ? '15px 32px' : '12px 24px',
+      heroButtonFontSize: d ? '15px' : '13px',
+
+      sectionPadding: d ? '64px 48px 12px' : '34px 20px 8px',
+      sectionPaddingNoBottom: d ? '12px 48px 0' : '8px 20px 0',
+      sectionSidePadding: d ? '48px' : '20px',
+      headingGap: d ? '28px' : '20px',
+      h2Size: d ? '40px' : '30px',
+      roomsGridColumns: d ? 'repeat(4, 1fr)' : 'repeat(2, 1fr)',
+      roomCardImgHeight: d ? '170px' : '104px',
+      roomTitleSize: d ? '22px' : '17px',
+      frameInnerPad: d ? '9px' : '7px',
+
+      quotePadding: d ? '64px 48px' : '40px 28px',
+      quoteTextMaxWidth: d ? '640px' : 'none',
+      quoteFontSize: d ? '34px' : '25px',
+
+      newDesignsDisplay: d ? 'grid' : 'flex',
+      newDesignsGridColumns: d ? 'repeat(4, 1fr)' : 'none',
+      newDesignsOverflow: d ? 'visible' : 'auto',
+      newDesignCardFlex: d ? '1' : '0 0 190px',
+
+      contactPadding: d ? '64px 48px 70px' : '34px 20px 30px',
+      contactGridColumns: d ? '1fr 420px' : '1fr',
+      contactGap: d ? '64px' : '20px',
+
+      contactName: this.state.contactName,
+      contactPhone: this.state.contactPhone,
+      contactMessage: this.state.contactMessage,
+      onNameInput: this.onNameInput,
+      onPhoneInput: this.onPhoneInput,
+      onMessageInput: this.onMessageInput,
+      sendContact: this.sendContact,
+      scrollToRooms: this.scrollToRooms,
+      viewProduct: this.viewProduct,
+      sendLabel: this.state.sending ? 'PO DËRGOHET...' : 'DËRGO',
+      contactStatus: this.state.contactStatus,
+      contactStatusColor: this.state.contactOk ? '#3F6B3F' : '#B3261E',
+    };
+  }
+}
+
+</script>
+</body>
+</html>

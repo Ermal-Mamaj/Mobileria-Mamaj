@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MAMAJ — Inbox</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #F6F2E9; font-family: 'Inter', sans-serif; color: #22303F; }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 40px 20px 80px; }
+  .kicker { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+  .kicker .line { width: 20px; height: 1.5px; background: #C9A227; }
+  .kicker span { font-size: 10px; font-weight: 600; letter-spacing: 2px; color: #8A6E1B; }
+  h1 { font-family: 'Cormorant Garamond', serif; font-size: 36px; font-weight: 600; margin: 0 0 24px; }
+  .login { display: flex; gap: 10px; max-width: 420px; }
+  .login input { flex: 1; padding: 12px 14px; border: 1px solid #16222F; background: #FFFDF8; font: inherit; outline: none; }
+  .login button, .msg button {
+    padding: 12px 18px; background: #16222F; color: #EBC84C; border: 1px solid #C9A227;
+    font-family: 'Cormorant Garamond', serif; font-size: 14px; font-weight: 600;
+    letter-spacing: 2px; cursor: pointer;
+  }
+  .error { color: #B3261E; font-size: 13px; margin-top: 12px; }
+  .count { font-size: 13px; color: #7E7666; margin: 0 0 18px; }
+  .msg { border: 1px solid #16222F; background: #FFFDF8; padding: 16px 18px; margin-bottom: 14px; position: relative; }
+  .msg.unread { border-left: 4px solid #C9A227; }
+  .msg .top { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .msg .name { font-weight: 700; font-size: 15px; }
+  .msg .date { font-size: 11.5px; color: #948B78; white-space: nowrap; }
+  .msg .phone { font-size: 13px; margin-top: 4px; }
+  .msg .phone a { color: #8A6E1B; font-weight: 600; text-decoration: none; border-bottom: 1px solid #C9A227; }
+  .msg .body { font-size: 14px; line-height: 1.55; margin-top: 10px; white-space: pre-wrap; }
+  .msg .actions { display: flex; gap: 8px; margin-top: 14px; }
+  .msg button { padding: 7px 14px; font-size: 12px; }
+  .msg button.ghost { background: transparent; color: #16222F; border: 1px solid #16222F; }
+  .empty { border: 1px dashed #C9A227; padding: 40px; text-align: center; color: #7E7666; font-size: 14px; }
+  .note { border: 1px solid #16222F; border-left: 4px solid #C9A227; background: #FFFDF8; padding: 14px 18px; margin: 0 0 28px; font-size: 13px; line-height: 1.6; display: none; }
+  .note strong { letter-spacing: 1px; }
+  .note a { color: #8A6E1B; font-weight: 600; text-decoration: none; border-bottom: 1px solid #C9A227; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="kicker"><div class="line"></div><span>MAMAJ WORKSHOP</span></div>
+  <h1>Inbox</h1>
+  <div class="note" id="photoNote">
+    <strong>CHANGING PHOTOS:</strong> while you're logged in here, every page of the site is in edit
+    mode for you. Open <a href="/">Home</a>, <a href="/Living%20Room.dc.html">Living Room</a>,
+    <a href="/Bedroom.dc.html">Bedroom</a>, <a href="/Kitchen.dc.html">Kitchen</a> or
+    <a href="/Dining%20Room.dc.html">Dining</a> and drag an image file onto any photo slot
+    (or click an empty one to browse). Hover a photo for <em>Replace / Remove</em>;
+    double-click it to reposition and zoom the crop. Changes save automatically and are
+    visible to everyone.
+  </div>
+  <div id="app"></div>
+</div>
+<script>
+(() => {
+  const app = document.getElementById('app');
+  // Accept the key from ?key=… once, then keep it in localStorage.
+  const urlKey = new URLSearchParams(location.search).get('key');
+  if (urlKey) {
+    localStorage.setItem('mamaj-admin-key', urlKey);
+    history.replaceState(null, '', '/admin');
+  }
+  const getKey = () => localStorage.getItem('mamaj-admin-key') || '';
+
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, (c) =>
+      ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  }
+
+  function showLogin(err) {
+    document.getElementById('photoNote').style.display = 'none';
+    app.innerHTML =
+      '<div class="login"><input id="key" type="password" placeholder="Admin key" autocomplete="off">' +
+      '<button id="go">OPEN</button></div>' +
+      (err ? '<div class="error">' + esc(err) + '</div>' : '');
+    const input = document.getElementById('key');
+    const go = () => { localStorage.setItem('mamaj-admin-key', input.value.trim()); load(); };
+    document.getElementById('go').onclick = go;
+    input.onkeydown = (e) => { if (e.key === 'Enter') go(); };
+    input.focus();
+  }
+
+  async function api(path, opts) {
+    const res = await fetch(path, {
+      ...opts,
+      headers: { 'x-admin-key': getKey(), 'content-type': 'application/json', ...(opts && opts.headers) },
+    });
+    if (res.status === 401) throw new Error('unauthorized');
+    return res.json();
+  }
+
+  function fmtDate(iso) {
+    try {
+      return new Date(iso).toLocaleString(undefined, {
+        day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit',
+      });
+    } catch { return iso; }
+  }
+
+  function render(messages) {
+    document.getElementById('photoNote').style.display = 'block';
+    if (!messages.length) {
+      app.innerHTML = '<div class="empty">No messages yet.</div>';
+      return;
+    }
+    const unread = messages.filter((m) => !m.read).length;
+    app.innerHTML =
+      '<p class="count">' + messages.length + ' message' + (messages.length === 1 ? '' : 's') +
+      (unread ? ' · <strong>' + unread + ' unread</strong>' : '') + '</p>' +
+      messages.map((m) =>
+        '<div class="msg' + (m.read ? '' : ' unread') + '" data-id="' + m.id + '">' +
+        '<div class="top"><span class="name">' + esc(m.name) + '</span>' +
+        '<span class="date">' + esc(fmtDate(m.created_at)) + '</span></div>' +
+        (m.phone ? '<div class="phone"><a href="tel:' + esc(m.phone) + '">' + esc(m.phone) + '</a></div>' : '') +
+        (m.message ? '<div class="body">' + esc(m.message) + '</div>' : '') +
+        '<div class="actions">' +
+        (m.read ? '' : '<button class="ghost" data-act="read">MARK READ</button>') +
+        '<button class="ghost" data-act="del">DELETE</button></div></div>'
+      ).join('');
+
+    app.querySelectorAll('button[data-act]').forEach((btn) => {
+      btn.onclick = async () => {
+        const id = btn.closest('.msg').dataset.id;
+        if (btn.dataset.act === 'del') {
+          if (!confirm('Delete this message?')) return;
+          await api('/api/admin/messages/' + id, { method: 'DELETE' });
+        } else {
+          await api('/api/admin/messages/' + id + '/read', { method: 'POST' });
+        }
+        load();
+      };
+    });
+  }
+
+  async function load() {
+    if (!getKey()) return showLogin();
+    try {
+      const data = await api('/api/admin/messages');
+      render(data.messages);
+    } catch {
+      showLogin('That key was not accepted.');
+    }
+  }
+
+  load();
+})();
+</script>
+</body>
+</html>

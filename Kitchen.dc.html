@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mobilie Kuzhine | MAMAJ</title>
+<meta name="description" content="Mobilie kuzhine me porosi — dollapë dhe tavolina të punuara me dorë në punishten MAMAJ.">
+<meta property="og:title" content="Mobilie Kuzhine | MAMAJ">
+<meta property="og:description" content="Kuzhina dhe dollapë të punuara me porosi.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="MAMAJ">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<dc-import name="RoomPage" title="Kuzhina" tagline="Mobilie kuzhine të projektuara për funksionalitet, komoditet dhe përdorim të përditshëm." hero-id="room-kitchen-hero" products="{{ products }}" hint-size="100%,100%"></dc-import>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      products: [
+        { name: 'Ishull Kuzhine', desc: 'Lis · Sipërfaqe Mermeri', tag: 'ME POROSI', imageId: 'kt-island' },
+        { name: 'Stol Bari', desc: 'Set prej Dy Copash · Lis', tag: 'E RE', imageId: 'kt-stool' },
+        { name: 'Dollap Kuzhine', desc: 'Lis Masiv', tag: 'E RE', imageId: 'kt-pantry' },
+        { name: 'Tavolinë Mëngjesi', desc: 'Me Porosi', tag: 'ME POROSI', imageId: 'kt-table' },
+      ],
+    };
+  }
+}
+
+</script>
+</body>
+</html>

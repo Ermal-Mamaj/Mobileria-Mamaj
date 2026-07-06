@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mobilie për Dhomën e Ndenjes | MAMAJ</title>
+<meta name="description" content="Divane, kolltukë dhe tavolina kafeje të punuara me dorë e me porosi në punishten MAMAJ.">
+<meta property="og:title" content="Mobilie për Dhomën e Ndenjes | MAMAJ">
+<meta property="og:description" content="Divane, kolltukë dhe tavolina kafeje të punuara me porosi.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="MAMAJ">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<dc-import name="RoomPage" title="Dhoma e Ndenjes" tagline="Divane, kolltukë dhe tavolina kafeje të krijuara për momente të bukura së bashku." hero-id="room-living-hero" products="{{ products }}" hint-size="100%,100%"></dc-import>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      products: [
+        { name: 'Divan Modern', desc: 'Skelet prej Lisi · Lino', tag: 'E RE', imageId: 'lr-modern-sofa' },
+        { name: 'Kolltuk', desc: 'Arrë · Bouclé', tag: 'E RE', imageId: 'lr-armchair' },
+        { name: 'Tavolinë Kafeje', desc: 'Mermer · Tunxh', tag: 'E RE', imageId: 'lr-coffee-table' },
+        { name: 'Komodë TV', desc: 'Lis Masiv', tag: 'ME POROSI', imageId: 'lr-console' },
+      ],
+    };
+  }
+}
+
+</script>
+</body>
+</html>
