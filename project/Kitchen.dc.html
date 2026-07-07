@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<dc-import name="CategoryPage" category-slug="kitchen" category-title="Kitchen" category-tagline="Dining & storage built for daily use" products="{{ products }}" hint-size="100%,100%"></dc-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      products: [
+        { name: 'Kitchen Island', material: 'Solid oak, granite top' },
+        { name: 'Bar Stool', material: 'Walnut seat, iron legs' },
+        { name: 'Pantry Cabinet', material: 'Ash wood, glass panels' },
+        { name: 'Utility Table', material: 'Pine top, steel frame' },
+        { name: 'Wine Rack', material: 'Solid oak, open shelving' },
+        { name: 'Dining Cart', material: 'Bamboo, brass casters' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>
