@@ -1,0 +1,11 @@
+.gallery-grid {
+  column-count: 2;
+  column-gap: 10px;
+}
+
+.gallery-item {
+  break-inside: avoid;
+  margin-bottom: 10px;
+  border-radius: 12px;
+  overflow: hidden;
+}

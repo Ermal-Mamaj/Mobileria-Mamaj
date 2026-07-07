@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<dc-import name="CategoryPage" category-slug="home-office" category-title="Home Office" category-tagline="Desks & shelving for focused work" products="{{ products }}" hint-size="100%,100%"></dc-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      products: [
+        { name: 'Writing Desk', material: 'Solid oak, cable-managed' },
+        { name: 'Office Chair', material: 'Walnut base, wool upholstery' },
+        { name: 'Bookcase', material: 'Ash wood, open shelving' },
+        { name: 'Filing Cabinet', material: 'Steel frame, oak front' },
+        { name: 'Desk Lamp Table', material: 'Pine top, iron legs' },
+        { name: 'Conference Table', material: 'Solid walnut, made to order' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

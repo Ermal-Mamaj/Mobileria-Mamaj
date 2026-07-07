@@ -1,15 +1,16 @@
-# Dependencies
 node_modules/
+dist/
+.env
+server/data.sqlite
+server/data.sqlite-*
+server/uploads/*
+!server/uploads/.gitkeep
 
-# Server runtime data — NEVER commit: contains the admin key and the
-# customer-message inbox database.
+# Leftovers from the previous (.dc.html) implementation — local runtime data
+# and working artifacts; never commit (admin key, message inbox).
 server/data/
-
-# Site image store (runtime content, written by the admin from the browser)
 .image-slots.state.json
-
-# Local working artifacts
-scratch/
-screenshots/
-uploads/
-.thumbnail
+/scratch/
+/screenshots/
+/uploads/
+/.thumbnail

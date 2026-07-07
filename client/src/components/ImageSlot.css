@@ -1,0 +1,65 @@
+.image-slot {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.image-slot--filled {
+  object-fit: cover;
+}
+
+/* Empty state (no photo uploaded yet). Two flavours:
+   - light  → used inside cards where a caption sits below; centered + branded.
+   - dark   → used behind text-overlay heroes; icon pinned to the top, out of
+              the way of the bottom-anchored headline. */
+.image-slot--empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-align: center;
+  color: var(--muted);
+  background:
+    linear-gradient(135deg, #F4EFE3 0%, #EDE7D8 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+/* A whisper of a diagonal weave so an unfilled tile still feels designed. */
+.image-slot--empty::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(45deg, rgba(148, 139, 120, 0.05) 0 1px, transparent 1px 11px);
+  pointer-events: none;
+}
+
+.image-slot--empty svg {
+  opacity: 0.55;
+  position: relative;
+  z-index: 1;
+}
+
+.image-slot--dark {
+  justify-content: flex-start;
+  padding-top: 16px;
+  color: rgba(235, 200, 76, 0.5);
+  background:
+    radial-gradient(90% 70% at 50% 0%, #223140 0%, #16222F 70%);
+}
+
+.image-slot--dark::after {
+  background-image:
+    repeating-linear-gradient(45deg, rgba(235, 200, 76, 0.035) 0 1px, transparent 1px 12px);
+}
+
+.image-slot__caption {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  position: relative;
+  z-index: 1;
+}

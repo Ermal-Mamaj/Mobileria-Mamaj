@@ -1,0 +1,142 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@600;700&display=swap');
+
+:root {
+  --navy: #16222F;
+  --navy-2: #1C2A3A;
+  --gold: #EBC84C;
+  --gold-deep: #C9A227;
+  --bg: #F6F2E9;
+  --white: #FFFFFF;
+  --text: #22303F;
+  --muted: #948B78;
+  --muted-2: #6E6656;
+  --border: #EAE2D0;
+
+  /* Layered, soft shadows reused across cards for a consistent depth system. */
+  --shadow-sm: 0 2px 8px rgba(34, 48, 63, 0.05), 0 1px 2px rgba(34, 48, 63, 0.04);
+  --shadow-md: 0 8px 22px rgba(34, 48, 63, 0.10), 0 2px 6px rgba(34, 48, 63, 0.05);
+  --shadow-lg: 0 16px 36px rgba(34, 48, 63, 0.14), 0 4px 10px rgba(34, 48, 63, 0.06);
+
+  --radius: 16px;
+  --app-width: 460px;
+
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-wordmark: 'Poppins', sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  /* Clip stray horizontal overflow at the root. Kept on <html> (not <body>)
+     so <body> stays the normal document scroller and position:sticky works. */
+  overflow-x: hidden;
+}
+
+html, body {
+  /* Ambient backdrop only visible on tablet/desktop, where the mobile column
+     floats centered. On phones the column fills the width and covers this. */
+  background:
+    radial-gradient(120% 80% at 50% -10%, #22323f 0%, #182430 38%, #10191f 100%) fixed;
+  min-height: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background: rgba(235, 200, 76, 0.35);
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* Public, mobile-first pages render inside this centered column; the admin
+   dashboard intentionally opts out to use the full viewport. On phones it is
+   edge-to-edge; from tablet up it floats as a framed device. */
+.app-shell {
+  width: 100%;
+  max-width: var(--app-width);
+  margin: 0 auto;
+  min-height: 100vh;
+  background: var(--bg);
+  position: relative;
+  /* No `overflow` here on purpose — an overflow container would trap the
+     sticky nav header. Horizontal overflow is contained on <body> instead. */
+}
+
+/* From tablet up the mobile column floats as a framed device. The nav and
+   footer round their outer corners so the frame looks clipped without an
+   overflow container (which would break the sticky header). */
+@media (min-width: 520px) {
+  .app-shell {
+    min-height: auto;
+    margin: 32px auto;
+    border-radius: 26px;
+    box-shadow:
+      0 40px 80px rgba(0, 0, 0, 0.45),
+      0 12px 28px rgba(0, 0, 0, 0.30);
+    outline: 1px solid rgba(235, 200, 76, 0.10);
+  }
+  .app-shell .nav-header__bar {
+    border-top-left-radius: 26px;
+    border-top-right-radius: 26px;
+  }
+  .app-shell .footer {
+    border-bottom-left-radius: 26px;
+    border-bottom-right-radius: 26px;
+  }
+}
+
+a {
+  color: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button {
+  font-family: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+
+img {
+  max-width: 100%;
+}
+
+/* Keyboard focus stays visible & on-brand; mouse/touch taps don't get a ring. */
+:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+::-webkit-scrollbar {
+  height: 5px;
+  width: 5px;
+}
+::-webkit-scrollbar-thumb {
+  background: #C9B98A;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}

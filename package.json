@@ -1,12 +1,15 @@
 {
-  "name": "mobileria",
-  "version": "1.0.0",
+  "name": "mamaj-showroom",
   "private": true,
-  "description": "MAMAJ furniture site — static pages + contact inbox backend",
+  "workspaces": [
+    "server",
+    "client"
+  ],
   "scripts": {
-    "start": "node server/server.js"
+    "dev": "concurrently -n server,client -c yellow,cyan \"npm run dev -w server\" \"npm run dev -w client\"",
+    "seed": "npm run seed -w server"
   },
-  "dependencies": {
-    "express": "^4.21.2"
+  "devDependencies": {
+    "concurrently": "^9.1.0"
   }
 }
