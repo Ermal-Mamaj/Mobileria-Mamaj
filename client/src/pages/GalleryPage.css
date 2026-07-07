@@ -9,3 +9,13 @@
   border-radius: 12px;
   overflow: hidden;
 }
+
+@media (min-width: 900px) {
+  .gallery-grid {
+    column-count: 3;
+    column-gap: 16px;
+  }
+  .gallery-item {
+    margin-bottom: 16px;
+  }
+}

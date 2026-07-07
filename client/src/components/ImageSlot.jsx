@@ -1,6 +1,6 @@
 import './ImageSlot.css';
 
-export default function ImageSlot({ src, placeholder = 'Photo', className = '', dark = false }) {
+export default function ImageSlot({ src, placeholder = 'Foto', className = '', dark = false }) {
   if (src) {
     return <img src={src} alt={placeholder} className={`image-slot image-slot--filled ${className}`} />;
   }

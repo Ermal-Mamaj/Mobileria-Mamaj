@@ -27,48 +27,48 @@ export default function HomeSection() {
     }
   }
 
-  if (!form) return <p>Loading…</p>;
+  if (!form) return <p>Po ngarkohet...</p>;
 
   return (
     <form className="admin-panel" onSubmit={handleSave}>
-      <h2 className="admin-panel__heading">Home Page — Hero</h2>
+      <h2 className="admin-panel__heading">Ballina – Seksioni Kryesor</h2>
       <div className="admin-field">
-        <label className="admin-field__label">Eyebrow</label>
+        <label className="admin-field__label">Teksti sipër titullit</label>
         <input value={form.hero_eyebrow || ''} onChange={(e) => set('hero_eyebrow', e.target.value)} />
       </div>
       <div className="admin-field">
-        <label className="admin-field__label">Headline (use a line break for a second line)</label>
+        <label className="admin-field__label">Titulli Kryesor (përdorni një rresht të ri për një rresht të dytë)</label>
         <textarea rows={2} value={form.hero_headline || ''} onChange={(e) => set('hero_headline', e.target.value)} />
       </div>
       <div className="admin-field">
-        <label className="admin-field__label">CTA button text</label>
+        <label className="admin-field__label">Teksti i Butonit</label>
         <input value={form.hero_cta || ''} onChange={(e) => set('hero_cta', e.target.value)} />
       </div>
-      <ImageUploadField label="Hero image" value={form.hero_image_url} onChange={(url) => set('hero_image_url', url)} />
+      <ImageUploadField label="Imazhi Kryesor" value={form.hero_image_url} onChange={(url) => set('hero_image_url', url)} />
 
-      <h2 className="admin-panel__heading">Brand Quote Band</h2>
+      <h2 className="admin-panel__heading">Citati i Markës</h2>
       <div className="admin-field">
-        <label className="admin-field__label">Quote text</label>
+        <label className="admin-field__label">Teksti i Citatit</label>
         <textarea rows={2} value={form.quote_text || ''} onChange={(e) => set('quote_text', e.target.value)} />
       </div>
       <div className="admin-field">
-        <label className="admin-field__label">Quote label</label>
+        <label className="admin-field__label">Nënshkrimi</label>
         <input value={form.quote_label || ''} onChange={(e) => set('quote_label', e.target.value)} />
       </div>
 
-      <h2 className="admin-panel__heading">Contact Section</h2>
+      <h2 className="admin-panel__heading">Seksioni i Kontaktit</h2>
       <div className="admin-field">
-        <label className="admin-field__label">Heading</label>
+        <label className="admin-field__label">Titulli</label>
         <input value={form.contact_heading || ''} onChange={(e) => set('contact_heading', e.target.value)} />
       </div>
       <div className="admin-field">
-        <label className="admin-field__label">Intro text</label>
+        <label className="admin-field__label">Teksti Përshkrues</label>
         <textarea rows={2} value={form.contact_intro || ''} onChange={(e) => set('contact_intro', e.target.value)} />
       </div>
 
       <div className="admin-panel__actions">
-        <button type="submit" disabled={saving}>{saving ? 'Saving…' : 'Save Changes'}</button>
-        {savedAt && <span className="admin-panel__saved">Saved</span>}
+        <button type="submit" disabled={saving}>{saving ? 'Po ruhen ndryshimet...' : 'Ruaj Ndryshimet'}</button>
+        {savedAt && <span className="admin-panel__saved">U ruajt me sukses</span>}
       </div>
     </form>
   );

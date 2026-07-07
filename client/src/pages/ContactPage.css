@@ -65,3 +65,17 @@
   margin-bottom: 18px;
   line-height: 1.5;
 }
+
+@media (min-width: 900px) {
+  .contact-info-list {
+    flex-direction: row;
+    gap: 16px;
+  }
+  .contact-info-card {
+    flex: 1;
+  }
+  .contact-form-panel {
+    max-width: 640px;
+    padding: 30px 28px;
+  }
+}

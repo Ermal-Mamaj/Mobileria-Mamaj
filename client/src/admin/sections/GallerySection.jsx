@@ -26,26 +26,26 @@ export default function GallerySection() {
     setImages((imgs) => imgs.filter((img) => img.id !== id));
   }
 
-  if (!images) return <p>Loading…</p>;
+  if (!images) return <p>Po ngarkohet...</p>;
 
   return (
     <div className="admin-panel">
-      <h2 className="admin-panel__heading">Gallery</h2>
+      <h2 className="admin-panel__heading">Galeria</h2>
       {images.map((img) => (
         <div className="admin-subcard" key={img.id}>
           <ImageUploadField value={img.image_url} onChange={(url) => updateImage(img.id, { image_url: url })} />
           <div className="admin-field">
-            <label className="admin-field__label">Caption</label>
+            <label className="admin-field__label">Përshkrimi i Fotos</label>
             <input
               value={img.caption || ''}
               onChange={(e) => setImages((imgs) => imgs.map((i) => (i.id === img.id ? { ...i, caption: e.target.value } : i)))}
               onBlur={(e) => updateImage(img.id, { caption: e.target.value })}
             />
           </div>
-          <button type="button" className="admin-btn-secondary" onClick={() => removeImage(img.id)}>Remove</button>
+          <button type="button" className="admin-btn-secondary" onClick={() => removeImage(img.id)}>Hiq</button>
         </div>
       ))}
-      <button type="button" className="admin-btn-secondary" onClick={addImage}>+ Add Image</button>
+      <button type="button" className="admin-btn-secondary" onClick={addImage}>+ Shto Foto</button>
     </div>
   );
 }

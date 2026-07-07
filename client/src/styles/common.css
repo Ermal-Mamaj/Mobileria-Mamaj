@@ -273,3 +273,39 @@
   border-radius: 10px;
   padding: 16px;
 }
+
+@media (min-width: 900px) {
+  .section-heading {
+    font-size: 40px;
+  }
+  .section-intro {
+    font-size: 14px;
+    max-width: 560px;
+  }
+  .page-body {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 40px 48px 72px;
+  }
+  .page-hero {
+    height: 340px;
+  }
+  .page-hero__copy {
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    width: min(100% - 96px, 1184px);
+    bottom: 36px;
+  }
+  .page-hero__title {
+    font-size: 52px;
+  }
+  .page-hero__tagline {
+    font-size: 14px;
+    max-width: 560px;
+  }
+  .contact-form input,
+  .contact-form textarea {
+    font-size: 13.5px;
+  }
+}

@@ -3,13 +3,13 @@ import { api } from '../../lib/api.js';
 import ImageUploadField from '../ImageUploadField.jsx';
 
 const FIELDS = [
-  ['phone', 'Phone'],
+  ['phone', 'Telefoni'],
   ['whatsapp', 'WhatsApp'],
   ['email', 'Email'],
-  ['address', 'Address'],
+  ['address', 'Adresa'],
   ['facebook', 'Facebook'],
   ['instagram', 'Instagram'],
-  ['business_hours', 'Business Hours'],
+  ['business_hours', 'Orari i Punës'],
 ];
 
 export default function SiteSettingsSection() {
@@ -37,12 +37,12 @@ export default function SiteSettingsSection() {
     }
   }
 
-  if (!form) return <p>Loading…</p>;
+  if (!form) return <p>Po ngarkohet...</p>;
 
   return (
     <form className="admin-panel" onSubmit={handleSave}>
-      <h2 className="admin-panel__heading">Site Settings</h2>
-      <ImageUploadField label="Logo" value={form.logo_url} onChange={(url) => set('logo_url', url)} />
+      <h2 className="admin-panel__heading">Cilësimet e Faqes</h2>
+      <ImageUploadField label="Logoja" value={form.logo_url} onChange={(url) => set('logo_url', url)} />
       {FIELDS.map(([key, label]) => (
         <div className="admin-field" key={key}>
           <label className="admin-field__label">{label}</label>
@@ -50,8 +50,8 @@ export default function SiteSettingsSection() {
         </div>
       ))}
       <div className="admin-panel__actions">
-        <button type="submit" disabled={saving}>{saving ? 'Saving…' : 'Save Changes'}</button>
-        {savedAt && <span className="admin-panel__saved">Saved</span>}
+        <button type="submit" disabled={saving}>{saving ? 'Po ruhen ndryshimet...' : 'Ruaj Ndryshimet'}</button>
+        {savedAt && <span className="admin-panel__saved">U ruajt me sukses</span>}
       </div>
     </form>
   );

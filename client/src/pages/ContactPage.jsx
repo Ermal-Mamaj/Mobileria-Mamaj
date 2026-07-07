@@ -15,7 +15,7 @@ export default function ContactPage() {
 
   const infoRows = [
     settings.phone && {
-      label: 'Phone',
+      label: 'Telefoni',
       value: settings.phone,
       icon: <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />,
     },
@@ -30,7 +30,7 @@ export default function ContactPage() {
       ),
     },
     settings.address && {
-      label: 'Showroom',
+      label: 'Salloni',
       value: settings.address,
       icon: (
         <>
@@ -49,8 +49,8 @@ export default function ContactPage() {
           <span className="eyebrow__rule" />
           <span>MAMAJ</span>
         </div>
-        <h1 className="section-heading" style={{ marginBottom: 6 }}>Contact Us</h1>
-        <p className="section-intro">We'd love to hear from you.</p>
+        <h1 className="section-heading" style={{ marginBottom: 6 }}>Na Kontaktoni</h1>
+        <p className="section-intro">Do të gëzoheshim t'ju dëgjonim.</p>
 
         <div className="contact-info-list">
           {infoRows.map((row) => (
@@ -69,21 +69,21 @@ export default function ContactPage() {
         </div>
 
         {settings.business_hours && (
-          <p className="contact-hours">Business Hours: {settings.business_hours}</p>
+          <p className="contact-hours">Orari i Punës: {settings.business_hours}</p>
         )}
 
         <div className="contact-form-panel">
-          <h3 className="contact-form-panel__heading">Send a Message</h3>
-          <p className="contact-form-panel__intro">Have questions? We'll reply shortly.</p>
+          <h3 className="contact-form-panel__heading">Dërgo një Mesazh</h3>
+          <p className="contact-form-panel__intro">Keni pyetje? Do t'ju përgjigjemi së shpejti.</p>
 
           {sent ? (
-            <p className="contact-form__success">Thanks — we'll be in touch soon.</p>
+            <p className="contact-form__success">Mesazhi u dërgua me sukses. Do t'ju kontaktojmë së shpejti.</p>
           ) : (
             <form className="contact-form" onSubmit={handleSubmit}>
-              <input type="text" placeholder="Your Name" required />
-              <input type="tel" placeholder="Phone Number" required />
-              <textarea placeholder="Your Message" required />
-              <button type="submit" className="btn-navy">Send Message</button>
+              <input type="text" placeholder="Emri juaj" required />
+              <input type="tel" placeholder="Numri i telefonit" required />
+              <textarea placeholder="Mesazhi juaj" required />
+              <button type="submit" className="btn-navy">Dërgo</button>
             </form>
           )}
         </div>

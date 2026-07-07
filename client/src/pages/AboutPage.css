@@ -102,3 +102,38 @@
   font-weight: 600;
   margin-top: 10px;
 }
+
+@media (min-width: 900px) {
+  .about-hero {
+    height: 320px;
+  }
+  .about-hero__copy {
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(100% - 96px, 1184px);
+    bottom: 32px;
+  }
+  .about-hero__title {
+    font-size: 46px;
+  }
+  .about-paragraph {
+    font-size: 15px;
+    max-width: 760px;
+  }
+  .about-subheading {
+    font-size: 28px;
+  }
+  .value-list {
+    flex-direction: row;
+    gap: 20px;
+  }
+  .value-item {
+    flex: 1;
+  }
+  .about-quote {
+    padding: 30px 34px;
+  }
+  .about-quote__text {
+    font-size: 16px;
+  }
+}

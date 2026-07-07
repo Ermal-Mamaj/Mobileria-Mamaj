@@ -1,6 +1,10 @@
 .footer {
   background: var(--navy);
   padding: 32px 24px 34px;
+  /* Clear the home-indicator / gesture bar on notched phones. */
+  padding-bottom: calc(34px + env(safe-area-inset-bottom));
+  padding-left: max(24px, env(safe-area-inset-left));
+  padding-right: max(24px, env(safe-area-inset-right));
   border-top: 1px solid rgba(235, 200, 76, 0.15);
 }
 
@@ -52,4 +56,27 @@
   color: rgba(255, 255, 255, 0.4);
   margin-top: 22px;
   letter-spacing: 0.3px;
+}
+
+@media (min-width: 900px) {
+  .footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 40px max(48px, calc((100% - 1280px) / 2)) 34px;
+  }
+  .footer__brand {
+    margin-bottom: 0;
+  }
+  .footer__rows {
+    flex-direction: row;
+    align-items: center;
+    gap: 28px;
+  }
+  .footer__copyright {
+    width: 100%;
+    margin-top: 12px;
+  }
 }

@@ -43,50 +43,50 @@ export default function AboutSection() {
     }
   }
 
-  if (!form) return <p>Loading…</p>;
+  if (!form) return <p>Po ngarkohet...</p>;
 
   return (
     <form className="admin-panel" onSubmit={handleSave}>
-      <h2 className="admin-panel__heading">About Us — Story</h2>
-      <ImageUploadField label="Hero image" value={form.hero_image_url} onChange={(url) => set('hero_image_url', url)} />
+      <h2 className="admin-panel__heading">Rreth Nesh – Historia Jonë</h2>
+      <ImageUploadField label="Imazhi Kryesor" value={form.hero_image_url} onChange={(url) => set('hero_image_url', url)} />
       <div className="admin-field">
-        <label className="admin-field__label">Paragraph 1</label>
+        <label className="admin-field__label">Paragrafi i Parë</label>
         <textarea rows={3} value={form.paragraph_1 || ''} onChange={(e) => set('paragraph_1', e.target.value)} />
       </div>
       <div className="admin-field">
-        <label className="admin-field__label">Paragraph 2</label>
+        <label className="admin-field__label">Paragrafi i Dytë</label>
         <textarea rows={3} value={form.paragraph_2 || ''} onChange={(e) => set('paragraph_2', e.target.value)} />
       </div>
 
-      <h2 className="admin-panel__heading">What We Value</h2>
+      <h2 className="admin-panel__heading">Vlerat Tona</h2>
       {(form.values_json || []).map((v, i) => (
         <div className="admin-subcard" key={i}>
           <div className="admin-field">
-            <label className="admin-field__label">Title</label>
+            <label className="admin-field__label">Titulli</label>
             <input value={v.title || ''} onChange={(e) => setValue(i, 'title', e.target.value)} />
           </div>
           <div className="admin-field">
-            <label className="admin-field__label">Description</label>
+            <label className="admin-field__label">Përshkrimi</label>
             <input value={v.description || ''} onChange={(e) => setValue(i, 'description', e.target.value)} />
           </div>
-          <button type="button" className="admin-btn-secondary" onClick={() => removeValue(i)}>Remove</button>
+          <button type="button" className="admin-btn-secondary" onClick={() => removeValue(i)}>Hiq</button>
         </div>
       ))}
-      <button type="button" className="admin-btn-secondary" onClick={addValue}>+ Add Value</button>
+      <button type="button" className="admin-btn-secondary" onClick={addValue}>+ Shto Vlerë</button>
 
-      <h2 className="admin-panel__heading">Closing Quote</h2>
+      <h2 className="admin-panel__heading">Mesazhi Përmbyllës</h2>
       <div className="admin-field">
-        <label className="admin-field__label">Quote text</label>
+        <label className="admin-field__label">Teksti i Citatit</label>
         <textarea rows={2} value={form.quote_text || ''} onChange={(e) => set('quote_text', e.target.value)} />
       </div>
       <div className="admin-field">
-        <label className="admin-field__label">Attribution</label>
+        <label className="admin-field__label">Nënshkrimi</label>
         <input value={form.quote_author || ''} onChange={(e) => set('quote_author', e.target.value)} />
       </div>
 
       <div className="admin-panel__actions">
-        <button type="submit" disabled={saving}>{saving ? 'Saving…' : 'Save Changes'}</button>
-        {savedAt && <span className="admin-panel__saved">Saved</span>}
+        <button type="submit" disabled={saving}>{saving ? 'Po ruhen ndryshimet...' : 'Ruaj Ndryshimet'}</button>
+        {savedAt && <span className="admin-panel__saved">U ruajt me sukses</span>}
       </div>
     </form>
   );

@@ -8,6 +8,8 @@
 .nav-header__bar {
   padding: 12px 20px;
   padding-top: max(12px, env(safe-area-inset-top));
+  padding-left: max(20px, env(safe-area-inset-left));
+  padding-right: max(20px, env(safe-area-inset-right));
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -79,6 +81,7 @@
 }
 
 .nav-header__menu {
+  display: none;
   position: absolute;
   top: calc(100% + 8px);
   right: 20px;
@@ -128,4 +131,39 @@
 .nav-header__link.is-active {
   color: var(--gold);
   font-weight: 600;
+}
+
+.nav-header__menu.is-open {
+  display: block;
+}
+
+/* Desktop: burger goes away, the menu becomes an inline link row. */
+@media (min-width: 900px) {
+  .nav-header__bar {
+    padding: 14px max(48px, calc((100% - 1280px) / 2));
+  }
+  .nav-header__toggle {
+    display: none;
+  }
+  .nav-header__menu {
+    display: block;
+    position: static;
+    width: auto;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    animation: none;
+    overflow: visible;
+  }
+  .nav-header__menu nav {
+    flex-direction: row;
+    align-items: center;
+    gap: 6px;
+    padding: 0;
+  }
+  .nav-header__link {
+    padding: 8px 14px;
+    font-size: 13.5px;
+  }
 }

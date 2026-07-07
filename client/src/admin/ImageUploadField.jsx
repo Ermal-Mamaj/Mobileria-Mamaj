@@ -27,15 +27,15 @@ export default function ImageUploadField({ label, value, onChange }) {
       {label && <label className="admin-field__label">{label}</label>}
       <div className="admin-image-field">
         <div className="admin-image-field__preview">
-          {value ? <img src={value} alt="" /> : <span>No image</span>}
+          {value ? <img src={value} alt="" /> : <span>Nuk ka foto</span>}
         </div>
         <div className="admin-image-field__actions">
           <button type="button" onClick={() => inputRef.current?.click()} disabled={uploading}>
-            {uploading ? 'Uploading…' : value ? 'Replace' : 'Upload'}
+            {uploading ? 'Po ngarkohet...' : value ? 'Zëvendëso' : 'Ngarko'}
           </button>
           {value && (
             <button type="button" className="admin-btn-secondary" onClick={() => onChange(null)}>
-              Remove
+              Hiq
             </button>
           )}
         </div>

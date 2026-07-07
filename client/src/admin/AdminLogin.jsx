@@ -29,24 +29,24 @@ function LoginForm() {
   return (
     <div className="admin-login">
       <form className="admin-login__card" onSubmit={handleSubmit}>
-        <h1 className="admin-login__title">MAMAJ Admin</h1>
-        <p className="admin-login__subtitle">Sign in to manage site content.</p>
+        <h1 className="admin-login__title">Administrimi i MAMAJ</h1>
+        <p className="admin-login__subtitle">Hyni për të menaxhuar faqen e MAMAJ.</p>
         <input
           type="text"
-          placeholder="Username"
+          placeholder="Përdoruesi"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           autoFocus
         />
         <input
           type="password"
-          placeholder="Password"
+          placeholder="Fjalëkalimi"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
         {error && <p className="admin-login__error">{error}</p>}
         <button type="submit" disabled={submitting}>
-          {submitting ? 'Signing in…' : 'Sign In'}
+          {submitting ? 'Po identifikoheni...' : 'Hyr'}
         </button>
       </form>
     </div>

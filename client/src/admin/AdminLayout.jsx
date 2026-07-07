@@ -2,11 +2,11 @@ import { NavLink } from 'react-router-dom';
 import { useAdminAuth } from './AdminAuth.jsx';
 
 const TABS = [
-  { to: '/admin', label: 'Home Page', end: true },
-  { to: '/admin/categories', label: 'Categories & Products' },
-  { to: '/admin/gallery', label: 'Gallery' },
-  { to: '/admin/about', label: 'About Us' },
-  { to: '/admin/settings', label: 'Site Settings' },
+  { to: '/admin', label: 'Ballina', end: true },
+  { to: '/admin/categories', label: 'Koleksionet' },
+  { to: '/admin/gallery', label: 'Galeria' },
+  { to: '/admin/about', label: 'Rreth Nesh' },
+  { to: '/admin/settings', label: 'Cilësimet' },
 ];
 
 export default function AdminLayout({ children }) {
@@ -16,10 +16,10 @@ export default function AdminLayout({ children }) {
     <div className="admin-layout">
       <header className="admin-layout__header">
         <div>
-          <h1 className="admin-layout__title">MAMAJ Admin</h1>
-          <p className="admin-layout__username">Signed in as {username}</p>
+          <h1 className="admin-layout__title">Administrimi i MAMAJ</h1>
+          <p className="admin-layout__username">I identifikuar si {username}</p>
         </div>
-        <button type="button" className="admin-btn-secondary" onClick={logout}>Log out</button>
+        <button type="button" className="admin-btn-secondary" onClick={logout}>Dil</button>
       </header>
 
       <nav className="admin-layout__tabs">

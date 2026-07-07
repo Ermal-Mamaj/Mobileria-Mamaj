@@ -38,7 +38,7 @@ export default function Footer() {
           </div>
         )}
       </div>
-      <p className="footer__copyright">© {new Date().getFullYear()} MAMAJ · Handcrafted furniture</p>
+      <p className="footer__copyright">© {new Date().getFullYear()} MAMAJ · Mobilie të Punuara me Dorë</p>
     </div>
   );
 }

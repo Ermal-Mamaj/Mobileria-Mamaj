@@ -19,10 +19,10 @@ export default function AboutPage() {
       <NavHeader />
 
       <div className="about-hero">
-        <ImageSlot src={about.hero_image_url} placeholder="Workshop / showroom photo" dark className="about-hero__image" />
+        <ImageSlot src={about.hero_image_url} placeholder="Foto e punishtes / sallonit" dark className="about-hero__image" />
         <div className="about-hero__gradient" />
         <div className="about-hero__copy">
-          <h1 className="about-hero__title">Our Story</h1>
+          <h1 className="about-hero__title">Historia Jonë</h1>
         </div>
       </div>
 
@@ -30,7 +30,7 @@ export default function AboutPage() {
         <p className="about-paragraph">{about.paragraph_1}</p>
         <p className="about-paragraph">{about.paragraph_2}</p>
 
-        <h2 className="about-subheading">What We Value</h2>
+        <h2 className="about-subheading">Vlerat Tona</h2>
         <div className="value-list">
           {values.map((v, i) => (
             <div className="value-item" key={i}>

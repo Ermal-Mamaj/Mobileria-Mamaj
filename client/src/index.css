@@ -129,6 +129,30 @@ img {
   }
 }
 
+/* From desktop up the framed-device presentation gives way to a true
+   full-width responsive layout; each component adds its own desktop rules. */
+@media (min-width: 900px) {
+  html, body {
+    background: var(--bg);
+  }
+  .app-shell {
+    max-width: none;
+    margin: 0;
+    min-height: 100vh;
+    border-radius: 0;
+    box-shadow: none;
+    outline: none;
+  }
+  .app-shell .nav-header__bar {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+  .app-shell .footer {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+}
+
 ::-webkit-scrollbar {
   height: 5px;
   width: 5px;

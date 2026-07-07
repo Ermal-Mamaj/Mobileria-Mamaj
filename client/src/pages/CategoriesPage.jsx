@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+﻿import { Link } from 'react-router-dom';
 import NavHeader from '../components/NavHeader.jsx';
 import Footer from '../components/Footer.jsx';
 import ImageSlot from '../components/ImageSlot.jsx';
@@ -13,16 +13,16 @@ export default function CategoriesPage() {
       <div className="page-body">
         <div className="eyebrow eyebrow--muted">
           <span className="eyebrow__rule" />
-          <span>COLLECTIONS</span>
+          <span>KOLEKSIONET</span>
         </div>
-        <h1 className="section-heading" style={{ marginBottom: 6 }}>All Categories</h1>
-        <p className="section-intro">Browse furniture by room.</p>
+        <h1 className="section-heading" style={{ marginBottom: 6 }}>Ambientet</h1>
+        <p className="section-intro">Shfletoni mobiliet sipas ambientit.</p>
 
         <div className="category-grid">
           {categories.map((cat) => (
             <Link key={cat.id} to={`/rooms/${cat.slug}`} className="category-card">
               <div className="category-card__image">
-                <ImageSlot src={cat.hero_image_url} placeholder="Photo" />
+                <ImageSlot src={cat.hero_image_url} placeholder="Foto" />
               </div>
               <div className="category-card__body">
                 <h3 className="category-card__name">{cat.name}</h3>

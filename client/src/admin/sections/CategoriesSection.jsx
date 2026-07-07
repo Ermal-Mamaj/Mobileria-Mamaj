@@ -20,30 +20,30 @@ function CategoryRow({ category, onChanged, onDeleted }) {
   }
 
   async function handleDelete() {
-    if (!confirm(`Delete "${category.name}" and all of its products? This can't be undone.`)) return;
+    if (!confirm(`Jeni të sigurt që dëshironi të fshini "${category.name}" dhe të gjitha produktet e tij? Ky veprim nuk mund të zhbëhet.`)) return;
     await api.del(`/categories/${category.id}`);
     onDeleted(category.id);
   }
 
   return (
     <div className="admin-subcard">
-      <ImageUploadField label="Hero image" value={form.hero_image_url} onChange={(url) => setForm((f) => ({ ...f, hero_image_url: url }))} />
+      <ImageUploadField label="Imazhi Kryesor" value={form.hero_image_url} onChange={(url) => setForm((f) => ({ ...f, hero_image_url: url }))} />
       <div className="admin-field">
-        <label className="admin-field__label">Name</label>
+        <label className="admin-field__label">Emri</label>
         <input value={form.name || ''} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} />
       </div>
       <div className="admin-field">
-        <label className="admin-field__label">Tagline</label>
+        <label className="admin-field__label">Përshkrim i shkurtër</label>
         <input value={form.tagline || ''} onChange={(e) => setForm((f) => ({ ...f, tagline: e.target.value }))} />
       </div>
-      <p className="admin-field__hint">Page: /rooms/{form.slug}</p>
+      <p className="admin-field__hint">Faqja: /rooms/{form.slug}</p>
 
       <div className="admin-subcard__actions">
-        <button type="button" onClick={handleSave} disabled={saving}>{saving ? 'Saving…' : 'Save'}</button>
+        <button type="button" onClick={handleSave} disabled={saving}>{saving ? 'Po ruhen ndryshimet...' : 'Ruaj'}</button>
         <button type="button" className="admin-btn-secondary" onClick={() => setExpanded((v) => !v)}>
-          {expanded ? 'Hide Products' : 'Manage Products'}
+          {expanded ? 'Fshih Produktet' : 'Menaxho Produktet'}
         </button>
-        <button type="button" className="admin-btn-danger" onClick={handleDelete}>Delete Category</button>
+        <button type="button" className="admin-btn-danger" onClick={handleDelete}>Fshi Koleksionin</button>
       </div>
 
       {expanded && <ProductsPanel category={form} />}
@@ -71,14 +71,14 @@ export default function CategoriesSection() {
     reload();
   }
 
-  if (!categories) return <p>Loading…</p>;
+  if (!categories) return <p>Po ngarkohet...</p>;
 
   return (
     <div className="admin-panel">
-      <h2 className="admin-panel__heading">Categories &amp; Products</h2>
+      <h2 className="admin-panel__heading">Koleksionet</h2>
       <p className="admin-panel__description">
-        Each category becomes its own page (e.g. /rooms/living-room) with a product grid. Add a new
-        category here to publish a new room page.
+        Çdo koleksion krijon faqen e vet me produktet përkatëse. Shtoni një koleksion të ri për ta
+        publikuar në faqe.
       </p>
 
       {categories.map((cat) => (
@@ -91,16 +91,16 @@ export default function CategoriesSection() {
       ))}
 
       <form className="admin-subcard" onSubmit={handleAdd}>
-        <h3 className="admin-panel__heading" style={{ marginTop: 0 }}>Add New Category</h3>
+        <h3 className="admin-panel__heading" style={{ marginTop: 0 }}>Shto Koleksion të Ri</h3>
         <div className="admin-field">
-          <label className="admin-field__label">Name</label>
-          <input value={newName} onChange={(e) => setNewName(e.target.value)} placeholder="e.g. Kids Room" />
+          <label className="admin-field__label">Emri</label>
+          <input value={newName} onChange={(e) => setNewName(e.target.value)} placeholder="p.sh. Dhoma e Fëmijëve" />
         </div>
         <div className="admin-field">
-          <label className="admin-field__label">Tagline</label>
-          <input value={newTagline} onChange={(e) => setNewTagline(e.target.value)} placeholder="e.g. Playful pieces for growing families" />
+          <label className="admin-field__label">Përshkrim i shkurtër</label>
+          <input value={newTagline} onChange={(e) => setNewTagline(e.target.value)} placeholder="p.sh. Mobilie funksionale për familje moderne" />
         </div>
-        <button type="submit">+ Add Category</button>
+        <button type="submit">+ Shto Koleksion</button>
       </form>
     </div>
   );

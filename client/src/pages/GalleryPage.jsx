@@ -17,13 +17,13 @@ export default function GalleryPage() {
           <span className="eyebrow__rule" />
           <span>MAMAJ</span>
         </div>
-        <h1 className="section-heading" style={{ marginBottom: 6 }}>Gallery</h1>
-        <p className="section-intro">Real spaces styled with MAMAJ pieces.</p>
+        <h1 className="section-heading" style={{ marginBottom: 6 }}>Galeria</h1>
+        <p className="section-intro">Ambiente reale të mobiluara me mobilie MAMAJ.</p>
 
         <div className="gallery-grid">
           {images.map((img, i) => (
             <div key={img.id} className="gallery-item" style={{ height: HEIGHTS[i % HEIGHTS.length] }}>
-              <ImageSlot src={img.image_url} placeholder={img.caption || `Photo ${i + 1}`} />
+              <ImageSlot src={img.image_url} placeholder={img.caption || `Foto ${i + 1}`} />
             </div>
           ))}
         </div>

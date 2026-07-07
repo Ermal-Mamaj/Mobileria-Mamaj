@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import NavHeader from '../components/NavHeader.jsx';
 import Footer from '../components/Footer.jsx';
@@ -17,12 +17,12 @@ export default function RoomPage() {
       <NavHeader />
 
       <div className="page-hero">
-        <ImageSlot src={category?.hero_image_url} placeholder="Photo" dark className="page-hero__image" />
+        <ImageSlot src={category?.hero_image_url} placeholder="Foto" dark className="page-hero__image" />
         <div className="page-hero__gradient" />
         <div className="page-hero__copy">
           <div className="eyebrow eyebrow--gold" style={{ marginBottom: 8, fontSize: '9.5px', letterSpacing: '2px' }}>
             <span className="eyebrow__rule" style={{ width: 20 }} />
-            <span>COLLECTION</span>
+            <span>KOLEKSION</span>
           </div>
           <h1 className="page-hero__title">{category?.name}</h1>
           <p className="page-hero__tagline">{category?.tagline}</p>
@@ -33,7 +33,7 @@ export default function RoomPage() {
         {products.map((p) => (
           <div key={p.id} className="room-product-card" onClick={() => setSelected(p)}>
             <div className="room-product-card__image">
-              <ImageSlot src={p.image_url} placeholder="Photo" />
+              <ImageSlot src={p.image_url} placeholder="Foto" />
             </div>
             <div className="room-product-card__body">
               <h3 className="room-product-card__name">{p.name}</h3>
@@ -47,7 +47,7 @@ export default function RoomPage() {
         <div className="room-modal-overlay" onClick={() => setSelected(null)}>
           <div className="room-modal" onClick={(e) => e.stopPropagation()}>
             <div className="room-modal__image">
-              <ImageSlot src={selected.image_url} placeholder="Photo" dark />
+              <ImageSlot src={selected.image_url} placeholder="Foto" dark />
               <button type="button" className="room-modal__close" onClick={() => setSelected(null)}>×</button>
             </div>
             <div className="room-modal__body">
@@ -57,7 +57,7 @@ export default function RoomPage() {
               </div>
               <h2 className="room-modal__name">{selected.name}</h2>
               <p className="room-modal__description">
-                Handcrafted from {selected.material}. Available made-to-order in a range of finishes — visit our showroom to see it in person.
+                Punuar me dorë — {selected.material}. Ofrohet me porosi në përmasa e përfundime të ndryshme — vizitoni sallonin tonë për ta parë nga afër.
               </p>
             </div>
           </div>

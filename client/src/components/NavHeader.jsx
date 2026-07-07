@@ -3,11 +3,11 @@ import { Link, useLocation } from 'react-router-dom';
 import './NavHeader.css';
 
 const LINKS = [
-  { key: 'home', label: 'Home', to: '/' },
-  { key: 'categories', label: 'Categories', to: '/categories' },
-  { key: 'gallery', label: 'Gallery', to: '/gallery' },
-  { key: 'about', label: 'About', to: '/about' },
-  { key: 'contact', label: 'Contact', to: '/contact' },
+  { key: 'home', label: 'Ballina', to: '/' },
+  { key: 'categories', label: 'Ambientet', to: '/categories' },
+  { key: 'gallery', label: 'Galeria', to: '/gallery' },
+  { key: 'about', label: 'Rreth Nesh', to: '/about' },
+  { key: 'contact', label: 'Na Kontaktoni', to: '/contact' },
 ];
 
 function activeKeyFor(pathname) {
@@ -42,7 +42,7 @@ export default function NavHeader() {
         <button
           type="button"
           className="nav-header__toggle"
-          aria-label="Toggle menu"
+          aria-label="Menyja"
           aria-expanded={menuOpen}
           onClick={() => setMenuOpen((open) => !open)}
         >
@@ -51,22 +51,20 @@ export default function NavHeader() {
           <span />
         </button>
 
-        {menuOpen && (
-          <div className="nav-header__menu">
-            <nav>
-              {LINKS.map((link) => (
-                <Link
-                  key={link.key}
-                  to={link.to}
-                  className={`nav-header__link ${active === link.key ? 'is-active' : ''}`}
-                  onClick={() => setMenuOpen(false)}
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </nav>
-          </div>
-        )}
+        <div className={`nav-header__menu ${menuOpen ? 'is-open' : ''}`}>
+          <nav>
+            {LINKS.map((link) => (
+              <Link
+                key={link.key}
+                to={link.to}
+                className={`nav-header__link ${active === link.key ? 'is-active' : ''}`}
+                onClick={() => setMenuOpen(false)}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
+        </div>
       </div>
     </div>
   );
