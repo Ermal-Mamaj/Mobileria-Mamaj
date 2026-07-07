@@ -1,0 +1,55 @@
+.footer {
+  background: var(--navy);
+  padding: 32px 24px 34px;
+  border-top: 1px solid rgba(235, 200, 76, 0.15);
+}
+
+.footer__brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin-bottom: 20px;
+}
+
+.footer__wordmark {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+}
+
+.footer__eyebrow {
+  font-size: 7px;
+  font-weight: 600;
+  letter-spacing: 1.8px;
+  color: var(--gold);
+  margin-bottom: 4px;
+}
+
+.footer__name {
+  font-family: var(--font-wordmark);
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  color: var(--white);
+}
+
+.footer__rows {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.footer__row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12.5px;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.footer__copyright {
+  font-size: 10.5px;
+  color: rgba(255, 255, 255, 0.4);
+  margin-top: 22px;
+  letter-spacing: 0.3px;
+}
