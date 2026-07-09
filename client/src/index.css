@@ -60,6 +60,7 @@ body {
 
 #root {
   min-height: 100vh;
+  min-height: 100dvh;
 }
 
 /* Public, mobile-first pages render inside this centered column; the admin
@@ -67,20 +68,29 @@ body {
    edge-to-edge; from tablet up it floats as a framed device. */
 .app-shell {
   width: 100%;
-  max-width: var(--app-width);
   margin: 0 auto;
+  /* Fill the phone screen edge-to-edge (full width, no max cap in the phone
+     range) and top-to-bottom. `dvh` tracks the dynamic viewport so the layout
+     stays full-height as mobile browser chrome (URL bar) shows/hides; `vh` is
+     the fallback for browsers without `dvh`. The 460px reference width is
+     re-imposed only in the framed-device zone below. */
   min-height: 100vh;
+  min-height: 100dvh;
   background: var(--bg);
   position: relative;
   /* No `overflow` here on purpose — an overflow container would trap the
      sticky nav header. Horizontal overflow is contained on <body> instead. */
 }
 
-/* From tablet up the mobile column floats as a framed device. The nav and
-   footer round their outer corners so the frame looks clipped without an
-   overflow container (which would break the sticky header). */
-@media (min-width: 520px) {
+/* From tablet up (≥600px) the mobile column stops filling the screen and
+   floats as a framed device, re-capped to the 460px reference width. This
+   keeps every phone — including large handsets and small foldables up to
+   599px — edge-to-edge. The nav and footer round their outer corners so the
+   frame looks clipped without an overflow container (which would break the
+   sticky header). */
+@media (min-width: 600px) {
   .app-shell {
+    max-width: var(--app-width);
     min-height: auto;
     margin: 32px auto;
     border-radius: 26px;
@@ -151,6 +161,33 @@ img {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
   }
+}
+
+/* ── Small phones ─────────────────────────────────────────────
+   The layout is authored against a 460px reference column. On
+   narrower handsets (≤380px: iPhone SE / mini, compact Androids,
+   down to 320px) the side gutters are tightened to reclaim content
+   width. Display type already scales fluidly via clamp() declared
+   per-component, so only spacing needs adjusting here. */
+@media (max-width: 380px) {
+  .page-body                 { padding: 18px 16px 34px; }
+  .home-page__section        { padding: 30px 16px 8px; }
+  .home-page__section--tight { padding: 8px 16px 0; }
+  .room-product-grid         { padding: 18px 16px 28px; }
+  .product-carousel          { padding: 4px 16px 28px; scroll-padding-left: 16px; }
+  .contact-form-panel        { padding: 20px 16px; }
+
+  /* Full-bleed hero copy hugs closer to the edge on tiny screens. */
+  .home-page__hero-copy      { left: 18px; right: 18px; }
+  .page-hero__copy           { left: 16px; right: 16px; }
+  .about-hero__copy          { left: 16px; }
+
+  /* Editorial band: pull its inner padding and hairlines in to match. */
+  .brand-band                { padding: 38px 20px; }
+  .brand-band::before        { left: 20px; right: 20px; }
+  .brand-band__quote-mark    { left: 14px; font-size: 84px; }
+
+  .category-grid             { gap: 12px; }
 }
 
 ::-webkit-scrollbar {

@@ -39,7 +39,9 @@
 
 .section-heading {
   font-family: var(--font-serif);
-  font-size: 30px;
+  /* Fluid from ~25px on a 320px handset up to the 30px reference at 460px+
+     (capped there so the framed-device and desktop zones are unaffected). */
+  font-size: clamp(25px, 13.6px + 3.57vw, 30px);
   font-weight: 600;
   color: var(--text);
 }
@@ -249,7 +251,8 @@
 
 .page-hero__title {
   font-family: var(--font-serif);
-  font-size: 34px;
+  /* Scales 27px → 34px across phone widths, then holds at the reference. */
+  font-size: clamp(27px, 11px + 5vw, 34px);
   font-weight: 600;
   color: var(--white);
   line-height: 1;

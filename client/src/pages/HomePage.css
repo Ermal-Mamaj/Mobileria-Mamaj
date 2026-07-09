@@ -110,7 +110,7 @@
 
 .brand-band__text {
   font-family: var(--font-serif);
-  font-size: 26px;
+  font-size: clamp(21px, 9.6px + 3.57vw, 26px);
   font-weight: 500;
   color: var(--white);
   line-height: 1.38;
