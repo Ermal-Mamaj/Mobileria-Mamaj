@@ -1,6 +1,7 @@
 {
   "name": "mamaj-showroom",
   "private": true,
+  "type": "module",
   "workspaces": [
     "server",
     "client"
