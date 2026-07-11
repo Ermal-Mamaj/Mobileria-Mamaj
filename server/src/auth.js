@@ -48,3 +48,22 @@ export function checkAdmin(req) {
     return null;
   }
 }
+
+// Same checks as requireAdmin (JWT + CSRF), but returns a value instead of
+// writing an Express response — needed where a single route has to handle
+// both a browser-initiated request (has our cookies) and a server-to-server
+// callback (doesn't), such as Vercel Blob's client-upload token route.
+export function verifyAdminRequest(req) {
+  const token = req.cookies?.[COOKIE_NAME];
+  if (!token) return null;
+  let admin;
+  try {
+    admin = jwt.verify(token, JWT_SECRET);
+  } catch {
+    return null;
+  }
+  const cookieToken = req.cookies?.[CSRF_COOKIE_NAME];
+  const headerToken = req.get ? req.get(CSRF_HEADER_NAME) : req.headers?.[CSRF_HEADER_NAME];
+  if (!cookieToken || !headerToken || cookieToken !== headerToken) return null;
+  return admin;
+}

@@ -1,66 +1,44 @@
 import { Router } from 'express';
-import multer from 'multer';
-import sharp from 'sharp';
-import crypto from 'node:crypto';
-import { put } from '@vercel/blob';
-import { requireAdmin } from '../auth.js';
-
-const ALLOWED_MIMES = ['image/png', 'image/jpeg', 'image/webp'];
-
-// Resize/compress before storing: WebP at quality 88 is visually
-// indistinguishable from the source for product photography, but typically
-// runs 30-60% smaller than the original JPEG/PNG. Capping the longest edge
-// at 2000px matters more than the format change — nothing on this site is
-// ever displayed larger than that, so anything beyond it is wasted storage
-// and bandwidth with zero visible benefit.
-const MAX_DIMENSION = 2000;
-const WEBP_QUALITY = 88;
-
-// multer parses the multipart upload into memory (not disk) — the buffer
-// gets processed by sharp and handed straight to Blob storage, nothing ever
-// touches the local filesystem, which matters because that filesystem is
-// ephemeral on Vercel anyway.
-const upload = multer({
-  storage: multer.memoryStorage(),
-  limits: { fileSize: 15 * 1024 * 1024 }, // generous cap pre-compression; phone photos can be large
-  fileFilter: (req, file, cb) => {
-    if (!ALLOWED_MIMES.includes(file.mimetype)) return cb(new Error('Only PNG, JPEG, or WebP images are allowed'));
-    cb(null, true);
-  },
-});
+import { handleUpload } from '@vercel/blob/client';
+import { verifyAdminRequest } from '../auth.js';
 
 const router = Router();
 
-router.post('/', requireAdmin, (req, res) => {
-  upload.single('image')(req, res, async (err) => {
-    if (err) return res.status(400).json({ error: err.message });
-    if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
-
-    if (!process.env.BLOB_READ_WRITE_TOKEN) {
-      console.error('Upload attempted but BLOB_READ_WRITE_TOKEN is not configured');
-      return res.status(503).json({ error: 'Image storage is not configured yet' });
-    }
-
-    try {
-      const optimized = await sharp(req.file.buffer)
-        .rotate() // auto-orient using EXIF before resizing (phone photos otherwise end up sideways)
-        .resize({ width: MAX_DIMENSION, height: MAX_DIMENSION, fit: 'inside', withoutEnlargement: true })
-        .webp({ quality: WEBP_QUALITY })
-        .toBuffer();
-
-      const filename = `${crypto.randomUUID()}.webp`;
-      const blob = await put(filename, optimized, {
-        access: 'public',
-        contentType: 'image/webp',
-        addRandomSuffix: false,
-      });
-
-      res.status(201).json({ url: blob.url });
-    } catch (uploadErr) {
-      console.error('Upload failed:', uploadErr);
-      res.status(502).json({ error: 'Could not process or store the image right now' });
-    }
-  });
+// This route no longer receives the file itself. The browser uploads
+// directly to Vercel Blob (see client/src/lib/blobUpload.js) and only asks
+// this endpoint for a short-lived, scoped upload token first. That sidesteps
+// two problems with the old server-relay approach: Vercel Functions cap
+// request bodies at 4.5MB, and every upload was paying for two network hops
+// (browser -> our function -> Blob) instead of one.
+//
+// Vercel Blob also calls this same URL itself once the client's direct
+// upload finishes (the onUploadCompleted step below), so we can't gate the
+// whole route with the requireAdmin *middleware* — that call won't carry our
+// admin cookies. Auth is instead checked inside onBeforeGenerateToken, which
+// only runs for the token-issuing step.
+router.post('/', async (req, res) => {
+  try {
+    const jsonResponse = await handleUpload({
+      body: req.body,
+      request: req,
+      onBeforeGenerateToken: async () => {
+        const admin = verifyAdminRequest(req);
+        if (!admin) throw new Error('Not authenticated');
+        return {
+          allowedContentTypes: ['image/jpeg', 'image/png', 'image/webp'],
+          addRandomSuffix: true,
+          maximumSizeInBytes: 8 * 1024 * 1024, // generous headroom above what compressed uploads should ever produce
+        };
+      },
+      onUploadCompleted: async ({ blob }) => {
+        console.log('Blob upload completed:', blob.url);
+      },
+    });
+    res.json(jsonResponse);
+  } catch (err) {
+    console.error('Upload token error:', err);
+    res.status(400).json({ error: err.message });
+  }
 });
 
 export default router;

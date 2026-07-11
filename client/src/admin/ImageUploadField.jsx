@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { uploadImage } from '../lib/api.js';
+import { uploadImage } from '../lib/blobUpload.js';
 
 export default function ImageUploadField({ label, value, onChange }) {
   const inputRef = useRef(null);
