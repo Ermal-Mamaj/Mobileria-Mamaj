@@ -4,6 +4,7 @@ import NavHeader from '../components/NavHeader.jsx';
 import Footer from '../components/Footer.jsx';
 import ImageSlot from '../components/ImageSlot.jsx';
 import { useApiGet } from '../lib/hooks.js';
+import { api } from '../lib/api.js';
 import './HomePage.css';
 
 export default function HomePage() {
@@ -12,12 +13,28 @@ export default function HomePage() {
   const { data: featured } = useApiGet('/products?featured=1', []);
   const collectionsRef = useRef(null);
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState('');
+  const [form, setForm] = useState({ name: '', phone: '', message: '' });
 
   const headlineLines = (home.hero_headline || '').split('\n');
 
-  function handleSubmit(e) {
+  function handleChange(e) {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  }
+
+  async function handleSubmit(e) {
     e.preventDefault();
-    setSent(true);
+    setSending(true);
+    setError('');
+    try {
+      await api.post('/contact', form);
+      setSent(true);
+    } catch (err) {
+      setError(err.message || 'Diçka shkoi keq. Provoni përsëri.');
+    } finally {
+      setSending(false);
+    }
   }
 
   return (
@@ -125,10 +142,13 @@ export default function HomePage() {
           <p className="contact-form__success">Mesazhi u dërgua me sukses. Do t'ju kontaktojmë së shpejti.</p>
         ) : (
           <form className="contact-form" onSubmit={handleSubmit}>
-            <input type="text" placeholder="Emri juaj" required />
-            <input type="tel" placeholder="Numri i telefonit" required />
-            <textarea placeholder="Mesazhi juaj" required />
-            <button type="submit" className="btn-navy">DËRGO</button>
+            <input type="text" name="name" placeholder="Emri juaj" value={form.name} onChange={handleChange} required />
+            <input type="tel" name="phone" placeholder="Numri i telefonit" value={form.phone} onChange={handleChange} required />
+            <textarea name="message" placeholder="Mesazhi juaj" value={form.message} onChange={handleChange} required />
+            {error && <p className="contact-form__error">{error}</p>}
+            <button type="submit" className="btn-navy" disabled={sending}>
+              {sending ? 'DUKE DËRGUAR…' : 'DËRGO'}
+            </button>
           </form>
         )}
       </section>

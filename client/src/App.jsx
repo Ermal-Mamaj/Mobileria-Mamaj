@@ -17,8 +17,8 @@ function App() {
       <Route path="/gallery" element={<GalleryPage />} />
       <Route path="/about" element={<AboutPage />} />
       <Route path="/contact" element={<ContactPage />} />
-      <Route path="/admin/login" element={<AdminLogin />} />
-      <Route path="/admin/*" element={<AdminDashboard />} />
+      <Route path="/mamaj-cms/login" element={<AdminLogin />} />
+      <Route path="/mamaj-cms/*" element={<AdminDashboard />} />
     </Routes>
   );
 }

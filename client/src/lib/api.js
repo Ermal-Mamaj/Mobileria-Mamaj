@@ -1,7 +1,19 @@
+function getCookie(name) {
+  const match = document.cookie.match(new RegExp(`(?:^|; )${name}=([^;]*)`));
+  return match ? decodeURIComponent(match[1]) : null;
+}
+
 async function request(path, options = {}) {
+  const method = (options.method || 'GET').toUpperCase();
+  const headers = options.body instanceof FormData ? {} : { 'Content-Type': 'application/json' };
+  if (!['GET', 'HEAD', 'OPTIONS'].includes(method)) {
+    const csrfToken = getCookie('mamaj_csrf');
+    if (csrfToken) headers['x-csrf-token'] = csrfToken;
+  }
+
   const res = await fetch(`/api${path}`, {
     credentials: 'include',
-    headers: options.body instanceof FormData ? undefined : { 'Content-Type': 'application/json' },
+    headers,
     ...options,
   });
   const isJson = res.headers.get('content-type')?.includes('application/json');

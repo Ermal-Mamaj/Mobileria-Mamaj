@@ -1,5 +1,5 @@
 import bcrypt from 'bcryptjs';
-import db from './index.js';
+import { sql } from './index.js';
 
 const ADMIN_USERNAME = process.env.ADMIN_USERNAME || 'admin';
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'change-this-password';
@@ -72,89 +72,78 @@ const featuredHome = [
   { category: 'living-room', name: 'Tavolinë Kafeje', badge: 'E RE' },
 ];
 
-function run() {
-  const userCount = db.prepare('SELECT COUNT(*) AS n FROM admin_users').get().n;
+async function run() {
+  const [{ n: userCount }] = await sql`SELECT COUNT(*)::int AS n FROM admin_users`;
   if (userCount === 0) {
     const hash = bcrypt.hashSync(ADMIN_PASSWORD, 10);
-    db.prepare('INSERT INTO admin_users (username, password_hash) VALUES (?, ?)').run(ADMIN_USERNAME, hash);
+    await sql`INSERT INTO admin_users (username, password_hash) VALUES (${ADMIN_USERNAME}, ${hash})`;
     console.log(`Seeded admin user "${ADMIN_USERNAME}"`);
   }
 
-  const settingsCount = db.prepare('SELECT COUNT(*) AS n FROM site_settings').get().n;
+  const [{ n: settingsCount }] = await sql`SELECT COUNT(*)::int AS n FROM site_settings`;
   if (settingsCount === 0) {
-    db.prepare(`INSERT INTO site_settings (id, phone, whatsapp, email, address, facebook, instagram, business_hours)
-      VALUES (1, ?, ?, ?, ?, ?, ?, ?)`).run(
-      '+383 44/49 218 690',
-      '+383 44/49 218 690',
-      'hello@mamaj.com',
-      "Rr. Nena Terezë, Prishtinë",
-      'MobileriaMamaj',
-      '',
-      'Hën–Sht: 9:00–18:00'
-    );
+    await sql`
+      INSERT INTO site_settings (id, phone, whatsapp, email, address, facebook, instagram, business_hours)
+      VALUES (1, ${'+383 44/49 218 690'}, ${'+383 44/49 218 690'}, ${'hello@mamaj.com'}, ${'Rr. Nena Terezë, Prishtinë'}, ${'MobileriaMamaj'}, ${''}, ${'Hën–Sht: 9:00–18:00'})
+    `;
     console.log('Seeded site settings');
   }
 
-  const homeCount = db.prepare('SELECT COUNT(*) AS n FROM home_content').get().n;
+  const [{ n: homeCount }] = await sql`SELECT COUNT(*)::int AS n FROM home_content`;
   if (homeCount === 0) {
-    db.prepare(`INSERT INTO home_content (id, hero_eyebrow, hero_headline, hero_cta, quote_text, quote_label, contact_heading, contact_intro)
-      VALUES (1, ?, ?, ?, ?, ?, ?, ?)`).run(
-      'MOBILIE TË PUNUARA ME DORË',
-      'Mjeshtëri në çdo detaj.\nElegancë në çdo ambient.',
-      'Eksploro Koleksionet',
-      'Çdo mobilie punohet me dorë në punishten tonë dhe krijohet për të zgjatur me breza.',
-      'PUNISHTJA MAMAJ',
-      'Le të krijojmë diçka të veçantë.',
-      'Na shkruani dhe së bashku do të krijojmë mobilien ideale për shtëpinë tuaj.'
-    );
+    await sql`
+      INSERT INTO home_content (id, hero_eyebrow, hero_headline, hero_cta, quote_text, quote_label, contact_heading, contact_intro)
+      VALUES (1, ${'MOBILIE TË PUNUARA ME DORË'}, ${'Mjeshtëri në çdo detaj.\nElegancë në çdo ambient.'}, ${'Eksploro Koleksionet'}, ${'Çdo mobilie punohet me dorë në punishten tonë dhe krijohet për të zgjatur me breza.'}, ${'PUNISHTJA MAMAJ'}, ${'Le të krijojmë diçka të veçantë.'}, ${'Na shkruani dhe së bashku do të krijojmë mobilien ideale për shtëpinë tuaj.'})
+    `;
     console.log('Seeded home content');
   }
 
-  const aboutCount = db.prepare('SELECT COUNT(*) AS n FROM about_content').get().n;
+  const [{ n: aboutCount }] = await sql`SELECT COUNT(*)::int AS n FROM about_content`;
   if (aboutCount === 0) {
     const values = [
       { title: 'Mjeshtëri', description: 'Çdo bashkim dhe përfundim bëhet me dorë dhe kontrollohet dy herë.' },
       { title: 'Materiale të Qëndrueshme', description: 'Dru i përzgjedhur me përgjegjësi dhe pëlhura natyrale.' },
       { title: 'Me Porosi', description: 'Përmasa dhe përfundime të personalizuara për çdo shtëpi.' },
     ];
-    db.prepare(`INSERT INTO about_content (id, paragraph_1, paragraph_2, values_json, quote_text, quote_author)
-      VALUES (1, ?, ?, ?, ?, ?)`).run(
-      'MAMAJ nisi si një punishte e vogël familjare, duke punuar me dorë mobilie që sjellin ngrohtësi dhe karakter në jetesën moderne. Çdo mobilie që krijojmë ndërthur zdrukthëtarinë tradicionale me dizajnin bashkëkohor dhe ndërtohet për të zgjatur me breza.',
-      'Sot punojmë me mjeshtër vendas dhe materiale të përzgjedhura për të krijuar mobilie për çdo ambient — nga divanet përfaqësuese deri te setet e ngrënies me porosi.',
-      JSON.stringify(values),
-      'Mobilia duhet të ndihet sikur ka qenë gjithmonë pjesë e shtëpisë suaj.',
-      'Ekipi MAMAJ'
-    );
+    await sql`
+      INSERT INTO about_content (id, paragraph_1, paragraph_2, values_json, quote_text, quote_author)
+      VALUES (1, ${'MAMAJ nisi si një punishte e vogël familjare, duke punuar me dorë mobilie që sjellin ngrohtësi dhe karakter në jetesën moderne. Çdo mobilie që krijojmë ndërthur zdrukthëtarinë tradicionale me dizajnin bashkëkohor dhe ndërtohet për të zgjatur me breza.'}, ${'Sot punojmë me mjeshtër vendas dhe materiale të përzgjedhura për të krijuar mobilie për çdo ambient — nga divanet përfaqësuese deri te setet e ngrënies me porosi.'}, ${JSON.stringify(values)}, ${'Mobilia duhet të ndihet sikur ka qenë gjithmonë pjesë e shtëpisë suaj.'}, ${'Ekipi MAMAJ'})
+    `;
     console.log('Seeded about content');
   }
 
-  const catCount = db.prepare('SELECT COUNT(*) AS n FROM categories').get().n;
+  const [{ n: catCount }] = await sql`SELECT COUNT(*)::int AS n FROM categories`;
   if (catCount === 0) {
-    const insertCat = db.prepare('INSERT INTO categories (slug, name, tagline, sort_order) VALUES (?, ?, ?, ?)');
-    const insertProduct = db.prepare(`INSERT INTO products (category_id, name, material, badge, featured_home, sort_order)
-      VALUES (?, ?, ?, ?, ?, ?)`);
-
-    categories.forEach((cat, ci) => {
-      const info = insertCat.run(cat.slug, cat.name, cat.tagline, ci);
-      const categoryId = info.lastInsertRowid;
+    for (const [ci, cat] of categories.entries()) {
+      const [{ id: categoryId }] = await sql`
+        INSERT INTO categories (slug, name, tagline, sort_order)
+        VALUES (${cat.slug}, ${cat.name}, ${cat.tagline}, ${ci})
+        RETURNING id
+      `;
       const products = productsByCategory[cat.slug] || [];
-      products.forEach((p, pi) => {
+      for (const [pi, p] of products.entries()) {
         const feature = featuredHome.find((f) => f.category === cat.slug && f.name === p.name);
-        insertProduct.run(categoryId, p.name, p.material, feature ? feature.badge : null, feature ? 1 : 0, pi);
-      });
-    });
+        await sql`
+          INSERT INTO products (category_id, name, material, badge, featured_home, sort_order)
+          VALUES (${categoryId}, ${p.name}, ${p.material}, ${feature ? feature.badge : null}, ${feature ? 1 : 0}, ${pi})
+        `;
+      }
+    }
     console.log('Seeded categories & products');
   }
 
-  const galleryCount = db.prepare('SELECT COUNT(*) AS n FROM gallery_images').get().n;
+  const [{ n: galleryCount }] = await sql`SELECT COUNT(*)::int AS n FROM gallery_images`;
   if (galleryCount === 0) {
-    const insertGallery = db.prepare('INSERT INTO gallery_images (caption, sort_order) VALUES (?, ?)');
     for (let i = 1; i <= 6; i++) {
-      insertGallery.run(`Foto ${i}`, i - 1);
+      await sql`INSERT INTO gallery_images (caption, sort_order) VALUES (${`Foto ${i}`}, ${i - 1})`;
     }
     console.log('Seeded gallery placeholders');
   }
 }
 
-run();
-console.log('Seed complete.');
+run()
+  .then(() => console.log('Seed complete.'))
+  .catch((err) => {
+    console.error('Seed failed:', err);
+    process.exit(1);
+  });

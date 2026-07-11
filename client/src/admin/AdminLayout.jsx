@@ -2,11 +2,11 @@ import { NavLink } from 'react-router-dom';
 import { useAdminAuth } from './AdminAuth.jsx';
 
 const TABS = [
-  { to: '/admin', label: 'Ballina', end: true },
-  { to: '/admin/categories', label: 'Koleksionet' },
-  { to: '/admin/gallery', label: 'Galeria' },
-  { to: '/admin/about', label: 'Rreth Nesh' },
-  { to: '/admin/settings', label: 'Cilësimet' },
+  { to: '/mamaj-cms', label: 'Ballina', end: true },
+  { to: '/mamaj-cms/categories', label: 'Koleksionet' },
+  { to: '/mamaj-cms/gallery', label: 'Galeria' },
+  { to: '/mamaj-cms/about', label: 'Rreth Nesh' },
+  { to: '/mamaj-cms/settings', label: 'Cilësimet' },
 ];
 
 export default function AdminLayout({ children }) {
