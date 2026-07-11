@@ -11,7 +11,7 @@ function LoginForm() {
   const [submitting, setSubmitting] = useState(false);
 
   if (!checked) return null;
-  if (loggedIn) return <Navigate to="/admin" replace />;
+  if (loggedIn) return <Navigate to="/mamaj-cms" replace />;
 
   async function handleSubmit(e) {
     e.preventDefault();

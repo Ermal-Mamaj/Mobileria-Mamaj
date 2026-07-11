@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import db from '../db/index.js';
+import { sql } from '../db/index.js';
 import { requireAdmin } from '../auth.js';
 
 const router = Router();
@@ -7,40 +7,45 @@ const router = Router();
 const HOME_FIELDS = ['hero_eyebrow', 'hero_headline', 'hero_cta', 'hero_image_url', 'quote_text', 'quote_label', 'contact_heading', 'contact_intro'];
 const ABOUT_FIELDS = ['hero_image_url', 'paragraph_1', 'paragraph_2', 'values_json', 'quote_text', 'quote_author'];
 
-router.get('/home', (req, res) => {
-  const row = db.prepare('SELECT * FROM home_content WHERE id = 1').get();
+async function upsertSingleton(table, fields, id, next) {
+  const values = fields.map((f) => next[f] ?? null);
+  const columnList = fields.join(', ');
+  const placeholders = fields.map((_, i) => `$${i + 2}`).join(', ');
+  const updateList = fields.map((f, i) => `${f} = $${i + 2}`).join(', ');
+  const [row] = await sql.query(
+    `INSERT INTO ${table} (id, ${columnList}) VALUES ($1, ${placeholders})
+     ON CONFLICT (id) DO UPDATE SET ${updateList}
+     RETURNING *`,
+    [id, ...values]
+  );
+  return row;
+}
+
+router.get('/home', async (req, res) => {
+  const [row] = await sql`SELECT * FROM home_content WHERE id = 1`;
   res.json(row || {});
 });
 
-router.put('/home', requireAdmin, (req, res) => {
-  const existing = db.prepare('SELECT * FROM home_content WHERE id = 1').get();
+router.put('/home', requireAdmin, async (req, res) => {
+  const [existing] = await sql`SELECT * FROM home_content WHERE id = 1`;
   const next = { ...existing, ...req.body };
-  const values = HOME_FIELDS.map((f) => next[f] ?? null);
-  db.prepare(`
-    INSERT INTO home_content (id, ${HOME_FIELDS.join(', ')}) VALUES (1, ${HOME_FIELDS.map(() => '?').join(', ')})
-    ON CONFLICT(id) DO UPDATE SET ${HOME_FIELDS.map((f) => `${f} = excluded.${f}`).join(', ')}
-  `).run(...values);
-  res.json(db.prepare('SELECT * FROM home_content WHERE id = 1').get());
+  const row = await upsertSingleton('home_content', HOME_FIELDS, 1, next);
+  res.json(row);
 });
 
-router.get('/about', (req, res) => {
-  const row = db.prepare('SELECT * FROM about_content WHERE id = 1').get();
-  if (row) row.values_json = JSON.parse(row.values_json || '[]');
+router.get('/about', async (req, res) => {
+  const [row] = await sql`SELECT * FROM about_content WHERE id = 1`;
+  // values_json is a JSONB column — Neon returns it already parsed as an array.
   res.json(row || {});
 });
 
-router.put('/about', requireAdmin, (req, res) => {
-  const existing = db.prepare('SELECT * FROM about_content WHERE id = 1').get();
+router.put('/about', requireAdmin, async (req, res) => {
+  const [existing] = await sql`SELECT * FROM about_content WHERE id = 1`;
   const body = { ...req.body };
   if (Array.isArray(body.values_json)) body.values_json = JSON.stringify(body.values_json);
   const next = { ...existing, ...body };
-  const values = ABOUT_FIELDS.map((f) => next[f] ?? null);
-  db.prepare(`
-    INSERT INTO about_content (id, ${ABOUT_FIELDS.join(', ')}) VALUES (1, ${ABOUT_FIELDS.map(() => '?').join(', ')})
-    ON CONFLICT(id) DO UPDATE SET ${ABOUT_FIELDS.map((f) => `${f} = excluded.${f}`).join(', ')}
-  `).run(...values);
-  const row = db.prepare('SELECT * FROM about_content WHERE id = 1').get();
-  row.values_json = JSON.parse(row.values_json || '[]');
+  if (Array.isArray(next.values_json)) next.values_json = JSON.stringify(next.values_json);
+  const row = await upsertSingleton('about_content', ABOUT_FIELDS, 1, next);
   res.json(row);
 });
 

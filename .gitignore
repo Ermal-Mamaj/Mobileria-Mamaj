@@ -1,10 +1,6 @@
 node_modules/
 dist/
 .env
-server/data.sqlite
-server/data.sqlite-*
-server/uploads/*
-!server/uploads/.gitkeep
 
 # Leftovers from the previous (.dc.html) implementation — local runtime data
 # and working artifacts; never commit (admin key, message inbox).

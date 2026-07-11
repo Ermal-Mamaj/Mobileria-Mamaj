@@ -12,7 +12,7 @@ function Protected() {
   const { checked, loggedIn } = useAdminAuth();
 
   if (!checked) return null;
-  if (!loggedIn) return <Navigate to="/admin/login" replace />;
+  if (!loggedIn) return <Navigate to="/mamaj-cms/login" replace />;
 
   return (
     <AdminLayout>
