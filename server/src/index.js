@@ -16,6 +16,10 @@ import contactRoutes from './routes/contact.js';
 const PORT = process.env.PORT || 3001;
 
 export const app = express();
+// Vercel sits in front as a single reverse-proxy hop; trusting it lets
+// express-rate-limit (and req.ip generally) resolve the real client IP from
+// X-Forwarded-For instead of the proxy's own address.
+app.set('trust proxy', 1);
 app.use(helmet());
 app.use(cors({ origin: process.env.CLIENT_ORIGIN || 'http://localhost:5173', credentials: true }));
 app.use(express.json());
