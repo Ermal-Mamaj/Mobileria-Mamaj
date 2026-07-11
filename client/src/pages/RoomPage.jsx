@@ -17,7 +17,7 @@ export default function RoomPage() {
       <NavHeader />
 
       <div className="page-hero">
-        <ImageSlot src={category?.hero_image_url} placeholder="Foto" dark className="page-hero__image" />
+        <ImageSlot src={category?.hero_image_url} placeholder="Foto" dark className="page-hero__image" priority />
         <div className="page-hero__gradient" />
         <div className="page-hero__copy">
           <div className="eyebrow eyebrow--gold" style={{ marginBottom: 8, fontSize: '9.5px', letterSpacing: '2px' }}>

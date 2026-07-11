@@ -42,7 +42,7 @@ export default function HomePage() {
       <NavHeader />
 
       <div className="home-page__hero">
-        <ImageSlot src={home.hero_image_url} placeholder="Foto" dark className="home-page__hero-image" />
+        <ImageSlot src={home.hero_image_url} placeholder="Foto" dark className="home-page__hero-image" priority />
         <div className="home-page__hero-gradient" />
         <div className="home-page__hero-copy">
           <div className="eyebrow eyebrow--gold">
