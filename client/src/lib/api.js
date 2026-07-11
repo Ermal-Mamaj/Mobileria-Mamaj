@@ -1,4 +1,4 @@
-function getCookie(name) {
+export function getCookie(name) {
   const match = document.cookie.match(new RegExp(`(?:^|; )${name}=([^;]*)`));
   return match ? decodeURIComponent(match[1]) : null;
 }
@@ -30,12 +30,6 @@ export const api = {
   put: (path, body) => request(path, { method: 'PUT', body: JSON.stringify(body) }),
   del: (path) => request(path, { method: 'DELETE' }),
 };
-
-export function uploadImage(file) {
-  const form = new FormData();
-  form.append('image', file);
-  return request('/uploads', { method: 'POST', body: form }).then((r) => r.url);
-}
 
 export const adminAuth = {
   login: (username, password) => request('/admin/login', { method: 'POST', body: JSON.stringify({ username, password }) }),
