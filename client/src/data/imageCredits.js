@@ -40,13 +40,6 @@ export const IMAGE_CREDITS = [
     "source": "https://www.flickr.com/photos/9243453@N02/4778863344"
   },
   {
-    "title": "Kitchen Cabinets",
-    "creator": "EcoIslandLife",
-    "license": "CC BY 2.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "source": "https://www.flickr.com/photos/89484852@N06/8142526823"
-  },
-  {
     "title": "Houghton Hall - Walled Garden - Fruit and Vegetable Garden - bench",
     "creator": "ell brown",
     "license": "CC BY 2.0",
@@ -68,11 +61,11 @@ export const IMAGE_CREDITS = [
     "source": "https://www.flickr.com/photos/187837216@N04/49862231446"
   },
   {
-    "title": "glasses and coasters on bar cart",
-    "creator": "FTD Florists",
-    "license": "CC BY 2.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "source": "https://www.flickr.com/photos/142320496@N06/30761357354"
+    "title": "Serving Cart, Model 3321",
+    "creator": "Gilbert Rohde",
+    "license": "CC BY 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/3.0/",
+    "source": "https://www.brooklynmuseum.org/opencollection/objects/1778"
   },
   {
     "title": "Girls White Dresser",
@@ -89,11 +82,11 @@ export const IMAGE_CREDITS = [
     "source": "https://www.flickr.com/photos/52634191@N08/8559802318"
   },
   {
-    "title": "20260325 - Built-in buffet-sideboard, Justices' Dining Room at the Minnesota State Capitol",
-    "creator": "Heritage Preservation Department - MNHS",
-    "license": "CC BY 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
-    "source": "https://commons.wikimedia.org/w/index.php?curid=187497361"
+    "title": "Danish teak Credenza number 18",
+    "creator": "johncruz2",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+    "source": "https://www.flickr.com/photos/96920823@N03/8940055912"
   },
   {
     "title": "Rocket Propellant Disposal Party – we melted the metal fire pit!",
@@ -178,6 +171,13 @@ export const IMAGE_CREDITS = [
     "license": "CC BY 2.0",
     "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
     "source": "https://www.flickr.com/photos/10393601@N08/2897079476"
+  },
+  {
+    "title": "white-kitchen-cabinets-remodel-remodeling-light-home-sebring-services",
+    "creator": "sebringdesignbuild",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+    "source": "https://www.flickr.com/photos/144070289@N03/27517917336"
   },
   {
     "title": "Empty wooden wardrobe closeup",
