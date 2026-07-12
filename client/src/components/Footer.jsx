@@ -7,18 +7,11 @@ export default function Footer() {
   return (
     <div className="footer">
       <div className="footer__brand">
-        <svg width="34" height="31" viewBox="0 0 40 36" fill="none" stroke="#EBC84C" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-          <rect x="12.5" y="3.5" width="15" height="15" rx="2.5" />
-          <path d="M16.5 14.5 v-6 l3.5 3.5 3.5-3.5 v6" />
-          <path d="M12.5 9 h-4 a3 3 0 0 0-3 3 v8" />
-          <path d="M27.5 9 h4 a3 3 0 0 1 3 3 v8" />
-          <rect x="5.5" y="18.5" width="29" height="6" rx="2" />
-          <path d="M8.5 24.5 v6 M31.5 24.5 v6 M13.5 24.5 v3.5 M26.5 24.5 v3.5" />
-        </svg>
-        <div className="footer__wordmark">
-          <span className="footer__eyebrow">FABRIKA E MOBILEVE</span>
-          <span className="footer__name">MAMAJ</span>
-        </div>
+        <img
+          src={settings?.logo_url || '/logo-full.png'}
+          alt="MAMAJ — Fabrika e Mobileve"
+          className="footer__logo"
+        />
       </div>
       <div className="footer__rows">
         {settings?.phone && (
