@@ -12,6 +12,13 @@ export const IMAGE_CREDITS = [
     "source": "https://www.flickr.com/photos/125401673@N05/15593813426"
   },
   {
+    "title": "Dresser/ Mirror",
+    "creator": "bluemasonjars",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+    "source": "https://www.flickr.com/photos/67607949@N00/1634198005"
+  },
+  {
     "title": "(2) 4.5 x 8 ft wood bookcase",
     "creator": "bonnerlibrary",
     "license": "CC BY 2.0",
@@ -24,6 +31,13 @@ export const IMAGE_CREDITS = [
     "license": "CC BY-SA 2.0",
     "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
     "source": "https://www.flickr.com/photos/9243453@N02/3442572472"
+  },
+  {
+    "title": "Master Bedroom Bench and Pillows in pink and brown.",
+    "creator": "DesignFolly.com",
+    "license": "CC BY-SA 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0/",
+    "source": "https://www.flickr.com/photos/9243453@N02/4778863344"
   },
   {
     "title": "Kitchen Cabinets",
@@ -61,6 +75,13 @@ export const IMAGE_CREDITS = [
     "source": "https://www.flickr.com/photos/142320496@N06/30761357354"
   },
   {
+    "title": "Girls White Dresser",
+    "creator": "gm.esthermax",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
+    "source": "https://www.flickr.com/photos/29971610@N02/33880912232"
+  },
+  {
     "title": "Hex Coffee & Side Tables, Designed by Haldane Martin, Photo Micky Hoyle",
     "creator": "HALDANE MARTIN",
     "license": "CC BY 2.0",
@@ -96,32 +117,11 @@ export const IMAGE_CREDITS = [
     "source": "https://www.flickr.com/photos/28477800@N00/8718021904"
   },
   {
-    "title": "Upholstered Bench",
-    "creator": "lacasavictoria",
-    "license": "CC BY 2.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "source": "https://www.flickr.com/photos/19568916@N07/5370162531"
-  },
-  {
     "title": "White and Green Club Chair",
     "creator": "lacasavictoria",
     "license": "CC BY 2.0",
     "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
     "source": "https://www.flickr.com/photos/19568916@N07/5813371572"
-  },
-  {
-    "title": "Shabby chic dressing table",
-    "creator": "LindaH",
-    "license": "CC BY 2.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "source": "https://www.flickr.com/photos/25747180@N00/2610806371"
-  },
-  {
-    "title": "chest of drawers",
-    "creator": "LisaSki66",
-    "license": "CC BY 2.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by/2.0/",
-    "source": "https://www.flickr.com/photos/64298413@N07/8463416667"
   },
   {
     "title": "Miniature office chair",
