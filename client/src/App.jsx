@@ -1,3 +1,4 @@
+import { lazy, Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import HomePage from './pages/HomePage.jsx';
 import CategoriesPage from './pages/CategoriesPage.jsx';
@@ -6,8 +7,13 @@ import GalleryPage from './pages/GalleryPage.jsx';
 import AboutPage from './pages/AboutPage.jsx';
 import ContactPage from './pages/ContactPage.jsx';
 import CreditsPage from './pages/CreditsPage.jsx';
-import AdminLogin from './admin/AdminLogin.jsx';
-import AdminDashboard from './admin/AdminDashboard.jsx';
+
+// The CMS is only ever loaded by one person, but it was bundled into the single
+// script every visitor downloads and parses before the page could even ask the
+// API for its content — which is what the photos are waiting on. Splitting it
+// out keeps the admin code off the public critical path.
+const AdminLogin = lazy(() => import('./admin/AdminLogin.jsx'));
+const AdminDashboard = lazy(() => import('./admin/AdminDashboard.jsx'));
 
 function App() {
   return (
@@ -19,8 +25,22 @@ function App() {
       <Route path="/about" element={<AboutPage />} />
       <Route path="/contact" element={<ContactPage />} />
       <Route path="/credits" element={<CreditsPage />} />
-      <Route path="/mamaj-cms/login" element={<AdminLogin />} />
-      <Route path="/mamaj-cms/*" element={<AdminDashboard />} />
+      <Route
+        path="/mamaj-cms/login"
+        element={
+          <Suspense fallback={null}>
+            <AdminLogin />
+          </Suspense>
+        }
+      />
+      <Route
+        path="/mamaj-cms/*"
+        element={
+          <Suspense fallback={null}>
+            <AdminDashboard />
+          </Suspense>
+        }
+      />
     </Routes>
   );
 }

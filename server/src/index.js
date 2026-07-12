@@ -25,12 +25,29 @@ app.use(cors({ origin: process.env.CLIENT_ORIGIN || 'http://localhost:5173', cre
 app.use(express.json());
 app.use(cookieParser());
 
+// The showroom content is identical for every visitor and changes only when
+// someone edits it in the CMS, yet each page view was waking a serverless
+// function and querying Postgres to rebuild the same JSON. Letting Vercel's CDN
+// hold it means most visits never reach the function at all.
+//
+// Applied per-router rather than globally on purpose: the admin routes and the
+// contact inbox return visitor-specific or private data and must never be
+// stored by a shared cache. Only GETs are marked — mutations aren't cacheable.
+//
+// Trade-off: an edit can take up to a minute to show on the public site.
+function cachePublicReads(req, res, next) {
+  if (req.method === 'GET') {
+    res.set('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300');
+  }
+  next();
+}
+
 app.use('/api/admin', adminRoutes);
-app.use('/api/site-settings', settingsRoutes);
-app.use('/api/categories', categoriesRoutes);
-app.use('/api/products', productsRoutes);
-app.use('/api/gallery', galleryRoutes);
-app.use('/api/content', contentRoutes);
+app.use('/api/site-settings', cachePublicReads, settingsRoutes);
+app.use('/api/categories', cachePublicReads, categoriesRoutes);
+app.use('/api/products', cachePublicReads, productsRoutes);
+app.use('/api/gallery', cachePublicReads, galleryRoutes);
+app.use('/api/content', cachePublicReads, contentRoutes);
 app.use('/api/uploads', uploadsRoutes);
 app.use('/api/contact', contactRoutes);
 
