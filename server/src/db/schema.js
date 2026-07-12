@@ -69,6 +69,19 @@ export const SCHEMA_STATEMENTS = [
     quote_author TEXT DEFAULT ''
   )`,
 
+  // Extra photos for a product, beyond the cover shot in products.image_url.
+  // Kept as a separate table rather than more columns so a product can carry
+  // any number of angles; the cover stays where it is so existing cards,
+  // carousels and the CMS keep working untouched.
+  `CREATE TABLE IF NOT EXISTS product_images (
+    id SERIAL PRIMARY KEY,
+    product_id INTEGER NOT NULL REFERENCES products(id) ON DELETE CASCADE,
+    image_url TEXT NOT NULL,
+    sort_order INTEGER DEFAULT 0
+  )`,
+
+  `CREATE INDEX IF NOT EXISTS product_images_product_id_idx ON product_images (product_id)`,
+
   // Every contact submission lands here first. Email delivery is a
   // best-effort extra on top: if Resend is unconfigured or down, the
   // enquiry is still captured and readable in the CMS rather than lost.

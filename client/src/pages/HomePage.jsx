@@ -68,7 +68,7 @@ export default function HomePage() {
 
       <div className="home-page__hero">
         <div className="home-page__hero-media" ref={heroMediaRef}>
-          <ImageSlot src={home.hero_image_url} placeholder="Foto" dark className="home-page__hero-image" />
+          <ImageSlot src={home.hero_image_url} placeholder="Foto" dark priority className="home-page__hero-image" />
         </div>
         <div className="home-page__hero-gradient" />
         <div className="home-page__hero-copy">

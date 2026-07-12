@@ -34,10 +34,14 @@ app.use(cookieParser());
 // contact inbox return visitor-specific or private data and must never be
 // stored by a shared cache. Only GETs are marked — mutations aren't cacheable.
 //
-// Trade-off: an edit can take up to a minute to show on the public site.
+// The window is deliberately short: a CMS edit should show up on the site
+// within seconds, not a minute. Most of the speed-up comes from the CDN
+// absorbing bursts of traffic rather than from a long TTL, and
+// stale-while-revalidate keeps responses instant while a fresh copy is fetched
+// in the background — so shortening this costs almost no latency.
 function cachePublicReads(req, res, next) {
   if (req.method === 'GET') {
-    res.set('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300');
+    res.set('Cache-Control', 'public, s-maxage=10, stale-while-revalidate=60');
   }
   next();
 }

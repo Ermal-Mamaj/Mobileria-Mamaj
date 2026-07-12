@@ -19,7 +19,7 @@ export default function AboutPage() {
       <NavHeader />
 
       <div className="about-hero">
-        <ImageSlot src={about.hero_image_url} placeholder="Foto e punishtes / sallonit" dark className="about-hero__image" />
+        <ImageSlot src={about.hero_image_url} placeholder="Foto e punishtes / sallonit" dark priority className="about-hero__image" />
         <div className="about-hero__gradient" />
         <div className="about-hero__copy">
           <h1 className="about-hero__title">Historia Jonë</h1>

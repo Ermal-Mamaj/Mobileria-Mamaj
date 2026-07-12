@@ -28,13 +28,55 @@ export default function ProductsPanel({ category }) {
     setProducts((ps) => ps.filter((p) => p.id !== id));
   }
 
+  async function addPhoto(productId, url) {
+    if (!url) return;
+    const image = await api.post(`/products/${productId}/images`, { image_url: url });
+    setProducts((ps) => ps.map((p) => (p.id === productId ? { ...p, images: [...(p.images || []), image] } : p)));
+  }
+
+  async function removePhoto(productId, imageId) {
+    await api.del(`/products/${productId}/images/${imageId}`);
+    setProducts((ps) =>
+      ps.map((p) => (p.id === productId ? { ...p, images: (p.images || []).filter((i) => i.id !== imageId) } : p))
+    );
+  }
+
   if (!products) return <p>Po ngarkohen produktet...</p>;
 
   return (
     <div className="admin-products-panel">
       {products.map((p) => (
         <div className="admin-subcard" key={p.id}>
-          <ImageUploadField value={p.image_url} onChange={(url) => updateProduct(p.id, { image_url: url })} />
+          <ImageUploadField
+            label="Foto Kryesore"
+            value={p.image_url}
+            onChange={(url) => updateProduct(p.id, { image_url: url })}
+          />
+
+          <div className="admin-photos">
+            <label className="admin-field__label">Foto Shtesë</label>
+            {(p.images || []).length > 0 && (
+              <div className="admin-photo-strip">
+                {p.images.map((img) => (
+                  <div className="admin-photo-strip__item" key={img.id}>
+                    <img src={img.image_url} alt="" />
+                    <button
+                      type="button"
+                      className="admin-photo-strip__remove"
+                      aria-label="Hiq foton"
+                      onClick={() => removePhoto(p.id, img.id)}
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+            {/* Held at "" so it always shows an empty Ngarko slot — that lets
+                several photos be added one after another without resetting it. */}
+            <ImageUploadField value="" onChange={(url) => addPhoto(p.id, url)} />
+          </div>
+
           <div className="admin-field">
             <label className="admin-field__label">Emri</label>
             <input
