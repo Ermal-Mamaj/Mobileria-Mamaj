@@ -18,7 +18,7 @@ export default function GalleryPage() {
           <span>MAMAJ</span>
         </div>
         <h1 className="section-heading" style={{ marginBottom: 6 }}>Galeria</h1>
-        <p className="section-intro">Ambiente reale të mobiluara me mobilie MAMAJ.</p>
+        <p className="section-intro">Frymëzim për ambientet tuaja.</p>
 
         <div className="gallery-grid">
           {images.map((img, i) => (

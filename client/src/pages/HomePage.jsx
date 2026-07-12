@@ -1,4 +1,4 @@
-﻿import { useRef, useState } from 'react';
+﻿import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import NavHeader from '../components/NavHeader.jsx';
 import Footer from '../components/Footer.jsx';
@@ -12,12 +12,37 @@ export default function HomePage() {
   const { data: categories } = useApiGet('/categories', []);
   const { data: featured } = useApiGet('/products?featured=1', []);
   const collectionsRef = useRef(null);
+  const heroMediaRef = useRef(null);
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState('');
   const [form, setForm] = useState({ name: '', phone: '', message: '' });
 
   const headlineLines = (home.hero_headline || '').split('\n');
+
+  // Drift the hero photo slower than the page as you scroll, so it sits on a
+  // plane behind the copy instead of moving with it. Transform-only and
+  // rAF-throttled to stay off the main thread; skipped entirely for anyone who
+  // asked their OS for reduced motion.
+  useEffect(() => {
+    const media = heroMediaRef.current;
+    if (!media || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    let frame = 0;
+    const onScroll = () => {
+      if (frame) return;
+      frame = requestAnimationFrame(() => {
+        frame = 0;
+        const shift = Math.min(window.scrollY, 700) * 0.2;
+        media.style.setProperty('--hero-shift', `${shift}px`);
+      });
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      if (frame) cancelAnimationFrame(frame);
+    };
+  }, []);
 
   function handleChange(e) {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -42,7 +67,9 @@ export default function HomePage() {
       <NavHeader />
 
       <div className="home-page__hero">
-        <ImageSlot src={home.hero_image_url} placeholder="Foto" dark className="home-page__hero-image" />
+        <div className="home-page__hero-media" ref={heroMediaRef}>
+          <ImageSlot src={home.hero_image_url} placeholder="Foto" dark className="home-page__hero-image" />
+        </div>
         <div className="home-page__hero-gradient" />
         <div className="home-page__hero-copy">
           <div className="eyebrow eyebrow--gold">

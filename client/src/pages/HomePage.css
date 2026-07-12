@@ -10,9 +10,74 @@
   background: var(--navy);
 }
 
+/* Two layers so the transforms don't fight: the wrapper carries the
+   scroll parallax, the image itself carries the slow zoom. Bleeding the
+   wrapper past the hero edges keeps the parallax from exposing a gap. */
+.home-page__hero-media {
+  position: absolute;
+  inset: -6% -2%;
+  transform: translate3d(0, var(--hero-shift, 0px), 0);
+  will-change: transform;
+}
+
 .home-page__hero-image {
   position: absolute;
   inset: 0;
+  /* Lifts the room out from under the scrim — without it the furniture,
+     which is the whole point of the shot, reads as a dark smudge. */
+  filter: brightness(1.16) saturate(1.06);
+  animation: hero-drift 28s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+/* A very slow push-in. It should read as the room breathing, not as a
+   slideshow — if you can consciously see it move, it's too fast. */
+@keyframes hero-drift {
+  from {
+    transform: scale(1.03);
+  }
+  to {
+    transform: scale(1.15) translate3d(-2%, -1.5%, 0);
+  }
+}
+
+/* Vignette: darkens the corners so the eye falls to the copy and the
+   hero gains a little depth. */
+.home-page__hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(120% 90% at 65% 40%, transparent 38%, rgba(10, 15, 21, 0.38) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.home-page__hero-copy > * {
+  animation: hero-rise 1s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+.home-page__hero-copy > *:nth-child(1) { animation-delay: 0.1s; }
+.home-page__hero-copy > *:nth-child(2) { animation-delay: 0.24s; }
+.home-page__hero-copy > *:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-page__hero-image,
+  .home-page__hero-copy > * {
+    animation: none;
+  }
+  .home-page__hero-media {
+    transform: none;
+  }
 }
 
 /* The scrim has to guarantee legibility for *any* hero photo the client
@@ -22,8 +87,8 @@
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(to right, rgba(15, 22, 30, 0.82) 0%, rgba(15, 22, 30, 0.55) 45%, rgba(15, 22, 30, 0.3) 100%),
-    linear-gradient(to top, rgba(15, 22, 30, 0.95) 0%, rgba(15, 22, 30, 0.62) 50%, rgba(15, 22, 30, 0.45) 100%);
+    linear-gradient(to right, rgba(15, 22, 30, 0.72) 0%, rgba(15, 22, 30, 0.4) 45%, rgba(15, 22, 30, 0.14) 100%),
+    linear-gradient(to top, rgba(15, 22, 30, 0.88) 0%, rgba(15, 22, 30, 0.45) 55%, rgba(15, 22, 30, 0.25) 100%);
   pointer-events: none;
 }
 
