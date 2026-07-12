@@ -5,6 +5,7 @@ import RoomPage from './pages/RoomPage.jsx';
 import GalleryPage from './pages/GalleryPage.jsx';
 import AboutPage from './pages/AboutPage.jsx';
 import ContactPage from './pages/ContactPage.jsx';
+import CreditsPage from './pages/CreditsPage.jsx';
 import AdminLogin from './admin/AdminLogin.jsx';
 import AdminDashboard from './admin/AdminDashboard.jsx';
 
@@ -17,6 +18,7 @@ function App() {
       <Route path="/gallery" element={<GalleryPage />} />
       <Route path="/about" element={<AboutPage />} />
       <Route path="/contact" element={<ContactPage />} />
+      <Route path="/credits" element={<CreditsPage />} />
       <Route path="/mamaj-cms/login" element={<AdminLogin />} />
       <Route path="/mamaj-cms/*" element={<AdminDashboard />} />
     </Routes>

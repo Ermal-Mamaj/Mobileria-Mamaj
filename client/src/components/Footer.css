@@ -42,6 +42,16 @@
   letter-spacing: 0.3px;
 }
 
+.footer__link {
+  color: rgba(255, 255, 255, 0.55);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.footer__link:hover {
+  color: var(--gold);
+}
+
 @media (min-width: 900px) {
   .footer {
     display: flex;

@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { useApiGet } from '../lib/hooks.js';
 import './Footer.css';
 
@@ -31,7 +32,11 @@ export default function Footer() {
           </div>
         )}
       </div>
-      <p className="footer__copyright">© {new Date().getFullYear()} MAMAJ · Mobilie të Punuara me Dorë</p>
+      <p className="footer__copyright">
+        © {new Date().getFullYear()} MAMAJ · Mobilie të Punuara me Dorë
+        {' · '}
+        <Link to="/credits" className="footer__link">Kreditë e fotove</Link>
+      </p>
     </div>
   );
 }
