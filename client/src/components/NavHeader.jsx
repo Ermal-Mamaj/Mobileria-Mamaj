@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { useApiGet } from '../lib/hooks.js';
 import './NavHeader.css';
 
 const LINKS = [
@@ -21,16 +22,17 @@ export default function NavHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
   const { pathname } = useLocation();
   const active = activeKeyFor(pathname);
+  const { data: settings } = useApiGet('/site-settings', {});
 
   return (
     <div className="nav-header">
       <div className="nav-header__bar">
         <Link to="/" className="nav-header__brand" onClick={() => setMenuOpen(false)}>
-          <img src="/logo-mark.png" alt="" className="nav-header__mark" />
-          <div className="nav-header__wordmark">
-            <span className="nav-header__eyebrow">FABRIKA E MOBILEVE</span>
-            <span className="nav-header__name">MAMAJ</span>
-          </div>
+          <img
+            src={settings?.logo_url || '/logo-full.png'}
+            alt="MAMAJ — Fabrika e Mobileve"
+            className="nav-header__logo"
+          />
         </Link>
         <button
           type="button"
