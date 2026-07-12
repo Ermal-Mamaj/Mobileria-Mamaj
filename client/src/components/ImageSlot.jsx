@@ -2,7 +2,14 @@ import './ImageSlot.css';
 
 export default function ImageSlot({ src, placeholder = 'Foto', className = '', dark = false }) {
   if (src) {
-    return <img src={src} alt={placeholder} className={`image-slot image-slot--filled ${className}`} />;
+    return (
+      <img
+        src={src}
+        alt={placeholder}
+        decoding="async"
+        className={`image-slot image-slot--filled ${dark ? 'image-slot--filled-dark' : ''} ${className}`}
+      />
+    );
   }
   return (
     <div className={`image-slot image-slot--empty ${dark ? 'image-slot--dark' : ''} ${className}`}>
