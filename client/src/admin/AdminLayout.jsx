@@ -6,6 +6,7 @@ const TABS = [
   { to: '/mamaj-cms/categories', label: 'Koleksionet' },
   { to: '/mamaj-cms/gallery', label: 'Galeria' },
   { to: '/mamaj-cms/about', label: 'Rreth Nesh' },
+  { to: '/mamaj-cms/messages', label: 'Mesazhet' },
   { to: '/mamaj-cms/settings', label: 'Cilësimet' },
 ];
 

@@ -68,4 +68,17 @@ export const SCHEMA_STATEMENTS = [
     quote_text TEXT DEFAULT '',
     quote_author TEXT DEFAULT ''
   )`,
+
+  // Every contact submission lands here first. Email delivery is a
+  // best-effort extra on top: if Resend is unconfigured or down, the
+  // enquiry is still captured and readable in the CMS rather than lost.
+  `CREATE TABLE IF NOT EXISTS contact_messages (
+    id SERIAL PRIMARY KEY,
+    name TEXT NOT NULL,
+    phone TEXT NOT NULL,
+    message TEXT NOT NULL,
+    is_read BOOLEAN NOT NULL DEFAULT FALSE,
+    emailed BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+  )`,
 ];

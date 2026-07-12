@@ -6,6 +6,7 @@ import CategoriesSection from './sections/CategoriesSection.jsx';
 import GallerySection from './sections/GallerySection.jsx';
 import AboutSection from './sections/AboutSection.jsx';
 import SiteSettingsSection from './sections/SiteSettingsSection.jsx';
+import MessagesSection from './sections/MessagesSection.jsx';
 import './admin.css';
 
 function Protected() {
@@ -21,6 +22,7 @@ function Protected() {
         <Route path="categories" element={<CategoriesSection />} />
         <Route path="gallery" element={<GallerySection />} />
         <Route path="about" element={<AboutSection />} />
+        <Route path="messages" element={<MessagesSection />} />
         <Route path="settings" element={<SiteSettingsSection />} />
       </Routes>
     </AdminLayout>
