@@ -15,10 +15,15 @@
   inset: 0;
 }
 
+/* The scrim has to guarantee legibility for *any* hero photo the client
+   uploads, including bright ones — so it stays heavy where the copy sits
+   rather than only tinting the bottom edge. */
 .home-page__hero-gradient {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(15, 22, 30, 0.94) 0%, rgba(15, 22, 30, 0.45) 46%, rgba(15, 22, 30, 0.12) 100%);
+  background:
+    linear-gradient(to right, rgba(15, 22, 30, 0.82) 0%, rgba(15, 22, 30, 0.55) 45%, rgba(15, 22, 30, 0.3) 100%),
+    linear-gradient(to top, rgba(15, 22, 30, 0.95) 0%, rgba(15, 22, 30, 0.62) 50%, rgba(15, 22, 30, 0.45) 100%);
   pointer-events: none;
 }
 
