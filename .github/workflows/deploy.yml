@@ -1,0 +1,38 @@
+name: Deploy to Vercel
+
+# Vercel's own Git integration needs a GitHub OAuth link we can't create for
+# this repo, so we push deployments from here instead. Same result: every
+# commit that lands on main goes live.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://mobileria.vercel.app
+    env:
+      # Identifiers for the Vercel project, not credentials — they do nothing
+      # without VERCEL_TOKEN, which is a repo secret.
+      VERCEL_ORG_ID: team_ixz6uLDqGfHv4UVHqogBpIqS
+      VERCEL_PROJECT_ID: prj_zwEugC3TxOufLAOS4pijePisj9AV
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # Build happens on Vercel, using the project's own env vars — same path
+      # as a manual `vercel deploy --prod`.
+      - name: Deploy to production
+        run: npx vercel@55 deploy --prod --yes --token="$VERCEL_TOKEN"
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
