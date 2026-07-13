@@ -210,6 +210,12 @@
   text-decoration: none;
   color: inherit;
   transition: transform 0.25s ease, box-shadow 0.25s ease;
+  /* Fills the full height of its row (carousel/grid siblings already stretch
+     to match the tallest card by default) and lays its own content out top
+     to bottom, so the button below can be pinned to the bottom edge. */
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .product-card:hover {
@@ -220,6 +226,7 @@
 .product-card__image {
   height: 154px;
   position: relative;
+  flex-shrink: 0;
 }
 
 .product-card__badge {
@@ -239,6 +246,13 @@
 
 .product-card__body {
   padding: 14px;
+  /* Stretches to fill whatever space is left below the (fixed-height)
+     image, and lays its own children in a column so the button can be
+     pushed to the bottom independently of how many lines the name or
+     material take up. */
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .product-card__name {
@@ -248,12 +262,26 @@
   color: var(--text);
   line-height: 1.05;
   margin-bottom: 4px;
+  /* Long names get 2 lines max, then truncate — keeps card heights from
+     varying wildly between products instead of just being consistent
+     about where the button sits. */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .product-card__material {
   font-size: 10.5px;
   color: var(--muted);
   margin-bottom: 12px;
+}
+
+.product-card__body .btn-outline {
+  /* The actual fix: whatever space the name/material didn't use gets
+     absorbed here, so the button always sits flush with the card's
+     bottom edge no matter how much text is above it. */
+  margin-top: auto;
 }
 
 @media (min-width: 900px) {
