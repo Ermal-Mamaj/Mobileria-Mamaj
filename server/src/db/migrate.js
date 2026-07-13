@@ -9,7 +9,14 @@ async function migrate() {
   for (const statement of SCHEMA_STATEMENTS) {
     await sql.query(statement);
   }
-  console.log(`Migration complete: ${SCHEMA_STATEMENTS.length} tables ensured.`);
+
+  // gallery_images backed the old standalone inspiration gallery, which has
+  // been replaced by per-product photos (product_images). Drop it on
+  // already-migrated databases — safe to run repeatedly since IF EXISTS
+  // makes it a no-op once it's gone.
+  await sql.query('DROP TABLE IF EXISTS gallery_images');
+
+  console.log(`Migration complete: ${SCHEMA_STATEMENTS.length} tables ensured, gallery_images dropped.`);
 }
 
 migrate()

@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { api } from '../../lib/api.js';
 import ImageUploadField from '../ImageUploadField.jsx';
-import ProductsPanel from './ProductsPanel.jsx';
 
+// Categories are just the sub-pages themselves (name, photo, slug) — adding
+// and photographing the products that live inside each one happens in the
+// Galeria tab instead, so it's always clear which room you're editing.
 function CategoryRow({ category, onChanged, onDeleted }) {
   const [form, setForm] = useState(category);
-  const [expanded, setExpanded] = useState(false);
   const [saving, setSaving] = useState(false);
 
   async function handleSave() {
@@ -36,17 +37,12 @@ function CategoryRow({ category, onChanged, onDeleted }) {
         <label className="admin-field__label">Përshkrim i shkurtër</label>
         <input value={form.tagline || ''} onChange={(e) => setForm((f) => ({ ...f, tagline: e.target.value }))} />
       </div>
-      <p className="admin-field__hint">Faqja: /rooms/{form.slug}</p>
+      <p className="admin-field__hint">Faqja: /rooms/{form.slug} · Produktet dhe fotot e tyre menaxhohen te skeda "Galeria"</p>
 
       <div className="admin-subcard__actions">
         <button type="button" onClick={handleSave} disabled={saving}>{saving ? 'Po ruhen ndryshimet...' : 'Ruaj'}</button>
-        <button type="button" className="admin-btn-secondary" onClick={() => setExpanded((v) => !v)}>
-          {expanded ? 'Fshih Produktet' : 'Menaxho Produktet'}
-        </button>
         <button type="button" className="admin-btn-danger" onClick={handleDelete}>Fshi Koleksionin</button>
       </div>
-
-      {expanded && <ProductsPanel category={form} />}
     </div>
   );
 }
@@ -77,8 +73,9 @@ export default function CategoriesSection() {
     <div className="admin-panel">
       <h2 className="admin-panel__heading">Koleksionet</h2>
       <p className="admin-panel__description">
-        Çdo koleksion krijon faqen e vet me produktet përkatëse. Shtoni një koleksion të ri për ta
-        publikuar në faqe.
+        Çdo koleksion krijon faqen (nën-faqen) e vet — p.sh. Kuzhina, Dhoma e Ndenjes. Këtu vendosni vetëm
+        emrin, përshkrimin dhe foton kryesore të secilit. Për të shtuar produkte dhe fotot e tyre brenda
+        një koleksioni, shkoni te skeda "Galeria".
       </p>
 
       {categories.map((cat) => (

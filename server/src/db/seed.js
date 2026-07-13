@@ -131,14 +131,6 @@ async function run() {
     }
     console.log('Seeded categories & products');
   }
-
-  const [{ n: galleryCount }] = await sql`SELECT COUNT(*)::int AS n FROM gallery_images`;
-  if (galleryCount === 0) {
-    for (let i = 1; i <= 6; i++) {
-      await sql`INSERT INTO gallery_images (caption, sort_order) VALUES (${`Foto ${i}`}, ${i - 1})`;
-    }
-    console.log('Seeded gallery placeholders');
-  }
 }
 
 run()

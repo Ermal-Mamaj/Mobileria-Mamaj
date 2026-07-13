@@ -40,13 +40,6 @@ export const SCHEMA_STATEMENTS = [
     sort_order INTEGER DEFAULT 0
   )`,
 
-  `CREATE TABLE IF NOT EXISTS gallery_images (
-    id SERIAL PRIMARY KEY,
-    image_url TEXT,
-    caption TEXT DEFAULT '',
-    sort_order INTEGER DEFAULT 0
-  )`,
-
   `CREATE TABLE IF NOT EXISTS home_content (
     id INTEGER PRIMARY KEY CHECK (id = 1),
     hero_eyebrow TEXT DEFAULT '',

@@ -6,7 +6,6 @@ import './NavHeader.css';
 const LINKS = [
   { key: 'home', label: 'Ballina', to: '/' },
   { key: 'categories', label: 'Ambientet', to: '/categories' },
-  { key: 'gallery', label: 'Galeria', to: '/gallery' },
   { key: 'about', label: 'Rreth Nesh', to: '/about' },
   { key: 'contact', label: 'Na Kontaktoni', to: '/contact' },
 ];

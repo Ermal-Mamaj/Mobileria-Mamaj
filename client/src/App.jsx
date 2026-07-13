@@ -3,7 +3,6 @@ import { Routes, Route } from 'react-router-dom';
 import HomePage from './pages/HomePage.jsx';
 import CategoriesPage from './pages/CategoriesPage.jsx';
 import RoomPage from './pages/RoomPage.jsx';
-import GalleryPage from './pages/GalleryPage.jsx';
 import AboutPage from './pages/AboutPage.jsx';
 import ContactPage from './pages/ContactPage.jsx';
 import CreditsPage from './pages/CreditsPage.jsx';
@@ -21,7 +20,6 @@ function App() {
       <Route path="/" element={<HomePage />} />
       <Route path="/categories" element={<CategoriesPage />} />
       <Route path="/rooms/:slug" element={<RoomPage />} />
-      <Route path="/gallery" element={<GalleryPage />} />
       <Route path="/about" element={<AboutPage />} />
       <Route path="/contact" element={<ContactPage />} />
       <Route path="/credits" element={<CreditsPage />} />
