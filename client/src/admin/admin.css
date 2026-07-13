@@ -395,3 +395,32 @@ button {
   font-weight: 600;
   cursor: pointer;
 }
+
+/* Room picker at the top of Galeria — makes it explicit which room's
+   products/photos are being edited before any fields are shown. */
+.admin-room-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 4px 0 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.admin-room-tab {
+  padding: 8px 14px;
+  background: var(--white);
+  color: var(--muted-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.admin-room-tab.is-active {
+  background: var(--gold-deep);
+  color: var(--white);
+  border-color: var(--gold-deep);
+}
+
