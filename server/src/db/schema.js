@@ -17,8 +17,20 @@ export const SCHEMA_STATEMENTS = [
     facebook TEXT DEFAULT '',
     instagram TEXT DEFAULT '',
     business_hours TEXT DEFAULT '',
-    logo_url TEXT
+    logo_url TEXT,
+    location1_name TEXT DEFAULT '',
+    location1_maps_url TEXT DEFAULT '',
+    location2_name TEXT DEFAULT '',
+    location2_maps_url TEXT DEFAULT ''
   )`,
+
+  // The two columns above were added after site_settings already existed in
+  // production — CREATE TABLE IF NOT EXISTS is a no-op there, so the new
+  // columns need an explicit, repeat-safe ALTER for already-migrated DBs.
+  `ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS location1_name TEXT DEFAULT ''`,
+  `ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS location1_maps_url TEXT DEFAULT ''`,
+  `ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS location2_name TEXT DEFAULT ''`,
+  `ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS location2_maps_url TEXT DEFAULT ''`,
 
   `CREATE TABLE IF NOT EXISTS categories (
     id SERIAL PRIMARY KEY,

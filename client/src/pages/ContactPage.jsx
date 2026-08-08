@@ -46,17 +46,28 @@ export default function ContactPage() {
         </>
       ),
     },
-    settings.address && {
-      label: 'Salloni',
-      value: settings.address,
-      icon: (
-        <>
-          <path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0 1 18 0z" />
-          <circle cx="12" cy="10" r="3" />
-        </>
-      ),
+  ].filter(Boolean);
+
+  // Each is a tappable card that opens the exact Google Maps pin in a new
+  // tab/app — set by the admin as name + share-link pairs, so it works even
+  // though we only ever have a maps.app.goo.gl link, not real coordinates.
+  const locationRows = [
+    settings.location1_maps_url && {
+      name: settings.location1_name || 'Lokacioni 1',
+      url: settings.location1_maps_url,
+    },
+    settings.location2_maps_url && {
+      name: settings.location2_name || 'Lokacioni 2',
+      url: settings.location2_maps_url,
     },
   ].filter(Boolean);
+
+  const pinIcon = (
+    <>
+      <path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0 1 18 0z" />
+      <circle cx="12" cy="10" r="3" />
+    </>
+  );
 
   return (
     <div className="app-shell">
@@ -84,6 +95,33 @@ export default function ContactPage() {
             </div>
           ))}
         </div>
+
+        {locationRows.length > 0 && (
+          <div className="contact-info-list contact-location-list">
+            {locationRows.map((loc) => (
+              <a
+                className="contact-info-card contact-location-card"
+                key={loc.name}
+                href={loc.url}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <div className="contact-info-card__icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1F2733" strokeWidth="2">
+                    {pinIcon}
+                  </svg>
+                </div>
+                <div className="contact-location-card__text">
+                  <h3 className="contact-info-card__label">{loc.name}</h3>
+                  <p className="contact-info-card__value">Hap në Google Maps</p>
+                </div>
+                <svg className="contact-location-card__arrow" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#C9A227" strokeWidth="2">
+                  <path d="M7 17 17 7M7 7h10v10" />
+                </svg>
+              </a>
+            ))}
+          </div>
+        )}
 
         {settings.business_hours && (
           <p className="contact-hours">Orari i Punës: {settings.business_hours}</p>

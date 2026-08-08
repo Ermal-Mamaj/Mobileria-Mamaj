@@ -83,8 +83,15 @@ async function run() {
   const [{ n: settingsCount }] = await sql`SELECT COUNT(*)::int AS n FROM site_settings`;
   if (settingsCount === 0) {
     await sql`
-      INSERT INTO site_settings (id, phone, whatsapp, email, address, facebook, instagram, business_hours)
-      VALUES (1, ${'+383 44/49 218 690'}, ${'+383 44/49 218 690'}, ${'hello@mamaj.com'}, ${'Rr. Nena Terezë, Prishtinë'}, ${'MobileriaMamaj'}, ${''}, ${'Hën–Sht: 9:00–18:00'})
+      INSERT INTO site_settings (
+        id, phone, whatsapp, email, address, facebook, instagram, business_hours,
+        location1_name, location1_maps_url, location2_name, location2_maps_url
+      )
+      VALUES (
+        1, ${'+383 44/49 218 690'}, ${'+383 44/49 218 690'}, ${'hello@mamaj.com'}, ${'Rr. Nena Terezë, Prishtinë'}, ${'MobileriaMamaj'}, ${''}, ${'Hën–Sht: 9:00–18:00'},
+        ${'Lokacioni 1'}, ${'https://maps.app.goo.gl/96VAFbuLrEQEvQLD9?g_st=iv'},
+        ${'Lokacioni 2'}, ${'https://maps.app.goo.gl/x4E4oPk5a8kuWef4A?g_st=iv'}
+      )
     `;
     console.log('Seeded site settings');
   }

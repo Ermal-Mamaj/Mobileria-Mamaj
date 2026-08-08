@@ -12,6 +12,15 @@ const FIELDS = [
   ['business_hours', 'Orari i Punës'],
 ];
 
+// Each pair renders as a tappable "Lokacioni" card on the Contact page —
+// the name is shown, tapping it opens location*_maps_url in Google Maps.
+const LOCATION_FIELDS = [
+  ['location1_name', 'Emri i Lokacionit 1', 'p.sh. Salloni Kryesor'],
+  ['location1_maps_url', 'Linku i Google Maps (Lokacioni 1)', 'https://maps.app.goo.gl/...'],
+  ['location2_name', 'Emri i Lokacionit 2', 'p.sh. Punishtja'],
+  ['location2_maps_url', 'Linku i Google Maps (Lokacioni 2)', 'https://maps.app.goo.gl/...'],
+];
+
 export default function SiteSettingsSection() {
   const [form, setForm] = useState(null);
   const [saving, setSaving] = useState(false);
@@ -49,6 +58,24 @@ export default function SiteSettingsSection() {
           <input value={form[key] || ''} onChange={(e) => set(key, e.target.value)} />
         </div>
       ))}
+
+      <h2 className="admin-panel__heading">Lokacionet</h2>
+      <p className="admin-panel__description">
+        Hap Google Maps, gjej vendndodhjen, shto butonin "Share" dhe kopjo linkun që të
+        shfaqet — pastaj ngjite këtu. Në faqen e Kontaktit, çdo lokacion shfaqet si kartë
+        të cilën vizitorët mund ta prekin për t'u drejtuar direkt atje me Google Maps.
+      </p>
+      {LOCATION_FIELDS.map(([key, label, placeholder]) => (
+        <div className="admin-field" key={key}>
+          <label className="admin-field__label">{label}</label>
+          <input
+            value={form[key] || ''}
+            placeholder={placeholder}
+            onChange={(e) => set(key, e.target.value)}
+          />
+        </div>
+      ))}
+
       <div className="admin-panel__actions">
         <button type="submit" disabled={saving}>{saving ? 'Po ruhen ndryshimet...' : 'Ruaj Ndryshimet'}</button>
         {savedAt && <span className="admin-panel__saved">U ruajt me sukses</span>}
