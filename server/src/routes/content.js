@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { sql } from '../db/index.js';
 import { requireAdmin } from '../auth.js';
+import { asyncHandler } from '../lib/asyncHandler.js';
 
 const router = Router();
 
@@ -21,27 +22,27 @@ async function upsertSingleton(table, fields, id, next) {
   return row;
 }
 
-router.get('/home', async (req, res) => {
+router.get('/home', asyncHandler(async (req, res) => {
   const [row] = await sql`SELECT * FROM home_content WHERE id = 1`;
   res.json(row || {});
-});
+}));
 
-router.put('/home', requireAdmin, async (req, res) => {
+router.put('/home', requireAdmin, asyncHandler(async (req, res) => {
   const row = await upsertSingleton('home_content', HOME_FIELDS, 1, req.body || {});
   res.json(row);
-});
+}));
 
-router.get('/about', async (req, res) => {
+router.get('/about', asyncHandler(async (req, res) => {
   const [row] = await sql`SELECT * FROM about_content WHERE id = 1`;
   // values_json is a JSONB column — Neon returns it already parsed as an array.
   res.json(row || {});
-});
+}));
 
-router.put('/about', requireAdmin, async (req, res) => {
+router.put('/about', requireAdmin, asyncHandler(async (req, res) => {
   const body = { ...req.body };
   if (Array.isArray(body.values_json)) body.values_json = JSON.stringify(body.values_json);
   const row = await upsertSingleton('about_content', ABOUT_FIELDS, 1, body);
   res.json(row);
-});
+}));
 
 export default router;

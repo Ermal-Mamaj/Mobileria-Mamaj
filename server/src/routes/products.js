@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { sql } from '../db/index.js';
 import { requireAdmin } from '../auth.js';
+import { asyncHandler } from '../lib/asyncHandler.js';
 
 const router = Router();
 
@@ -21,7 +22,7 @@ const SELECT_PRODUCTS = `
   LEFT JOIN product_images pi ON pi.product_id = p.id
 `;
 
-router.get('/', async (req, res) => {
+router.get('/', asyncHandler(async (req, res) => {
   const { category, featured } = req.query;
 
   // Filters are composed as bound parameters — never concatenated into the SQL.
@@ -41,9 +42,9 @@ router.get('/', async (req, res) => {
     params
   );
   res.json(rows);
-});
+}));
 
-router.post('/', requireAdmin, async (req, res) => {
+router.post('/', requireAdmin, asyncHandler(async (req, res) => {
   const { category_id, name, material = '', image_url = null, badge = null, featured_home = 0, sort_order = 0 } = req.body || {};
   if (!category_id || !name) return res.status(400).json({ error: 'category_id and name required' });
   const [row] = await sql`
@@ -52,7 +53,7 @@ router.post('/', requireAdmin, async (req, res) => {
     RETURNING *
   `;
   res.status(201).json({ ...row, images: [] });
-});
+}));
 
 const PRODUCT_FIELDS = ['category_id', 'name', 'material', 'image_url', 'badge', 'featured_home', 'sort_order'];
 
@@ -67,7 +68,7 @@ const IMAGES_SUBQUERY = `(
   FROM product_images pi WHERE pi.product_id = products.id
 ) AS images`;
 
-router.put('/:id', requireAdmin, async (req, res) => {
+router.put('/:id', requireAdmin, asyncHandler(async (req, res) => {
   const body = { ...req.body };
   if ('featured_home' in body) body.featured_home = body.featured_home ? 1 : 0;
 
@@ -90,16 +91,16 @@ router.put('/:id', requireAdmin, async (req, res) => {
   );
   if (!row) return res.status(404).json({ error: 'Not found' });
   res.json(row);
-});
+}));
 
-router.delete('/:id', requireAdmin, async (req, res) => {
+router.delete('/:id', requireAdmin, asyncHandler(async (req, res) => {
   await sql`DELETE FROM products WHERE id = ${req.params.id}`;
   res.json({ ok: true });
-});
+}));
 
 // --- extra photos for a product ---
 
-router.post('/:id/images', requireAdmin, async (req, res) => {
+router.post('/:id/images', requireAdmin, asyncHandler(async (req, res) => {
   const { image_url } = req.body || {};
   if (!image_url) return res.status(400).json({ error: 'image_url required' });
 
@@ -115,11 +116,11 @@ router.post('/:id/images', requireAdmin, async (req, res) => {
     RETURNING id, image_url, sort_order
   `;
   res.status(201).json(row);
-});
+}));
 
-router.delete('/:id/images/:imageId', requireAdmin, async (req, res) => {
+router.delete('/:id/images/:imageId', requireAdmin, asyncHandler(async (req, res) => {
   await sql`DELETE FROM product_images WHERE id = ${req.params.imageId} AND product_id = ${req.params.id}`;
   res.json({ ok: true });
-});
+}));
 
 export default router;
