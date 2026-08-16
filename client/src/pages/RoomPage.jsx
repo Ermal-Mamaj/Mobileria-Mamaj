@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import NavHeader from '../components/NavHeader.jsx';
 import Footer from '../components/Footer.jsx';
 import ImageSlot from '../components/ImageSlot.jsx';
+import PriceTag from '../components/PriceTag.jsx';
 import { useApiGet } from '../lib/hooks.js';
 import './RoomPage.css';
 
@@ -69,6 +70,7 @@ export default function RoomPage() {
               <div className="room-product-card__body">
                 <h3 className="room-product-card__name">{p.name}</h3>
                 <p className="room-product-card__material">{p.material}</p>
+                <PriceTag product={p} className="room-product-card__price" />
               </div>
             </div>
           );
@@ -127,6 +129,7 @@ export default function RoomPage() {
                 <span>MAMAJ</span>
               </div>
               <h2 className="room-modal__name">{selected.name}</h2>
+              <PriceTag product={selected} className="room-modal__price" />
               <p className="room-modal__description">
                 Punuar me dorë — {selected.material}. Ofrohet me porosi në përmasa e përfundime të ndryshme — vizitoni sallonin tonë për ta parë nga afër.
               </p>

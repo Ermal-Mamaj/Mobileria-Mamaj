@@ -93,6 +93,32 @@ export default function ProductsPanel({ category }) {
               onBlur={(e) => updateProduct(p.id, { material: e.target.value })}
             />
           </div>
+          <div className="admin-field-row">
+            <div className="admin-field">
+              <label className="admin-field__label">Çmimi (€)</label>
+              <input
+                type="number"
+                min="0"
+                step="0.01"
+                value={p.price ?? ''}
+                placeholder="p.sh. 450"
+                onChange={(e) => setProducts((ps) => ps.map((x) => (x.id === p.id ? { ...x, price: e.target.value } : x)))}
+                onBlur={(e) => updateProduct(p.id, { price: e.target.value === '' ? null : e.target.value })}
+              />
+            </div>
+            <div className="admin-field">
+              <label className="admin-field__label">Çmimi i Zbritjes (€) — lëreni bosh nëse nuk është në zbritje</label>
+              <input
+                type="number"
+                min="0"
+                step="0.01"
+                value={p.sale_price ?? ''}
+                placeholder="p.sh. 360"
+                onChange={(e) => setProducts((ps) => ps.map((x) => (x.id === p.id ? { ...x, sale_price: e.target.value } : x)))}
+                onBlur={(e) => updateProduct(p.id, { sale_price: e.target.value === '' ? null : e.target.value })}
+              />
+            </div>
+          </div>
           <div className="admin-field">
             <label className="admin-field__label">Etiketa</label>
             <select value={p.badge || ''} onChange={(e) => updateProduct(p.id, { badge: e.target.value || null })}>
