@@ -36,17 +36,29 @@ router.post('/', requireAdmin, async (req, res) => {
   res.status(201).json(row);
 });
 
+const CATEGORY_FIELDS = ['slug', 'name', 'tagline', 'hero_image_url', 'sort_order'];
+
 router.put('/:id', requireAdmin, async (req, res) => {
-  const [existing] = await sql`SELECT * FROM categories WHERE id = ${req.params.id}`;
-  if (!existing) return res.status(404).json({ error: 'Not found' });
-  const next = { ...existing, ...req.body };
-  if (req.body.slug) next.slug = slugify(req.body.slug);
-  const [row] = await sql`
-    UPDATE categories SET slug = ${next.slug}, name = ${next.name}, tagline = ${next.tagline},
-      hero_image_url = ${next.hero_image_url}, sort_order = ${next.sort_order}
-    WHERE id = ${req.params.id}
-    RETURNING *
-  `;
+  const body = { ...req.body };
+  if (body.slug) body.slug = slugify(body.slug);
+
+  // Only touch columns the client actually sent — avoids a pre-fetch SELECT
+  // just to preserve untouched fields. The admin form always sends every
+  // field anyway, but this stays correct even for a future partial update.
+  const presentFields = CATEGORY_FIELDS.filter((f) => f in body);
+  if (presentFields.length === 0) {
+    const [row] = await sql`SELECT * FROM categories WHERE id = ${req.params.id}`;
+    if (!row) return res.status(404).json({ error: 'Not found' });
+    return res.json(row);
+  }
+
+  const setList = presentFields.map((f, i) => `${f} = $${i + 1}`).join(', ');
+  const values = presentFields.map((f) => body[f]);
+  const [row] = await sql.query(
+    `UPDATE categories SET ${setList} WHERE id = $${presentFields.length + 1} RETURNING *`,
+    [...values, req.params.id]
+  );
+  if (!row) return res.status(404).json({ error: 'Not found' });
   res.json(row);
 });
 

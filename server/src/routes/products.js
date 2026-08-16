@@ -54,22 +54,42 @@ router.post('/', requireAdmin, async (req, res) => {
   res.status(201).json({ ...row, images: [] });
 });
 
+const PRODUCT_FIELDS = ['category_id', 'name', 'material', 'image_url', 'badge', 'featured_home', 'sort_order'];
+
+// Scalar subquery pulls the product's extra photos into the same query as
+// the UPDATE itself, so a save doesn't need a separate round trip afterward
+// just to hand the images back to the client.
+const IMAGES_SUBQUERY = `(
+  SELECT COALESCE(
+    json_agg(json_build_object('id', pi.id, 'image_url', pi.image_url, 'sort_order', pi.sort_order) ORDER BY pi.sort_order ASC, pi.id ASC),
+    '[]'
+  )
+  FROM product_images pi WHERE pi.product_id = products.id
+) AS images`;
+
 router.put('/:id', requireAdmin, async (req, res) => {
-  const [existing] = await sql`SELECT * FROM products WHERE id = ${req.params.id}`;
-  if (!existing) return res.status(404).json({ error: 'Not found' });
-  const next = { ...existing, ...req.body };
-  const [row] = await sql`
-    UPDATE products SET category_id = ${next.category_id}, name = ${next.name}, material = ${next.material},
-      image_url = ${next.image_url}, badge = ${next.badge}, featured_home = ${next.featured_home ? 1 : 0},
-      sort_order = ${next.sort_order}
-    WHERE id = ${req.params.id}
-    RETURNING *
-  `;
-  const images = await sql`
-    SELECT id, image_url, sort_order FROM product_images
-    WHERE product_id = ${req.params.id} ORDER BY sort_order ASC, id ASC
-  `;
-  res.json({ ...row, images });
+  const body = { ...req.body };
+  if ('featured_home' in body) body.featured_home = body.featured_home ? 1 : 0;
+
+  // Only touch columns the client actually sent. The admin UI genuinely
+  // relies on this being a real partial update (each field auto-saves on
+  // its own as you type/blur) rather than always resending the whole
+  // product, so this can't be simplified to "just send everything."
+  const presentFields = PRODUCT_FIELDS.filter((f) => f in body);
+  if (presentFields.length === 0) {
+    const [row] = await sql.query(`SELECT products.*, ${IMAGES_SUBQUERY} FROM products WHERE id = $1`, [req.params.id]);
+    if (!row) return res.status(404).json({ error: 'Not found' });
+    return res.json(row);
+  }
+
+  const setList = presentFields.map((f, i) => `${f} = $${i + 1}`).join(', ');
+  const values = presentFields.map((f) => body[f]);
+  const [row] = await sql.query(
+    `UPDATE products SET ${setList} WHERE id = $${presentFields.length + 1} RETURNING products.*, ${IMAGES_SUBQUERY}`,
+    [...values, req.params.id]
+  );
+  if (!row) return res.status(404).json({ error: 'Not found' });
+  res.json(row);
 });
 
 router.delete('/:id', requireAdmin, async (req, res) => {
