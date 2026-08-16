@@ -46,16 +46,15 @@ export default function ContactPage() {
         </>
       ),
     },
-    settings.address && {
-      label: 'Salloni',
-      value: settings.address,
-      icon: (
-        <>
-          <path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0 1 18 0z" />
-          <circle cx="12" cy="10" r="3" />
-        </>
-      ),
-    },
+  ].filter(Boolean);
+
+  // Each set address opens Google Maps with directions straight to it — no
+  // API key needed, and it works the same as a plain link on desktop (opens
+  // Google Maps in the browser) or on mobile (opens the Maps/Waze app if
+  // installed). Supports one location or two.
+  const locations = [
+    settings.address && { label: 'Vendndodhja 1', address: settings.address },
+    settings.address_2 && { label: 'Vendndodhja 2', address: settings.address_2 },
   ].filter(Boolean);
 
   return (
@@ -84,6 +83,32 @@ export default function ContactPage() {
             </div>
           ))}
         </div>
+
+        {locations.length > 0 && (
+          <div className="contact-locations">
+            {locations.map((loc) => (
+              <a
+                key={loc.label}
+                className="contact-location-card"
+                href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(loc.address)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <div className="contact-location-card__icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1F2733" strokeWidth="2">
+                    <path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0 1 18 0z" />
+                    <circle cx="12" cy="10" r="3" />
+                  </svg>
+                </div>
+                <div className="contact-location-card__text">
+                  <h3 className="contact-location-card__label">{loc.label}</h3>
+                  <p className="contact-location-card__value">{loc.address}</p>
+                </div>
+                <span className="contact-location-card__cta">Merr Drejtimin →</span>
+              </a>
+            ))}
+          </div>
+        )}
 
         {settings.business_hours && (
           <p className="contact-hours">Orari i Punës: {settings.business_hours}</p>

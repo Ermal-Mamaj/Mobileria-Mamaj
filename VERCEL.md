@@ -95,7 +95,10 @@ protection on admin actions, security headers (`helmet`), and the old
    `BLOB_READ_WRITE_TOKEN` automatically — you don't need to add it by hand.
 4. Deploy. Vercel builds the client (`npm run build -w client`) and deploys
    `api/index.js` as a serverless function per `vercel.json`'s rewrites,
-   which route `/api/*` and `/uploads/*` to it.
+   which route `/api/*` to it and everything else to the SPA's `index.html`
+   (so deep links like `/rooms/kitchen` don't 404 on refresh). Image uploads
+   never touch this function at all — the browser sends them straight to
+   Vercel Blob.
 5. Visit `https://<your-project>.vercel.app/mamaj-cms/login` and log in with
    the admin credentials from the seed step to confirm everything's wired up.
 

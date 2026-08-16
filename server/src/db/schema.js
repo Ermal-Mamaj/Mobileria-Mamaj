@@ -14,6 +14,7 @@ export const SCHEMA_STATEMENTS = [
     whatsapp TEXT DEFAULT '',
     email TEXT DEFAULT '',
     address TEXT DEFAULT '',
+    address_2 TEXT DEFAULT '',
     facebook TEXT DEFAULT '',
     instagram TEXT DEFAULT '',
     business_hours TEXT DEFAULT '',
