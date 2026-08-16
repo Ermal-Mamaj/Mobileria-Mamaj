@@ -23,6 +23,21 @@ export default function Footer() {
             <span>{settings.phone}</span>
           </div>
         )}
+        {[settings?.address, settings?.address_2].filter(Boolean).map((address) => (
+          <a
+            key={address}
+            className="footer__row footer__row--link"
+            href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(address)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#EBC84C" strokeWidth="2">
+              <path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0 1 18 0z" />
+              <circle cx="12" cy="10" r="3" />
+            </svg>
+            <span>{address}</span>
+          </a>
+        ))}
         {settings?.facebook && (
           <div className="footer__row">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="#EBC84C">
