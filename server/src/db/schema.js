@@ -18,7 +18,8 @@ export const SCHEMA_STATEMENTS = [
     facebook TEXT DEFAULT '',
     instagram TEXT DEFAULT '',
     business_hours TEXT DEFAULT '',
-    logo_url TEXT
+    logo_url TEXT,
+    sale_section_enabled BOOLEAN NOT NULL DEFAULT FALSE
   )`,
 
   `CREATE TABLE IF NOT EXISTS categories (
@@ -37,6 +38,8 @@ export const SCHEMA_STATEMENTS = [
     material TEXT DEFAULT '',
     image_url TEXT,
     badge TEXT,
+    price NUMERIC(10,2),
+    sale_price NUMERIC(10,2),
     featured_home INTEGER DEFAULT 0,
     sort_order INTEGER DEFAULT 0
   )`,

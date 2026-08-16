@@ -5,7 +5,7 @@ import { asyncHandler } from '../lib/asyncHandler.js';
 
 const router = Router();
 
-const FIELDS = ['phone', 'whatsapp', 'email', 'address', 'address_2', 'facebook', 'instagram', 'business_hours', 'logo_url'];
+const FIELDS = ['phone', 'whatsapp', 'email', 'address', 'address_2', 'facebook', 'instagram', 'business_hours', 'logo_url', 'sale_section_enabled'];
 
 router.get('/', asyncHandler(async (req, res) => {
   const [row] = await sql`SELECT * FROM site_settings WHERE id = 1`;

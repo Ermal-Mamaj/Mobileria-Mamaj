@@ -277,6 +277,15 @@
   margin-bottom: 12px;
 }
 
+.product-card__price {
+  margin-bottom: 12px;
+}
+
+.product-card__badge--sale {
+  background: #C94B3F;
+  color: #fff;
+}
+
 .product-card__body .btn-outline {
   /* The actual fix: whatever space the name/material didn't use gets
      absorbed here, so the button always sits flush with the card's

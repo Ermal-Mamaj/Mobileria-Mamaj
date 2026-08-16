@@ -23,7 +23,7 @@ const SELECT_PRODUCTS = `
 `;
 
 router.get('/', asyncHandler(async (req, res) => {
-  const { category, featured } = req.query;
+  const { category, featured, sale } = req.query;
 
   // Filters are composed as bound parameters — never concatenated into the SQL.
   const clauses = [];
@@ -33,6 +33,10 @@ router.get('/', asyncHandler(async (req, res) => {
     clauses.push(`c.slug = $${params.length}`);
   }
   if (featured) clauses.push('p.featured_home = 1');
+  // "On sale" means an actual discount is set, not just any sale_price
+  // present — guards against a stale sale_price left over at or above the
+  // regular price still showing up as a deal.
+  if (sale) clauses.push('p.sale_price IS NOT NULL AND p.sale_price < p.price');
 
   const rows = await sql.query(
     `${SELECT_PRODUCTS}
@@ -45,17 +49,17 @@ router.get('/', asyncHandler(async (req, res) => {
 }));
 
 router.post('/', requireAdmin, asyncHandler(async (req, res) => {
-  const { category_id, name, material = '', image_url = null, badge = null, featured_home = 0, sort_order = 0 } = req.body || {};
+  const { category_id, name, material = '', image_url = null, badge = null, price = null, sale_price = null, featured_home = 0, sort_order = 0 } = req.body || {};
   if (!category_id || !name) return res.status(400).json({ error: 'category_id and name required' });
   const [row] = await sql`
-    INSERT INTO products (category_id, name, material, image_url, badge, featured_home, sort_order)
-    VALUES (${category_id}, ${name}, ${material}, ${image_url}, ${badge}, ${featured_home ? 1 : 0}, ${sort_order})
+    INSERT INTO products (category_id, name, material, image_url, badge, price, sale_price, featured_home, sort_order)
+    VALUES (${category_id}, ${name}, ${material}, ${image_url}, ${badge}, ${price}, ${sale_price}, ${featured_home ? 1 : 0}, ${sort_order})
     RETURNING *
   `;
   res.status(201).json({ ...row, images: [] });
 }));
 
-const PRODUCT_FIELDS = ['category_id', 'name', 'material', 'image_url', 'badge', 'featured_home', 'sort_order'];
+const PRODUCT_FIELDS = ['category_id', 'name', 'material', 'image_url', 'badge', 'price', 'sale_price', 'featured_home', 'sort_order'];
 
 // Scalar subquery pulls the product's extra photos into the same query as
 // the UPDATE itself, so a save doesn't need a separate round trip afterward
