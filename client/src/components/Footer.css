@@ -38,10 +38,31 @@
 .footer__row--link {
   text-decoration: none;
   cursor: pointer;
+  align-self: flex-start;
+  padding: 9px 14px;
+  border-radius: 999px;
+  background: rgba(235, 200, 76, 0.1);
+  border: 1px solid rgba(235, 200, 76, 0.3);
+  color: var(--gold);
+  font-weight: 600;
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+}
+
+.footer__row-arrow {
+  margin-left: 2px;
 }
 
 .footer__row--link:hover {
-  color: #fff;
+  background: rgba(235, 200, 76, 0.18);
+  border-color: rgba(235, 200, 76, 0.5);
+}
+
+/* :active (not just :hover) matters here since most visitors are on
+   mobile, where hover never fires — this is what gives a tap its
+   visible "yes, that registered, I'm a button" feedback. */
+.footer__row--link:active {
+  background: rgba(235, 200, 76, 0.24);
+  transform: scale(0.97);
 }
 
 .footer__copyright {
@@ -77,6 +98,9 @@
     flex-direction: row;
     align-items: center;
     gap: 28px;
+  }
+  .footer__row--link {
+    align-self: center;
   }
   .footer__copyright {
     width: 100%;
