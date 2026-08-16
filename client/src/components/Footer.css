@@ -35,6 +35,15 @@
   color: rgba(255, 255, 255, 0.85);
 }
 
+.footer__row--link {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.footer__row--link:hover {
+  color: #fff;
+}
+
 .footer__copyright {
   font-size: 10.5px;
   color: rgba(255, 255, 255, 0.4);
