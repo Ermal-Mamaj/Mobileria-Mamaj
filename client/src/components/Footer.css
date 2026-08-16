@@ -95,6 +95,14 @@
     gap: 24px;
     padding: 40px max(48px, calc((100% - 1280px) / 2)) 34px;
   }
+  /* Desktop already looked right stacked (logo above the rows) — the
+     side-by-side layout above is a mobile-only fix, not a global one. */
+  .footer__left {
+    display: block;
+  }
+  .footer__brand {
+    margin-bottom: 20px;
+  }
   .footer__copyright {
     margin-top: 0;
     text-align: right;
