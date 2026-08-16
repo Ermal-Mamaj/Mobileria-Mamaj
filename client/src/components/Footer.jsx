@@ -39,6 +39,9 @@ export default function Footer() {
               <circle cx="12" cy="10" r="3" />
             </svg>
             <span>{loc.label}</span>
+            <svg className="footer__row-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#EBC84C" strokeWidth="2.5">
+              <path d="M7 17 17 7M8 7h9v9" />
+            </svg>
           </a>
         ))}
         {settings?.facebook && (
