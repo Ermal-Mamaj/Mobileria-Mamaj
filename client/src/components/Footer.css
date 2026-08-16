@@ -8,11 +8,16 @@
   border-top: 1px solid rgba(235, 200, 76, 0.15);
 }
 
+.footer__left {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
 .footer__brand {
   display: flex;
   align-items: center;
-  gap: 11px;
-  margin-bottom: 20px;
+  flex-shrink: 0;
 }
 
 .footer__logo {
