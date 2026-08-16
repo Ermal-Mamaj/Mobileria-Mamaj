@@ -50,6 +50,10 @@
   line-height: 1.4;
 }
 
+.room-product-card__price {
+  margin-top: 6px;
+}
+
 .room-modal-overlay {
   position: fixed;
   inset: 0;
@@ -214,6 +218,10 @@
   color: var(--text);
   line-height: 1.05;
   margin: 10px 0;
+}
+
+.room-modal__price {
+  margin-bottom: 14px;
 }
 
 .room-modal__description {

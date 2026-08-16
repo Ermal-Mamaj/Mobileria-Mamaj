@@ -18,7 +18,8 @@ export const SCHEMA_STATEMENTS = [
     facebook TEXT DEFAULT '',
     instagram TEXT DEFAULT '',
     business_hours TEXT DEFAULT '',
-    logo_url TEXT
+    logo_url TEXT,
+    sale_section_enabled BOOLEAN NOT NULL DEFAULT FALSE
   )`,
 
   `CREATE TABLE IF NOT EXISTS categories (
@@ -37,6 +38,8 @@ export const SCHEMA_STATEMENTS = [
     material TEXT DEFAULT '',
     image_url TEXT,
     badge TEXT,
+    price NUMERIC(10,2),
+    sale_price NUMERIC(10,2),
     featured_home INTEGER DEFAULT 0,
     sort_order INTEGER DEFAULT 0
   )`,
@@ -77,8 +80,8 @@ export const SCHEMA_STATEMENTS = [
   `CREATE INDEX IF NOT EXISTS product_images_product_id_idx ON product_images (product_id)`,
 
   // Every contact submission lands here first. Email delivery is a
-  // best-effort extra on top: if Resend is unconfigured or down, the
-  // enquiry is still captured and readable in the CMS rather than lost.
+  // best-effort extra on top: if the email account is unconfigured or down,
+  // the enquiry is still captured and readable in the CMS rather than lost.
   `CREATE TABLE IF NOT EXISTS contact_messages (
     id SERIAL PRIMARY KEY,
     name TEXT NOT NULL,

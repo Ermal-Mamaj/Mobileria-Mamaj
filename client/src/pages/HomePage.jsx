@@ -3,14 +3,17 @@ import { Link } from 'react-router-dom';
 import NavHeader from '../components/NavHeader.jsx';
 import Footer from '../components/Footer.jsx';
 import ImageSlot from '../components/ImageSlot.jsx';
+import PriceTag from '../components/PriceTag.jsx';
 import { useApiGet } from '../lib/hooks.js';
 import { api } from '../lib/api.js';
 import './HomePage.css';
 
 export default function HomePage() {
   const { data: home } = useApiGet('/content/home', {});
+  const { data: settings } = useApiGet('/site-settings', {});
   const { data: categories } = useApiGet('/categories', []);
   const { data: featured } = useApiGet('/products?featured=1', []);
+  const { data: saleProducts } = useApiGet('/products?sale=1', []);
   const collectionsRef = useRef(null);
   const heroMediaRef = useRef(null);
   const [sent, setSent] = useState(false);
@@ -151,11 +154,43 @@ export default function HomePage() {
             <div className="product-card__body">
               <h3 className="product-card__name">{p.name}</h3>
               <p className="product-card__material">{p.material}</p>
+              <PriceTag product={p} className="product-card__price" />
               <span className="btn-outline">SHIKO</span>
             </div>
           </Link>
         ))}
       </div>
+
+      {settings.sale_section_enabled && saleProducts.length > 0 && (
+        <>
+          <section className="home-page__section home-page__section--tight">
+            <div className="eyebrow eyebrow--gold">
+              <span className="eyebrow__rule" />
+              <span>OFERTA</span>
+            </div>
+            <div className="section-heading-row">
+              <h2 className="section-heading">Në Zbritje</h2>
+            </div>
+          </section>
+
+          <div className="product-carousel">
+            {saleProducts.map((p) => (
+              <Link key={p.id} to={`/rooms/${p.category_slug}`} className="product-card">
+                <div className="product-card__image">
+                  <ImageSlot src={p.image_url} placeholder="Foto" />
+                  <span className="product-card__badge product-card__badge--sale">ZBRITJE</span>
+                </div>
+                <div className="product-card__body">
+                  <h3 className="product-card__name">{p.name}</h3>
+                  <p className="product-card__material">{p.material}</p>
+                  <PriceTag product={p} className="product-card__price" />
+                  <span className="btn-outline">SHIKO</span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </>
+      )}
 
       <section id="contactForm" className="home-page__section">
         <div className="eyebrow eyebrow--muted">

@@ -44,6 +44,14 @@ export default function SiteSettingsSection() {
     <form className="admin-panel" onSubmit={handleSave}>
       <h2 className="admin-panel__heading">Cilësimet e Faqes</h2>
       <ImageUploadField label="Logoja" value={form.logo_url} onChange={(url) => set('logo_url', url)} />
+      <label className="admin-checkbox">
+        <input
+          type="checkbox"
+          checked={!!form.sale_section_enabled}
+          onChange={(e) => set('sale_section_enabled', e.target.checked)}
+        />
+        Aktivizo Seksionin "Në Zbritje" në Ballinë
+      </label>
       {FIELDS.map(([key, label]) => (
         <div className="admin-field" key={key}>
           <label className="admin-field__label">{label}</label>

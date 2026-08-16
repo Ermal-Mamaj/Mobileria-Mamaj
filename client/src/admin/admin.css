@@ -164,6 +164,16 @@
   gap: 5px;
 }
 
+.admin-field-row {
+  display: flex;
+  gap: 12px;
+}
+
+.admin-field-row .admin-field {
+  flex: 1;
+  min-width: 0;
+}
+
 .admin-field__label {
   font-size: 12px;
   font-weight: 600;
