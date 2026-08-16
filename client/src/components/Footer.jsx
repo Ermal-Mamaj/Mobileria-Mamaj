@@ -23,11 +23,14 @@ export default function Footer() {
             <span>{settings.phone}</span>
           </div>
         )}
-        {[settings?.address, settings?.address_2].filter(Boolean).map((address) => (
+        {[
+          settings?.address && { label: 'Lokacioni 1', address: settings.address },
+          settings?.address_2 && { label: 'Lokacioni 2', address: settings.address_2 },
+        ].filter(Boolean).map((loc) => (
           <a
-            key={address}
+            key={loc.label}
             className="footer__row footer__row--link"
-            href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(address)}`}
+            href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(loc.address)}`}
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -35,7 +38,7 @@ export default function Footer() {
               <path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0 1 18 0z" />
               <circle cx="12" cy="10" r="3" />
             </svg>
-            <span>{address}</span>
+            <span>{loc.label}</span>
           </a>
         ))}
         {settings?.facebook && (

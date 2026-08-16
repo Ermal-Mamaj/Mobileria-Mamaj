@@ -53,8 +53,8 @@ export default function ContactPage() {
   // Google Maps in the browser) or on mobile (opens the Maps/Waze app if
   // installed). Supports one location or two.
   const locations = [
-    settings.address && { label: 'Vendndodhja 1', address: settings.address },
-    settings.address_2 && { label: 'Vendndodhja 2', address: settings.address_2 },
+    settings.address && { label: 'Lokacioni 1', address: settings.address },
+    settings.address_2 && { label: 'Lokacioni 2', address: settings.address_2 },
   ].filter(Boolean);
 
   return (
@@ -102,7 +102,6 @@ export default function ContactPage() {
                 </div>
                 <div className="contact-location-card__text">
                   <h3 className="contact-location-card__label">{loc.label}</h3>
-                  <p className="contact-location-card__value">{loc.address}</p>
                 </div>
                 <span className="contact-location-card__cta">Merr Drejtimin →</span>
               </a>
