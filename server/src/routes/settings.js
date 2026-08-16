@@ -1,17 +1,18 @@
 import { Router } from 'express';
 import { sql } from '../db/index.js';
 import { requireAdmin } from '../auth.js';
+import { asyncHandler } from '../lib/asyncHandler.js';
 
 const router = Router();
 
 const FIELDS = ['phone', 'whatsapp', 'email', 'address', 'address_2', 'facebook', 'instagram', 'business_hours', 'logo_url'];
 
-router.get('/', async (req, res) => {
+router.get('/', asyncHandler(async (req, res) => {
   const [row] = await sql`SELECT * FROM site_settings WHERE id = 1`;
   res.json(row || {});
-});
+}));
 
-router.put('/', requireAdmin, async (req, res) => {
+router.put('/', requireAdmin, asyncHandler(async (req, res) => {
   const values = FIELDS.map((f) => req.body[f] ?? null);
 
   // FIELDS is a hardcoded constant, not user input, so building the column
@@ -27,6 +28,6 @@ router.put('/', requireAdmin, async (req, res) => {
     values
   );
   res.json(row);
-});
+}));
 
 export default router;

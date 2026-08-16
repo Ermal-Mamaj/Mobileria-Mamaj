@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs';
 import rateLimit from 'express-rate-limit';
 import { sql } from '../db/index.js';
 import { signToken, checkAdmin, generateCsrfToken, COOKIE_NAME, CSRF_COOKIE_NAME } from '../auth.js';
+import { asyncHandler } from '../lib/asyncHandler.js';
 
 const router = Router();
 
@@ -26,7 +27,7 @@ const COOKIE_OPTS = {
 // needs to read this one to echo it back as a header.
 const CSRF_COOKIE_OPTS = { ...COOKIE_OPTS, httpOnly: false };
 
-router.post('/login', loginLimiter, async (req, res) => {
+router.post('/login', loginLimiter, asyncHandler(async (req, res) => {
   const { username, password } = req.body || {};
   if (!username || !password) return res.status(400).json({ error: 'Username and password required' });
 
@@ -39,7 +40,7 @@ router.post('/login', loginLimiter, async (req, res) => {
   res.cookie(COOKIE_NAME, token, COOKIE_OPTS);
   res.cookie(CSRF_COOKIE_NAME, generateCsrfToken(), CSRF_COOKIE_OPTS);
   res.json({ username: user.username });
-});
+}));
 
 router.post('/logout', (req, res) => {
   res.clearCookie(COOKIE_NAME, { ...COOKIE_OPTS, maxAge: undefined });

@@ -3,6 +3,7 @@ import rateLimit from 'express-rate-limit';
 import { Resend } from 'resend';
 import { sql } from '../db/index.js';
 import { requireAdmin } from '../auth.js';
+import { asyncHandler } from '../lib/asyncHandler.js';
 
 const router = Router();
 
@@ -47,7 +48,7 @@ async function sendEmail({ name, phone, message }) {
   return true;
 }
 
-router.post('/', contactLimiter, async (req, res) => {
+router.post('/', contactLimiter, asyncHandler(async (req, res) => {
   const { name, phone, message } = req.body || {};
   if (!name || !phone || !message) {
     return res.status(400).json({ error: 'Name, phone, and message are required' });
@@ -81,26 +82,26 @@ router.post('/', contactLimiter, async (req, res) => {
   }
 
   res.json({ ok: true });
-});
+}));
 
 // --- Admin inbox ---
 
-router.get('/', requireAdmin, async (req, res) => {
+router.get('/', requireAdmin, asyncHandler(async (req, res) => {
   const rows = await sql`SELECT * FROM contact_messages ORDER BY created_at DESC, id DESC`;
   res.json(rows);
-});
+}));
 
-router.put('/:id/read', requireAdmin, async (req, res) => {
+router.put('/:id/read', requireAdmin, asyncHandler(async (req, res) => {
   const [row] = await sql`
     UPDATE contact_messages SET is_read = ${req.body?.is_read !== false} WHERE id = ${req.params.id} RETURNING *
   `;
   if (!row) return res.status(404).json({ error: 'Not found' });
   res.json(row);
-});
+}));
 
-router.delete('/:id', requireAdmin, async (req, res) => {
+router.delete('/:id', requireAdmin, asyncHandler(async (req, res) => {
   await sql`DELETE FROM contact_messages WHERE id = ${req.params.id}`;
   res.json({ ok: true });
-});
+}));
 
 export default router;
