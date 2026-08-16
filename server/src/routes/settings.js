@@ -4,7 +4,7 @@ import { requireAdmin } from '../auth.js';
 
 const router = Router();
 
-const FIELDS = ['phone', 'whatsapp', 'email', 'address', 'facebook', 'instagram', 'business_hours', 'logo_url'];
+const FIELDS = ['phone', 'whatsapp', 'email', 'address', 'address_2', 'facebook', 'instagram', 'business_hours', 'logo_url'];
 
 router.get('/', async (req, res) => {
   const [row] = await sql`SELECT * FROM site_settings WHERE id = 1`;

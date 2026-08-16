@@ -16,7 +16,14 @@ async function migrate() {
   // makes it a no-op once it's gone.
   await sql.query('DROP TABLE IF EXISTS gallery_images');
 
-  console.log(`Migration complete: ${SCHEMA_STATEMENTS.length} tables ensured, gallery_images dropped.`);
+  // site_settings already existed on prior deployments before address_2 was
+  // added to the schema above — CREATE TABLE IF NOT EXISTS only skips
+  // creating the table when it's already there, it doesn't add missing
+  // columns to it. ADD COLUMN IF NOT EXISTS handles that, and is a no-op on
+  // fresh databases where the column already came from the CREATE TABLE.
+  await sql.query(`ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS address_2 TEXT DEFAULT ''`);
+
+  console.log(`Migration complete: ${SCHEMA_STATEMENTS.length} tables ensured, gallery_images dropped, address_2 column ensured.`);
 }
 
 migrate()
