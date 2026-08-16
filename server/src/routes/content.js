@@ -27,9 +27,7 @@ router.get('/home', async (req, res) => {
 });
 
 router.put('/home', requireAdmin, async (req, res) => {
-  const [existing] = await sql`SELECT * FROM home_content WHERE id = 1`;
-  const next = { ...existing, ...req.body };
-  const row = await upsertSingleton('home_content', HOME_FIELDS, 1, next);
+  const row = await upsertSingleton('home_content', HOME_FIELDS, 1, req.body || {});
   res.json(row);
 });
 
@@ -40,12 +38,9 @@ router.get('/about', async (req, res) => {
 });
 
 router.put('/about', requireAdmin, async (req, res) => {
-  const [existing] = await sql`SELECT * FROM about_content WHERE id = 1`;
   const body = { ...req.body };
   if (Array.isArray(body.values_json)) body.values_json = JSON.stringify(body.values_json);
-  const next = { ...existing, ...body };
-  if (Array.isArray(next.values_json)) next.values_json = JSON.stringify(next.values_json);
-  const row = await upsertSingleton('about_content', ABOUT_FIELDS, 1, next);
+  const row = await upsertSingleton('about_content', ABOUT_FIELDS, 1, body);
   res.json(row);
 });
 

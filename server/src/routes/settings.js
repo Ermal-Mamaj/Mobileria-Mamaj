@@ -12,9 +12,7 @@ router.get('/', async (req, res) => {
 });
 
 router.put('/', requireAdmin, async (req, res) => {
-  const [existing] = await sql`SELECT * FROM site_settings WHERE id = 1`;
-  const next = { ...existing, ...req.body };
-  const values = FIELDS.map((f) => next[f] ?? null);
+  const values = FIELDS.map((f) => req.body[f] ?? null);
 
   // FIELDS is a hardcoded constant, not user input, so building the column
   // list into the query text is safe — only the values themselves (bound as
