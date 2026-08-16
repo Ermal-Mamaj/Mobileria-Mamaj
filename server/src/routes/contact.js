@@ -1,17 +1,22 @@
 import { Router } from 'express';
 import rateLimit from 'express-rate-limit';
-import { Resend } from 'resend';
+import nodemailer from 'nodemailer';
 import { sql } from '../db/index.js';
 import { requireAdmin } from '../auth.js';
 import { asyncHandler } from '../lib/asyncHandler.js';
 
 const router = Router();
 
-// Resend is a plain HTTPS API call under the hood — no persistent SMTP
-// connection to manage, which makes it a good fit for serverless platforms
-// like Vercel where each request may hit a fresh, short-lived function
-// instance.
-const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
+// A plain Gmail account sending over SMTP — no domain verification or
+// third-party service needed, just an email + an app password. Gmail
+// rejects a regular account password here; EMAIL_PASS has to be an App
+// Password (see VERCEL.md for how to generate one).
+const transporter = (process.env.EMAIL_USER && process.env.EMAIL_PASS)
+  ? nodemailer.createTransport({
+      service: 'gmail',
+      auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS },
+    })
+  : null;
 
 // Contact form abuse is a real risk once this is public — 5 submissions
 // per 15 minutes per IP is generous for a real visitor, painful for a bot.
@@ -32,10 +37,14 @@ function escapeHtml(str) {
 }
 
 async function sendEmail({ name, phone, message }) {
-  if (!resend || !process.env.CONTACT_TO_EMAIL || !process.env.CONTACT_FROM_EMAIL) return false;
-  await resend.emails.send({
-    from: process.env.CONTACT_FROM_EMAIL,
-    to: process.env.CONTACT_TO_EMAIL,
+  if (!transporter) return false;
+  await transporter.sendMail({
+    from: process.env.EMAIL_USER,
+    // Defaults to the same inbox that's sending it — one Gmail account
+    // both sends and receives, which is exactly the "one email/password"
+    // setup being asked for. CONTACT_TO_EMAIL only needs setting if
+    // enquiries should land somewhere else instead.
+    to: process.env.CONTACT_TO_EMAIL || process.env.EMAIL_USER,
     subject: `New MAMAJ website inquiry from ${name}`,
     html: `
       <h2>New contact form submission</h2>

@@ -21,7 +21,8 @@ temporary. Three things moved as a result:
 Two more things were added along the way, unrelated to Vercel specifically
 but worth knowing about:
 
-- **Contact form emails** now send via **Resend** instead of doing nothing.
+- **Contact form emails** now send via **Gmail SMTP (nodemailer)** instead
+  of doing nothing.
 - **Image uploads are compressed** before they're stored: resized to a
   2000px cap and converted to WebP (quality 88 — visually lossless, 70-90%
   smaller than a typical phone photo). This matters more on Vercel than it
@@ -37,9 +38,8 @@ protection on admin actions, security headers (`helmet`), and the old
 - A [Vercel](https://vercel.com) account (free Hobby tier is fine to start —
   no credit card required to sign up).
 - A [Neon](https://neon.tech) account (free tier, no credit card required).
-- A [Resend](https://resend.com) account, once you have the client's real
-  sending domain/inbox (a placeholder works fine until then — the contact
-  form will just return a "not configured yet" error until it's set).
+- A Gmail account to send contact-form notifications from (any Gmail
+  address works — see step 3 for the one extra thing it needs).
 
 ## 1. Set up Neon
 
@@ -64,14 +64,26 @@ protection on admin actions, security headers (`helmet`), and the old
    Vercel injects this token into your deployed functions automatically —
    you won't need to set it again there.
 
-## 3. Set up Resend (can be done later)
+## 3. Set up email (Gmail SMTP)
 
-1. Create a Resend account and verify a sending domain (or use their test
-   domain to start).
-2. Grab an API key from the dashboard.
-3. Set `RESEND_API_KEY`, `CONTACT_TO_EMAIL` (where inquiries should land),
-   and `CONTACT_FROM_EMAIL` (must be on a domain you've verified with Resend).
-4. Until this is configured, the contact form fails gracefully with a
+Emails send through a plain Gmail account via SMTP — no domain
+verification or third-party service, just an email + an app-specific
+password.
+
+1. Turn on 2-Step Verification on the Gmail account, if it isn't already
+   (Google requires this before it'll issue app passwords):
+   [myaccount.google.com/security](https://myaccount.google.com/security).
+2. Generate an App Password:
+   [myaccount.google.com/apppasswords](https://myaccount.google.com/apppasswords)
+   — name it something like "MAMAJ website," Google gives you a 16-character
+   code. **This is not your normal Gmail password** — Gmail rejects the
+   regular login password for this.
+3. Set `EMAIL_USER` to the full Gmail address, and `EMAIL_PASS` to that
+   16-character app password (spaces don't matter either way).
+4. `CONTACT_TO_EMAIL` is optional — leave it unset and enquiries land in
+   the same inbox that's sending them. Only set it if you want them to go
+   somewhere else instead.
+5. Until this is configured, the contact form fails gracefully with a
    "Contact form is not configured yet" message instead of crashing.
 
 ## 4. Deploy to Vercel
@@ -85,7 +97,7 @@ protection on admin actions, security headers (`helmet`), and the old
    - `JWT_SECRET` — generate a real random string, don't reuse the example
    - `ADMIN_USERNAME`, `ADMIN_PASSWORD` — only needed if you re-run the seed
      script against production; not read at runtime otherwise
-   - `RESEND_API_KEY`, `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL`
+   - `EMAIL_USER`, `EMAIL_PASS`, `CONTACT_TO_EMAIL` (optional — see step 3)
    - `CLIENT_ORIGIN` — set this to your real production URL (e.g.
      `https://mamaj-showroom.vercel.app` or your custom domain) once you know
      it, otherwise the API's CORS check will reject the frontend's requests
