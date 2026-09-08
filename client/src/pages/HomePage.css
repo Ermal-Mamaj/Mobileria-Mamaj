@@ -210,12 +210,13 @@
   text-decoration: none;
   color: inherit;
   transition: transform 0.25s ease, box-shadow 0.25s ease;
-  /* Fills the full height of its row (carousel/grid siblings already stretch
-     to match the tallest card by default) and lays its own content out top
-     to bottom, so the button below can be pinned to the bottom edge. */
   display: flex;
   flex-direction: column;
-  height: 100%;
+  /* NOTE: deliberately no height:100% here. Percentage heights resolve to
+     auto when the parent (.product-carousel) has no explicit height of its
+     own — which silently disables the browser's default flex/grid stretch
+     behavior entirely, and was the actual cause of cards ending up
+     different heights. Leaving this out is what lets stretch work. */
 }
 
 .product-card:hover {
@@ -253,6 +254,12 @@
   flex: 1;
   display: flex;
   flex-direction: column;
+  /* Sized to comfortably fit the worst realistic case (2-line name, a
+     material line, and a wrapping sale price + discount badge) so cards
+     land on the same size by default — not just when they happen to be
+     stretched against a taller sibling in the same row. Measured against
+     real worst-case content before picking this number. */
+  min-height: 212px;
 }
 
 .product-card__name {
