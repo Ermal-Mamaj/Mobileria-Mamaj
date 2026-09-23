@@ -844,6 +844,49 @@ button {
   color: #2E7D32;
 }
 
+/* Quick stock +/- controls on the card header — visible without expanding */
+.prod-stock-controls {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.prod-stock-btn {
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  border: 1px solid;
+  transition: opacity 0.12s;
+  white-space: nowrap;
+}
+
+.prod-stock-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.prod-stock-btn--sell {
+  background: #FFF0EE;
+  color: #C94B3F;
+  border-color: #F1C7C7;
+}
+
+.prod-stock-btn--sell:hover:not(:disabled) {
+  background: #FBEAEA;
+}
+
+.prod-stock-btn--add {
+  background: #F0F7F0;
+  color: #2E7D32;
+  border-color: #C5DEC5;
+}
+
+.prod-stock-btn--add:hover:not(:disabled) {
+  background: #E3F0E3;
+}
+
 /* ============================================================
    PRODUCT CARDS (redesigned)
    ============================================================ */

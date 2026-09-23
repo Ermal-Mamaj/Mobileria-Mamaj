@@ -5,8 +5,9 @@ import ImageUploadField from '../ImageUploadField.jsx';
 
 const BADGES = ['', 'E RE', 'ME POROSI'];
 
-function ProductCard({ product: p, onUpdate, onDelete, onAddPhoto, onRemovePhoto }) {
+function ProductCard({ product: p, onUpdate, onDelete, onAddPhoto, onRemovePhoto, onStockChange }) {
   const [local, setLocal] = useState(p);
+  const [adjusting, setAdjusting] = useState(false);
 
   // Sync from parent when API saves come back
   useEffect(() => setLocal(p), [p]);
@@ -22,6 +23,15 @@ function ProductCard({ product: p, onUpdate, onDelete, onAddPhoto, onRemovePhoto
       onUpdate(p.id, { [field]: value === '' || value === null ? null : value });
     } else {
       onUpdate(p.id, { [field]: value });
+    }
+  }
+
+  async function quickStock(delta) {
+    setAdjusting(true);
+    try {
+      await onStockChange(p.id, delta);
+    } finally {
+      setAdjusting(false);
     }
   }
 
@@ -60,6 +70,14 @@ function ProductCard({ product: p, onUpdate, onDelete, onAddPhoto, onRemovePhoto
               {p.stock_count <= 0 ? 'Pa stok' : `${p.stock_count} copë`}
             </span>
           </div>
+        </div>
+        <div className="prod-stock-controls">
+          <button type="button" className="prod-stock-btn prod-stock-btn--sell" disabled={adjusting || p.stock_count <= 0} onClick={() => quickStock(-1)} title="Shitje (-1)">
+            − Shit
+          </button>
+          <button type="button" className="prod-stock-btn prod-stock-btn--add" disabled={adjusting} onClick={() => quickStock(1)} title="Shto stok (+1)">
+            + Stok
+          </button>
         </div>
       </div>
 
@@ -185,6 +203,11 @@ export default function ProductsPanel({ category }) {
     );
   }
 
+  async function adjustStock(id, delta) {
+    const result = await api.post(`/products/${id}/stock`, { delta });
+    setProducts((ps) => ps.map((p) => (p.id === id ? { ...p, stock_count: result.stock_count } : p)));
+  }
+
   if (!products) return <p>Po ngarkohen produktet...</p>;
 
   return (
@@ -200,6 +223,7 @@ export default function ProductsPanel({ category }) {
           onDelete={removeProduct}
           onAddPhoto={addPhoto}
           onRemovePhoto={removePhoto}
+          onStockChange={adjustStock}
         />
       ))}
       <button type="button" className="prod-add-btn" onClick={addProduct}>+ Shto Produkt të Ri</button>

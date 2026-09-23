@@ -102,6 +102,25 @@ router.delete('/:id', requireAdmin, asyncHandler(async (req, res) => {
   res.json({ ok: true });
 }));
 
+// Atomic stock adjustment — used by the quick +/- buttons on product cards.
+// Uses GREATEST(0, ...) so stock can never go negative, even if two people
+// hit "sell" at the same moment (each is a single atomic UPDATE, not a
+// read-then-write that could race).
+router.post('/:id/stock', requireAdmin, asyncHandler(async (req, res) => {
+  const { delta } = req.body || {};
+  const d = parseInt(delta, 10);
+  if (!Number.isFinite(d) || d === 0) return res.status(400).json({ error: 'delta must be a non-zero integer' });
+
+  const [row] = await sql`
+    UPDATE products
+    SET stock_count = GREATEST(0, stock_count + ${d})
+    WHERE id = ${req.params.id}
+    RETURNING id, stock_count
+  `;
+  if (!row) return res.status(404).json({ error: 'Not found' });
+  res.json(row);
+}));
+
 // --- extra photos for a product ---
 
 router.post('/:id/images', requireAdmin, asyncHandler(async (req, res) => {
