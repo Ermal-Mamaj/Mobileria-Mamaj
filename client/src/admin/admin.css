@@ -66,50 +66,83 @@
   font-size: 12.5px;
 }
 
-/* Dashboard shell */
+/* ============================================================
+   LAYOUT SHELL — sidebar on desktop, top bar + tabs on mobile
+   ============================================================ */
+
 .admin-layout {
   min-height: 100vh;
   background: #F3F1EC;
 }
 
-.admin-layout__header {
+/* --- Desktop sidebar (hidden on mobile) --- */
+.admin-sidebar {
+  display: none;
+}
+
+/* --- Mobile top bar --- */
+.admin-topbar {
   background: var(--navy);
   color: var(--white);
-  padding: 20px 28px;
+  padding: 14px 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.admin-layout__title {
+.admin-topbar__title {
   font-family: var(--font-serif);
-  font-size: 22px;
+  font-size: 18px;
   font-weight: 600;
+  margin: 0;
 }
 
-.admin-layout__username {
+.admin-topbar__right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin-topbar__user {
   font-size: 12px;
   color: rgba(255, 255, 255, 0.6);
-  margin-top: 2px;
 }
 
-.admin-layout__tabs {
+.admin-btn--sm {
+  padding: 6px 12px !important;
+  font-size: 11px !important;
+}
+
+/* --- Mobile horizontal tabs --- */
+.admin-mobile-tabs {
   display: flex;
-  gap: 4px;
-  padding: 0 28px;
+  gap: 2px;
+  padding: 0 12px;
   background: var(--white);
   border-bottom: 1px solid var(--border);
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .admin-layout__tab {
-  padding: 14px 16px;
-  font-size: 13px;
+  padding: 10px 12px;
+  font-size: 11px;
   font-weight: 500;
   color: var(--muted-2);
   text-decoration: none;
   border-bottom: 2px solid transparent;
   white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.admin-tab-icon { font-size: 14px; }
+.admin-tab-label { display: none; }
+
+@media (min-width: 480px) {
+  .admin-tab-label { display: inline; }
+  .admin-layout__tab { font-size: 12.5px; padding: 12px 14px; }
 }
 
 .admin-layout__tab.is-active {
@@ -118,10 +151,188 @@
   border-bottom-color: var(--gold-deep);
 }
 
-.admin-layout__content {
-  max-width: 720px;
+/* --- Main content area --- */
+.admin-main {
+  max-width: 900px;
   margin: 0 auto;
-  padding: 28px 20px 60px;
+  padding: 24px 20px 60px;
+}
+
+/* ============================================================
+   DESKTOP BREAKPOINT (900px+) — sidebar takes over from tabs
+   ============================================================ */
+
+@media (min-width: 900px) {
+  .admin-layout {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    grid-template-rows: 1fr;
+  }
+
+  /* Hide mobile-only elements */
+  .admin-topbar { display: none; }
+  .admin-mobile-tabs { display: none; }
+
+  /* Show sidebar */
+  .admin-sidebar {
+    display: flex;
+    flex-direction: column;
+    background: var(--navy);
+    color: var(--white);
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    overflow-y: auto;
+  }
+
+  .admin-sidebar__brand {
+    padding: 28px 24px 20px;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+
+  .admin-sidebar__title {
+    font-family: var(--font-serif);
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--gold);
+    margin: 0;
+  }
+
+  .admin-sidebar__subtitle {
+    font-size: 11px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.4);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+  }
+
+  .admin-sidebar__nav {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 0 12px;
+  }
+
+  .admin-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 14px;
+    border-radius: 8px;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.65);
+    text-decoration: none;
+    transition: background 0.12s ease, color 0.12s ease;
+  }
+
+  .admin-nav-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  .admin-nav-item.is-active {
+    background: rgba(235, 200, 76, 0.12);
+    color: var(--gold);
+    font-weight: 600;
+  }
+
+  .admin-nav-item__icon {
+    font-size: 17px;
+    width: 22px;
+    text-align: center;
+  }
+
+  .admin-sidebar__footer {
+    padding: 16px 16px 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .admin-sidebar__user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+
+  .admin-sidebar__avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(235, 200, 76, 0.18);
+    color: var(--gold);
+    font-weight: 700;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .admin-sidebar__username {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.7);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .admin-sidebar__logout {
+    background: none;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: rgba(255, 255, 255, 0.5);
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 11.5px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: border-color 0.15s, color 0.15s;
+  }
+
+  .admin-sidebar__logout:hover {
+    border-color: rgba(255, 255, 255, 0.35);
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  /* Wider content area on desktop */
+  .admin-main {
+    max-width: 1000px;
+    padding: 36px 40px 60px;
+    margin: 0;
+  }
+
+  /* Dashboard stats always 4-col on desktop */
+  .dash-stats-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  /* Product cards can sit in a 2-col grid on wide screens */
+  .admin-products-panel {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+
+  .prod-summary {
+    grid-column: 1 / -1;
+  }
+
+  .prod-add-btn {
+    grid-column: 1 / -1;
+  }
+
+  /* Form field rows can be wider */
+  .admin-field-row {
+    gap: 16px;
+  }
 }
 
 /* Panels & forms */
