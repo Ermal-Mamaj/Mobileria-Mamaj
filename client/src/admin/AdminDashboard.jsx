@@ -1,10 +1,9 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { AdminAuthProvider, useAdminAuth } from './AdminAuth.jsx';
 import AdminLayout from './AdminLayout.jsx';
-import HomeSection from './sections/HomeSection.jsx';
-import CategoriesSection from './sections/CategoriesSection.jsx';
-import GallerySection from './sections/GallerySection.jsx';
-import AboutSection from './sections/AboutSection.jsx';
+import DashboardSection from './sections/DashboardSection.jsx';
+import ProductsSection from './sections/ProductsSection.jsx';
+import PagesSection from './sections/PagesSection.jsx';
 import SiteSettingsSection from './sections/SiteSettingsSection.jsx';
 import MessagesSection from './sections/MessagesSection.jsx';
 import './admin.css';
@@ -18,10 +17,9 @@ function Protected() {
   return (
     <AdminLayout>
       <Routes>
-        <Route index element={<HomeSection />} />
-        <Route path="categories" element={<CategoriesSection />} />
-        <Route path="gallery" element={<GallerySection />} />
-        <Route path="about" element={<AboutSection />} />
+        <Route index element={<DashboardSection />} />
+        <Route path="products" element={<ProductsSection />} />
+        <Route path="pages" element={<PagesSection />} />
         <Route path="messages" element={<MessagesSection />} />
         <Route path="settings" element={<SiteSettingsSection />} />
       </Routes>

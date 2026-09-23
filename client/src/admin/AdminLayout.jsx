@@ -2,12 +2,11 @@ import { NavLink } from 'react-router-dom';
 import { useAdminAuth } from './AdminAuth.jsx';
 
 const TABS = [
-  { to: '/mamaj-cms', label: 'Ballina', end: true },
-  { to: '/mamaj-cms/categories', label: 'Koleksionet' },
-  { to: '/mamaj-cms/gallery', label: 'Galeria' },
-  { to: '/mamaj-cms/about', label: 'Rreth Nesh' },
-  { to: '/mamaj-cms/messages', label: 'Mesazhet' },
-  { to: '/mamaj-cms/settings', label: 'Cilësimet' },
+  { to: '/mamaj-cms', label: '📊 Paneli', end: true },
+  { to: '/mamaj-cms/products', label: '📦 Produkte' },
+  { to: '/mamaj-cms/pages', label: '📄 Faqet' },
+  { to: '/mamaj-cms/messages', label: '📬 Mesazhet' },
+  { to: '/mamaj-cms/settings', label: '⚙️ Cilësimet' },
 ];
 
 export default function AdminLayout({ children }) {
@@ -17,8 +16,8 @@ export default function AdminLayout({ children }) {
     <div className="admin-layout">
       <header className="admin-layout__header">
         <div>
-          <h1 className="admin-layout__title">Administrimi i MAMAJ</h1>
-          <p className="admin-layout__username">I identifikuar si {username}</p>
+          <h1 className="admin-layout__title">MAMAJ CMS</h1>
+          <p className="admin-layout__username">{username}</p>
         </div>
         <button type="button" className="admin-btn-secondary" onClick={logout}>Dil</button>
       </header>

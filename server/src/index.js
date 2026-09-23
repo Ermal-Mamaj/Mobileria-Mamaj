@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 import './db/index.js';
 
 import adminRoutes from './routes/admin.js';
+import dashboardRoutes from './routes/dashboard.js';
 import settingsRoutes from './routes/settings.js';
 import categoriesRoutes from './routes/categories.js';
 import productsRoutes from './routes/products.js';
@@ -46,6 +47,7 @@ function cachePublicReads(req, res, next) {
 }
 
 app.use('/api/admin', adminRoutes);
+app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/site-settings', cachePublicReads, settingsRoutes);
 app.use('/api/categories', cachePublicReads, categoriesRoutes);
 app.use('/api/products', cachePublicReads, productsRoutes);

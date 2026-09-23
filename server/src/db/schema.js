@@ -40,6 +40,7 @@ export const SCHEMA_STATEMENTS = [
     badge TEXT,
     price NUMERIC(10,2),
     sale_price NUMERIC(10,2),
+    stock_count INTEGER NOT NULL DEFAULT 0,
     featured_home INTEGER DEFAULT 0,
     sort_order INTEGER DEFAULT 0
   )`,
