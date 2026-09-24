@@ -3,6 +3,8 @@ import { AdminAuthProvider, useAdminAuth } from './AdminAuth.jsx';
 import AdminLayout from './AdminLayout.jsx';
 import DashboardSection from './sections/DashboardSection.jsx';
 import ProductsSection from './sections/ProductsSection.jsx';
+import CollectionsListSection from './sections/CollectionsListSection.jsx';
+import CollectionDetailSection from './sections/CollectionDetailSection.jsx';
 import PagesSection from './sections/PagesSection.jsx';
 import SiteSettingsSection from './sections/SiteSettingsSection.jsx';
 import MessagesSection from './sections/MessagesSection.jsx';
@@ -19,6 +21,8 @@ function Protected() {
       <Routes>
         <Route index element={<DashboardSection />} />
         <Route path="products" element={<ProductsSection />} />
+        <Route path="collections" element={<CollectionsListSection />} />
+        <Route path="collections/:id" element={<CollectionDetailSection />} />
         <Route path="pages" element={<PagesSection />} />
         <Route path="messages" element={<MessagesSection />} />
         <Route path="settings" element={<SiteSettingsSection />} />

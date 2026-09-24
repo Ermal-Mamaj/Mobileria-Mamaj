@@ -14,7 +14,13 @@ function slugify(str) {
 }
 
 router.get('/', asyncHandler(async (req, res) => {
-  const rows = await sql`SELECT * FROM categories ORDER BY sort_order ASC, id ASC`;
+  const rows = await sql`
+    SELECT c.*, COUNT(p.id)::int AS product_count
+    FROM categories c
+    LEFT JOIN products p ON p.category_id = c.id
+    GROUP BY c.id
+    ORDER BY c.sort_order ASC, c.id ASC
+  `;
   res.json(rows);
 }));
 
