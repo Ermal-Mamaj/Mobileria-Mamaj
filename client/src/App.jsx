@@ -5,7 +5,6 @@ import CategoriesPage from './pages/CategoriesPage.jsx';
 import RoomPage from './pages/RoomPage.jsx';
 import AboutPage from './pages/AboutPage.jsx';
 import ContactPage from './pages/ContactPage.jsx';
-import CreditsPage from './pages/CreditsPage.jsx';
 
 // The CMS is only ever loaded by one person, but it was bundled into the single
 // script every visitor downloads and parses before the page could even ask the
@@ -22,7 +21,6 @@ function App() {
       <Route path="/rooms/:slug" element={<RoomPage />} />
       <Route path="/about" element={<AboutPage />} />
       <Route path="/contact" element={<ContactPage />} />
-      <Route path="/credits" element={<CreditsPage />} />
       <Route
         path="/mamaj-cms/login"
         element={
