@@ -25,6 +25,7 @@ async function migrate() {
   await sql.query(`ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS sale_section_enabled BOOLEAN NOT NULL DEFAULT FALSE`);
   await sql.query(`ALTER TABLE products ADD COLUMN IF NOT EXISTS price NUMERIC(10,2)`);
   await sql.query(`ALTER TABLE products ADD COLUMN IF NOT EXISTS sale_price NUMERIC(10,2)`);
+  await sql.query(`ALTER TABLE products ADD COLUMN IF NOT EXISTS stock_count INTEGER NOT NULL DEFAULT 0`);
 
   console.log(`Migration complete: ${SCHEMA_STATEMENTS.length} tables ensured, gallery_images dropped, new columns ensured.`);
 }

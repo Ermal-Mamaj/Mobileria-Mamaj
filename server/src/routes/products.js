@@ -49,17 +49,17 @@ router.get('/', asyncHandler(async (req, res) => {
 }));
 
 router.post('/', requireAdmin, asyncHandler(async (req, res) => {
-  const { category_id, name, material = '', image_url = null, badge = null, price = null, sale_price = null, featured_home = 0, sort_order = 0 } = req.body || {};
+  const { category_id, name, material = '', image_url = null, badge = null, price = null, sale_price = null, stock_count = 0, featured_home = 0, sort_order = 0 } = req.body || {};
   if (!category_id || !name) return res.status(400).json({ error: 'category_id and name required' });
   const [row] = await sql`
-    INSERT INTO products (category_id, name, material, image_url, badge, price, sale_price, featured_home, sort_order)
-    VALUES (${category_id}, ${name}, ${material}, ${image_url}, ${badge}, ${price}, ${sale_price}, ${featured_home ? 1 : 0}, ${sort_order})
+    INSERT INTO products (category_id, name, material, image_url, badge, price, sale_price, stock_count, featured_home, sort_order)
+    VALUES (${category_id}, ${name}, ${material}, ${image_url}, ${badge}, ${price}, ${sale_price}, ${stock_count}, ${featured_home ? 1 : 0}, ${sort_order})
     RETURNING *
   `;
   res.status(201).json({ ...row, images: [] });
 }));
 
-const PRODUCT_FIELDS = ['category_id', 'name', 'material', 'image_url', 'badge', 'price', 'sale_price', 'featured_home', 'sort_order'];
+const PRODUCT_FIELDS = ['category_id', 'name', 'material', 'image_url', 'badge', 'price', 'sale_price', 'stock_count', 'featured_home', 'sort_order'];
 
 // Scalar subquery pulls the product's extra photos into the same query as
 // the UPDATE itself, so a save doesn't need a separate round trip afterward
@@ -100,6 +100,25 @@ router.put('/:id', requireAdmin, asyncHandler(async (req, res) => {
 router.delete('/:id', requireAdmin, asyncHandler(async (req, res) => {
   await sql`DELETE FROM products WHERE id = ${req.params.id}`;
   res.json({ ok: true });
+}));
+
+// Atomic stock adjustment — used by the quick +/- buttons on product cards.
+// Uses GREATEST(0, ...) so stock can never go negative, even if two people
+// hit "sell" at the same moment (each is a single atomic UPDATE, not a
+// read-then-write that could race).
+router.post('/:id/stock', requireAdmin, asyncHandler(async (req, res) => {
+  const { delta } = req.body || {};
+  const d = parseInt(delta, 10);
+  if (!Number.isFinite(d) || d === 0) return res.status(400).json({ error: 'delta must be a non-zero integer' });
+
+  const [row] = await sql`
+    UPDATE products
+    SET stock_count = GREATEST(0, stock_count + ${d})
+    WHERE id = ${req.params.id}
+    RETURNING id, stock_count
+  `;
+  if (!row) return res.status(404).json({ error: 'Not found' });
+  res.json(row);
 }));
 
 // --- extra photos for a product ---
