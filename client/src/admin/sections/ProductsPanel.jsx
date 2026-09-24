@@ -8,6 +8,7 @@ const BADGES = ['', 'E RE', 'ME POROSI'];
 function ProductCard({ product: p, onUpdate, onDelete, onAddPhoto, onRemovePhoto, onStockChange }) {
   const [local, setLocal] = useState(p);
   const [adjusting, setAdjusting] = useState(false);
+  const [qty, setQty] = useState(1);
 
   // Sync from parent when API saves come back
   useEffect(() => setLocal(p), [p]);
@@ -26,10 +27,14 @@ function ProductCard({ product: p, onUpdate, onDelete, onAddPhoto, onRemovePhoto
     }
   }
 
-  async function quickStock(delta) {
+  function clampQty(n) {
+    return Math.min(99, Math.max(1, n || 1));
+  }
+
+  async function quickStock(sign) {
     setAdjusting(true);
     try {
-      await onStockChange(p.id, delta);
+      await onStockChange(p.id, sign * qty);
     } finally {
       setAdjusting(false);
     }
@@ -72,10 +77,23 @@ function ProductCard({ product: p, onUpdate, onDelete, onAddPhoto, onRemovePhoto
           </div>
         </div>
         <div className="prod-stock-controls">
-          <button type="button" className="prod-stock-btn prod-stock-btn--sell" disabled={adjusting || p.stock_count <= 0} onClick={() => quickStock(-1)} title="Shitje (-1)">
+          <div className="prod-qty-stepper">
+            <button type="button" className="prod-qty-btn" onClick={() => setQty((q) => clampQty(q - 1))} disabled={adjusting} aria-label="Zvogëlo sasinë">−</button>
+            <input
+              type="number"
+              className="prod-qty-input"
+              min="1"
+              max="99"
+              value={qty}
+              onChange={(e) => setQty(clampQty(parseInt(e.target.value, 10)))}
+              disabled={adjusting}
+            />
+            <button type="button" className="prod-qty-btn" onClick={() => setQty((q) => clampQty(q + 1))} disabled={adjusting} aria-label="Rrit sasinë">+</button>
+          </div>
+          <button type="button" className="prod-stock-btn prod-stock-btn--sell" disabled={adjusting || p.stock_count <= 0} onClick={() => quickStock(-1)} title={`Shitje (-${qty})`}>
             − Shit
           </button>
-          <button type="button" className="prod-stock-btn prod-stock-btn--add" disabled={adjusting} onClick={() => quickStock(1)} title="Shto stok (+1)">
+          <button type="button" className="prod-stock-btn prod-stock-btn--add" disabled={adjusting} onClick={() => quickStock(1)} title={`Shto stok (+${qty})`}>
             + Stok
           </button>
         </div>
@@ -165,7 +183,7 @@ function ProductCard({ product: p, onUpdate, onDelete, onAddPhoto, onRemovePhoto
   );
 }
 
-export default function ProductsPanel({ category }) {
+export default function ProductsPanel({ category, showTopAddButton = false }) {
   const [products, setProducts] = useState(null);
   const [search, setSearch] = useState('');
   const [stockFilter, setStockFilter] = useState('all');
@@ -234,8 +252,13 @@ export default function ProductsPanel({ category }) {
 
   return (
     <div className="admin-products-panel">
-      <div className="prod-summary">
-        {products.length} produkte · {products.filter((p) => p.stock_count > 0).length} në stok · {products.filter((p) => isOnSale(p)).length} në zbritje
+      <div className="prod-header-row">
+        <div className="prod-summary">
+          {products.length} produkte · {products.filter((p) => p.stock_count > 0).length} në stok · {products.filter((p) => isOnSale(p)).length} në zbritje
+        </div>
+        {showTopAddButton && (
+          <button type="button" className="prod-add-btn prod-add-btn--top" onClick={addProduct}>+ Shto Produkt</button>
+        )}
       </div>
 
       <div className="prod-search-bar">
