@@ -1320,3 +1320,218 @@ button {
 .col-edit-details[open] .prod-card__toggle {
   border-bottom: 1px solid var(--border);
 }
+
+/* ============================================================
+   WYSIWYG PAGE EDITORS (Home / About)
+   ============================================================ */
+
+.admin-panel__header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.wysiwyg-frame {
+  border: 2px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+}
+
+.wysiwyg-frame::before {
+  content: '👁 PAMJA E DREJTPËRDREJTË — Klikoni për të ndryshuar';
+  display: block;
+  background: var(--navy);
+  color: var(--gold);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-align: center;
+  padding: 7px;
+}
+
+/* Base editable field — resets to blend into whatever typography it sits
+   inside, then gains a visible dashed outline on hover/focus so it's
+   discoverable as editable without disturbing the page's real look. */
+.wysiwyg-field {
+  display: block;
+  width: 100%;
+  font: inherit;
+  color: inherit;
+  text-align: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+  background: transparent;
+  border: 1px dashed transparent;
+  border-radius: 6px;
+  padding: 3px 6px;
+  margin: -3px -6px;
+  outline: none;
+  resize: none;
+  transition: border-color 0.12s, background 0.12s;
+}
+
+.wysiwyg-field:hover {
+  border-color: rgba(235, 200, 76, 0.5);
+  background: rgba(235, 200, 76, 0.06);
+}
+
+.wysiwyg-field:focus {
+  border-style: solid;
+  border-color: var(--gold-deep);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* --- Hero (dark background — needs light-mode hover/focus colors) --- */
+.wysiwyg-hero .wysiwyg-field:hover {
+  border-color: rgba(235, 200, 76, 0.6);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.wysiwyg-hero .wysiwyg-field:focus {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.wysiwyg-field--eyebrow {
+  flex: 1;
+  min-width: 0;
+}
+
+.wysiwyg-headline-wrap,
+.wysiwyg-btn-wrap {
+  display: inline-block;
+}
+
+.wysiwyg-field--headline {
+  min-height: 2.2em;
+  font-family: inherit;
+}
+
+.wysiwyg-field--btn {
+  text-align: center;
+  min-width: 160px;
+}
+
+.wysiwyg-field--quote {
+  min-height: 3em;
+}
+
+.wysiwyg-field--section-heading {
+  display: block;
+}
+
+.wysiwyg-field--intro,
+.wysiwyg-field--paragraph {
+  min-height: 3.5em;
+}
+
+.wysiwyg-note {
+  font-size: 11.5px;
+  color: var(--muted);
+  font-style: italic;
+  margin-top: 8px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--border);
+}
+
+.wysiwyg-section-bg {
+  background: var(--bg);
+}
+
+/* --- Editable image --- */
+.wysiwyg-image {
+  position: relative;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: hidden;
+}
+
+.wysiwyg-image__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.wysiwyg-image__empty {
+  width: 100%;
+  height: 100%;
+  min-height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #E9E5DA;
+  color: var(--muted-2);
+  font-size: 12.5px;
+  text-align: center;
+  padding: 20px;
+}
+
+.wysiwyg-image--dark .wysiwyg-image__empty {
+  background: #2A3746;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.wysiwyg-image__overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(22, 34, 47, 0.55);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  z-index: 3;
+}
+
+.wysiwyg-image:hover .wysiwyg-image__overlay {
+  opacity: 1;
+}
+
+/* --- About page value items get a remove button in edit mode --- */
+.wysiwyg-value-item {
+  position: relative;
+}
+
+.wysiwyg-value-item__body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.wysiwyg-field--value-title {
+  font-weight: 600;
+}
+
+.wysiwyg-value-remove {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(179, 38, 30, 0.1);
+  color: #B3261E;
+  font-size: 14px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.12s;
+}
+
+.wysiwyg-value-item:hover .wysiwyg-value-remove {
+  opacity: 1;
+}
+
+.wysiwyg-quote {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
