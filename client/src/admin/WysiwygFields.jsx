@@ -64,6 +64,7 @@ export function EditableImage({ value, onSave, className = '', dark = false, pla
       <div className="wysiwyg-image__overlay">
         {uploading ? 'Po ngarkohet...' : '📷 Ndrysho Foton'}
       </div>
+      {!uploading && <div className="wysiwyg-image__badge">✏️ Editabël</div>}
       <input ref={inputRef} type="file" accept="image/png,image/jpeg,image/webp" hidden onChange={handleFile} />
     </div>
   );
