@@ -167,12 +167,18 @@ function ProductCard({ product: p, onUpdate, onDelete, onAddPhoto, onRemovePhoto
 
 export default function ProductsPanel({ category }) {
   const [products, setProducts] = useState(null);
+  const [search, setSearch] = useState('');
+  const [stockFilter, setStockFilter] = useState('all');
 
   function reload() {
     api.get(`/products?category=${category.slug}`).then(setProducts);
   }
 
-  useEffect(reload, [category.slug]);
+  useEffect(() => {
+    reload();
+    setSearch('');
+    setStockFilter('all');
+  }, [category.slug]);
 
   async function addProduct() {
     await api.post('/products', { category_id: category.id, name: 'Produkt i Ri', material: '' });
@@ -210,22 +216,73 @@ export default function ProductsPanel({ category }) {
 
   if (!products) return <p>Po ngarkohen produktet...</p>;
 
+  const STOCK_FILTERS = [
+    { key: 'all', label: 'Të Gjitha', test: () => true },
+    { key: 'in-stock', label: 'Në Stok', test: (p) => p.stock_count > 3 },
+    { key: 'low', label: 'Stok i Ulët', test: (p) => p.stock_count > 0 && p.stock_count <= 3 },
+    { key: 'out', label: 'Pa Stok', test: (p) => p.stock_count <= 0 },
+    { key: 'sale', label: 'Në Zbritje', test: (p) => isOnSale(p) },
+  ];
+
+  const activeFilter = STOCK_FILTERS.find((f) => f.key === stockFilter) || STOCK_FILTERS[0];
+  const q = search.trim().toLowerCase();
+
+  const filtered = products.filter((p) => {
+    const matchesSearch = !q || p.name?.toLowerCase().includes(q) || p.material?.toLowerCase().includes(q);
+    return matchesSearch && activeFilter.test(p);
+  });
+
   return (
     <div className="admin-products-panel">
       <div className="prod-summary">
         {products.length} produkte · {products.filter((p) => p.stock_count > 0).length} në stok · {products.filter((p) => isOnSale(p)).length} në zbritje
       </div>
-      {products.map((p) => (
-        <ProductCard
-          key={p.id}
-          product={p}
-          onUpdate={updateProduct}
-          onDelete={removeProduct}
-          onAddPhoto={addPhoto}
-          onRemovePhoto={removePhoto}
-          onStockChange={adjustStock}
+
+      <div className="prod-search-bar">
+        <input
+          type="search"
+          className="prod-search-input"
+          placeholder="Kërko produkt me emër ose material..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
         />
-      ))}
+        <div className="prod-filter-chips">
+          {STOCK_FILTERS.map((f) => (
+            <button
+              key={f.key}
+              type="button"
+              className={`prod-filter-chip ${stockFilter === f.key ? 'is-active' : ''}`}
+              onClick={() => setStockFilter(f.key)}
+            >
+              {f.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {filtered.length === 0 ? (
+        <p className="prod-empty-state">
+          Asnjë produkt nuk përputhet {q && `me "${search}"`} {stockFilter !== 'all' && `në filtrin "${activeFilter.label}"`}.
+        </p>
+      ) : (
+        <>
+          {(q || stockFilter !== 'all') && (
+            <p className="prod-filter-count">{filtered.length} nga {products.length} produkte</p>
+          )}
+          {filtered.map((p) => (
+            <ProductCard
+              key={p.id}
+              product={p}
+              onUpdate={updateProduct}
+              onDelete={removeProduct}
+              onAddPhoto={addPhoto}
+              onRemovePhoto={removePhoto}
+              onStockChange={adjustStock}
+            />
+          ))}
+        </>
+      )}
+
       <button type="button" className="prod-add-btn" onClick={addProduct}>+ Shto Produkt të Ri</button>
     </div>
   );
