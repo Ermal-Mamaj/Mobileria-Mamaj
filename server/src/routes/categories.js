@@ -74,4 +74,24 @@ router.delete('/:id', requireAdmin, asyncHandler(async (req, res) => {
   res.json({ ok: true });
 }));
 
+// Same full-renumber approach as the products reorder endpoint, and for the
+// same reason: swapping two sort_order values silently fails whenever they
+// happen to be equal (common, since nothing enforces distinct values).
+router.post('/reorder', requireAdmin, asyncHandler(async (req, res) => {
+  const { order } = req.body || {};
+  if (!Array.isArray(order) || order.length === 0) {
+    return res.status(400).json({ error: 'order must be a non-empty array of category IDs' });
+  }
+  const values = order.map((id, i) => [id, i]);
+  const valuesSql = values.map((_, i) => `($${i * 2 + 1}::int, $${i * 2 + 2}::int)`).join(', ');
+  const params = values.flat();
+  await sql.query(
+    `UPDATE categories AS c SET sort_order = v.new_order
+     FROM (VALUES ${valuesSql}) AS v(id, new_order)
+     WHERE c.id = v.id`,
+    params
+  );
+  res.json({ ok: true });
+}));
+
 export default router;

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { api } from '../../lib/api.js';
 import { EditableText, EditableImage } from '../WysiwygFields.jsx';
+import { useUnsavedChanges } from '../UnsavedChangesContext.jsx';
 import '../../pages/AboutPage.css';
 
 const VALUE_ICONS = [
@@ -11,34 +12,47 @@ const VALUE_ICONS = [
 
 export default function AboutSection() {
   const [form, setForm] = useState(null);
+  const [saving, setSaving] = useState(false);
   const [savedAt, setSavedAt] = useState(null);
+  const { isDirty, setIsDirty } = useUnsavedChanges();
 
   useEffect(() => {
     api.get('/content/about').then(setForm);
+    return () => setIsDirty(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  async function save(field, value) {
-    const next = { ...form, [field]: value };
-    setForm(next);
-    const saved = await api.put('/content/about', next);
-    setForm(saved);
-    setSavedAt(Date.now());
+  // Edits only touch local state — nothing hits the server until
+  // "Ruaj Ndryshimet" is pressed.
+  function edit(field, value) {
+    setForm((f) => ({ ...f, [field]: value }));
+    setIsDirty(true);
   }
 
-  async function saveValue(index, field, value) {
+  function editValue(index, field, value) {
     const values = [...(form.values_json || [])];
     values[index] = { ...values[index], [field]: value };
-    await save('values_json', values);
+    edit('values_json', values);
   }
 
-  async function addValue() {
-    const values = [...(form.values_json || []), { title: 'Vlerë e Re', description: 'Përshkrimi...' }];
-    await save('values_json', values);
+  function addValue() {
+    edit('values_json', [...(form.values_json || []), { title: 'Vlerë e Re', description: 'Përshkrimi...' }]);
   }
 
-  async function removeValue(index) {
-    const values = (form.values_json || []).filter((_, i) => i !== index);
-    await save('values_json', values);
+  function removeValue(index) {
+    edit('values_json', (form.values_json || []).filter((_, i) => i !== index));
+  }
+
+  async function handleSave() {
+    setSaving(true);
+    try {
+      const saved = await api.put('/content/about', form);
+      setForm(saved);
+      setSavedAt(Date.now());
+      setIsDirty(false);
+    } finally {
+      setSaving(false);
+    }
   }
 
   if (!form) return <p>Po ngarkohet...</p>;
@@ -49,17 +63,24 @@ export default function AboutSection() {
     <div className="admin-panel">
       <div className="admin-panel__header-row">
         <h2 className="admin-panel__heading">Rreth Nesh</h2>
-        {savedAt && <span className="admin-panel__saved">U ruajt ✓</span>}
+        <div className="admin-panel__save-controls">
+          {savedAt && !isDirty && <span className="admin-panel__saved">U ruajt ✓</span>}
+          {isDirty && <span className="admin-panel__unsaved">Ndryshime të paruajtura</span>}
+          <button type="button" className="admin-save-btn" onClick={handleSave} disabled={saving || !isDirty}>
+            {saving ? 'Po ruhet...' : 'Ruaj Ndryshimet'}
+          </button>
+        </div>
       </div>
       <p className="admin-panel__description">
-        Kjo është pikërisht siç do të duket faqja. Klikoni mbi çdo tekst ose foto për ta ndryshuar.
+        Kjo është pikërisht siç do të duket faqja. Klikoni mbi çdo tekst ose foto për ta ndryshuar,
+        pastaj shtypni "Ruaj Ndryshimet".
       </p>
 
       <div className="wysiwyg-frame">
         <div className="about-hero wysiwyg-about-hero">
           <EditableImage
             value={form.hero_image_url}
-            onSave={(url) => save('hero_image_url', url)}
+            onSave={(url) => edit('hero_image_url', url)}
             className="about-hero__image"
             dark
           />
@@ -74,7 +95,7 @@ export default function AboutSection() {
             as="textarea"
             rows={3}
             value={form.paragraph_1}
-            onSave={(v) => save('paragraph_1', v)}
+            onSave={(v) => edit('paragraph_1', v)}
             placeholder="Paragrafi i parë..."
             className="wysiwyg-field--paragraph about-paragraph"
           />
@@ -82,7 +103,7 @@ export default function AboutSection() {
             as="textarea"
             rows={3}
             value={form.paragraph_2}
-            onSave={(v) => save('paragraph_2', v)}
+            onSave={(v) => edit('paragraph_2', v)}
             placeholder="Paragrafi i dytë..."
             className="wysiwyg-field--paragraph about-paragraph"
           />
@@ -99,13 +120,13 @@ export default function AboutSection() {
                 <div className="wysiwyg-value-item__body">
                   <EditableText
                     value={v.title}
-                    onSave={(val) => saveValue(i, 'title', val)}
+                    onSave={(val) => editValue(i, 'title', val)}
                     placeholder="Titulli"
                     className="wysiwyg-field--value-title value-item__title"
                   />
                   <EditableText
                     value={v.description}
-                    onSave={(val) => saveValue(i, 'description', val)}
+                    onSave={(val) => editValue(i, 'description', val)}
                     placeholder="Përshkrimi"
                     className="wysiwyg-field--value-desc value-item__description"
                   />
@@ -121,13 +142,13 @@ export default function AboutSection() {
               as="textarea"
               rows={2}
               value={form.quote_text}
-              onSave={(v) => save('quote_text', v)}
+              onSave={(v) => edit('quote_text', v)}
               placeholder="Teksti i citatit..."
               className="wysiwyg-field--quote about-quote__text"
             />
             <EditableText
               value={form.quote_author}
-              onSave={(v) => save('quote_author', v)}
+              onSave={(v) => edit('quote_author', v)}
               placeholder="Ekipi MAMAJ"
               className="wysiwyg-field--author about-quote__author"
             />

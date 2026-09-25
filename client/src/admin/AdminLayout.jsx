@@ -1,5 +1,7 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { useAdminAuth } from './AdminAuth.jsx';
+import { useUnsavedChanges } from './UnsavedChangesContext.jsx';
+import { useConfirm } from './useConfirm.jsx';
 
 const TABS = [
   { to: '/mamaj-cms', label: 'Paneli', icon: '📊', end: true },
@@ -12,6 +14,31 @@ const TABS = [
 
 export default function AdminLayout({ children }) {
   const { username, logout } = useAdminAuth();
+  const { isDirty, setIsDirty } = useUnsavedChanges();
+  const { confirm, modal } = useConfirm();
+  const navigate = useNavigate();
+
+  // Every nav click (sidebar or mobile tabs) goes through here — if the
+  // current page has unsaved edits, confirm before actually leaving instead
+  // of silently discarding them. Since we render the app's own nav (not
+  // arbitrary links), intercepting clicks here covers every way to switch
+  // CMS pages without needing a full data-router migration for
+  // React Router's useBlocker.
+  async function handleNavClick(e, to) {
+    if (!isDirty) return;
+    e.preventDefault();
+    const leave = await confirm({
+      title: 'Keni ndryshime të paruajtura',
+      message: 'Nëse largoheni tani, ndryshimet e fundit nuk do të ruhen. Dëshironi të largoheni pa i ruajtur?',
+      confirmLabel: 'Largohu pa ruajtur',
+      cancelLabel: 'Qëndro këtu',
+      danger: true,
+    });
+    if (leave) {
+      setIsDirty(false);
+      navigate(to);
+    }
+  }
 
   return (
     <div className="admin-layout">
@@ -28,6 +55,7 @@ export default function AdminLayout({ children }) {
               key={tab.to}
               to={tab.to}
               end={tab.end}
+              onClick={(e) => handleNavClick(e, tab.to)}
               className={({ isActive }) => `admin-nav-item ${isActive ? 'is-active' : ''}`}
             >
               <span className="admin-nav-item__icon">{tab.icon}</span>
@@ -61,6 +89,7 @@ export default function AdminLayout({ children }) {
             key={tab.to}
             to={tab.to}
             end={tab.end}
+            onClick={(e) => handleNavClick(e, tab.to)}
             className={({ isActive }) => `admin-layout__tab ${isActive ? 'is-active' : ''}`}
           >
             <span className="admin-tab-icon">{tab.icon}</span>
@@ -70,6 +99,7 @@ export default function AdminLayout({ children }) {
       </nav>
 
       <main className="admin-main">{children}</main>
+      {modal}
     </div>
   );
 }

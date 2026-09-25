@@ -1,22 +1,41 @@
 import { useEffect, useState } from 'react';
 import { api } from '../../lib/api.js';
 import { EditableText, EditableImage } from '../WysiwygFields.jsx';
+import { useUnsavedChanges } from '../UnsavedChangesContext.jsx';
 import '../../pages/HomePage.css';
 
 export default function HomeSection() {
   const [form, setForm] = useState(null);
+  const [saving, setSaving] = useState(false);
   const [savedAt, setSavedAt] = useState(null);
+  const { isDirty, setIsDirty } = useUnsavedChanges();
 
   useEffect(() => {
     api.get('/content/home').then(setForm);
+    // Leaving this page (however it happens) shouldn't leave a stale
+    // "unsaved changes" flag armed for whatever page loads next.
+    return () => setIsDirty(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  async function save(field, value) {
-    const next = { ...form, [field]: value };
-    setForm(next);
-    const saved = await api.put('/content/home', next);
-    setForm(saved);
-    setSavedAt(Date.now());
+  // Edits only update local state now — nothing hits the server until
+  // "Ruaj Ndryshimet" is pressed, and the nav guard (see AdminLayout) stops
+  // an accidental tab switch from silently losing them.
+  function edit(field, value) {
+    setForm((f) => ({ ...f, [field]: value }));
+    setIsDirty(true);
+  }
+
+  async function handleSave() {
+    setSaving(true);
+    try {
+      const saved = await api.put('/content/home', form);
+      setForm(saved);
+      setSavedAt(Date.now());
+      setIsDirty(false);
+    } finally {
+      setSaving(false);
+    }
   }
 
   if (!form) return <p>Po ngarkohet...</p>;
@@ -25,11 +44,17 @@ export default function HomeSection() {
     <div className="admin-panel">
       <div className="admin-panel__header-row">
         <h2 className="admin-panel__heading">Ballina</h2>
-        {savedAt && <span className="admin-panel__saved">U ruajt ✓</span>}
+        <div className="admin-panel__save-controls">
+          {savedAt && !isDirty && <span className="admin-panel__saved">U ruajt ✓</span>}
+          {isDirty && <span className="admin-panel__unsaved">Ndryshime të paruajtura</span>}
+          <button type="button" className="admin-save-btn" onClick={handleSave} disabled={saving || !isDirty}>
+            {saving ? 'Po ruhet...' : 'Ruaj Ndryshimet'}
+          </button>
+        </div>
       </div>
       <p className="admin-panel__description">
-        Kjo është pikërisht siç do të duket faqja. Klikoni mbi çdo tekst ose foto për ta ndryshuar —
-        ruhet automatikisht sapo largoheni nga fusha.
+        Kjo është pikërisht siç do të duket faqja. Klikoni mbi çdo tekst ose foto për ta ndryshuar,
+        pastaj shtypni "Ruaj Ndryshimet".
       </p>
 
       <div className="wysiwyg-frame">
@@ -38,7 +63,7 @@ export default function HomeSection() {
           <div className="home-page__hero-media">
             <EditableImage
               value={form.hero_image_url}
-              onSave={(url) => save('hero_image_url', url)}
+              onSave={(url) => edit('hero_image_url', url)}
               className="home-page__hero-image"
               dark
             />
@@ -49,7 +74,7 @@ export default function HomeSection() {
               <span className="eyebrow__rule" />
               <EditableText
                 value={form.hero_eyebrow}
-                onSave={(v) => save('hero_eyebrow', v)}
+                onSave={(v) => edit('hero_eyebrow', v)}
                 placeholder="MOBILIE TË PUNUARA ME DORË"
                 className="wysiwyg-field--eyebrow"
               />
@@ -59,7 +84,7 @@ export default function HomeSection() {
                 as="textarea"
                 rows={2}
                 value={form.hero_headline}
-                onSave={(v) => save('hero_headline', v)}
+                onSave={(v) => edit('hero_headline', v)}
                 placeholder="Titulli kryesor..."
                 className="wysiwyg-field--headline"
               />
@@ -67,7 +92,7 @@ export default function HomeSection() {
             <div className="btn-gold wysiwyg-btn-wrap">
               <EditableText
                 value={form.hero_cta}
-                onSave={(v) => save('hero_cta', v)}
+                onSave={(v) => edit('hero_cta', v)}
                 placeholder="Eksploro Koleksionet"
                 className="wysiwyg-field--btn"
               />
@@ -83,7 +108,7 @@ export default function HomeSection() {
               as="textarea"
               rows={2}
               value={form.quote_text}
-              onSave={(v) => save('quote_text', v)}
+              onSave={(v) => edit('quote_text', v)}
               placeholder="Teksti i citatit..."
               className="wysiwyg-field--quote brand-band__text"
             />
@@ -91,7 +116,7 @@ export default function HomeSection() {
               <span className="eyebrow__rule" />
               <EditableText
                 value={form.quote_label}
-                onSave={(v) => save('quote_label', v)}
+                onSave={(v) => edit('quote_label', v)}
                 placeholder="PUNISHTJA MAMAJ"
                 className="wysiwyg-field--eyebrow"
               />
@@ -107,7 +132,7 @@ export default function HomeSection() {
           </div>
           <EditableText
             value={form.contact_heading}
-            onSave={(v) => save('contact_heading', v)}
+            onSave={(v) => edit('contact_heading', v)}
             placeholder="Le të krijojmë diçka të veçantë."
             className="wysiwyg-field--section-heading section-heading"
           />
@@ -115,7 +140,7 @@ export default function HomeSection() {
             as="textarea"
             rows={2}
             value={form.contact_intro}
-            onSave={(v) => save('contact_intro', v)}
+            onSave={(v) => edit('contact_intro', v)}
             placeholder="Na shkruani dhe..."
             className="wysiwyg-field--intro section-intro"
           />

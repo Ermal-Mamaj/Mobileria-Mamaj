@@ -1,5 +1,6 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { AdminAuthProvider, useAdminAuth } from './AdminAuth.jsx';
+import { UnsavedChangesProvider } from './UnsavedChangesContext.jsx';
 import AdminLayout from './AdminLayout.jsx';
 import DashboardSection from './sections/DashboardSection.jsx';
 import ProductsSection from './sections/ProductsSection.jsx';
@@ -17,17 +18,19 @@ function Protected() {
   if (!loggedIn) return <Navigate to="/mamaj-cms/login" replace />;
 
   return (
-    <AdminLayout>
-      <Routes>
-        <Route index element={<DashboardSection />} />
-        <Route path="products" element={<ProductsSection />} />
-        <Route path="collections" element={<CollectionsListSection />} />
-        <Route path="collections/:id" element={<CollectionDetailSection />} />
-        <Route path="pages" element={<PagesSection />} />
-        <Route path="messages" element={<MessagesSection />} />
-        <Route path="settings" element={<SiteSettingsSection />} />
-      </Routes>
-    </AdminLayout>
+    <UnsavedChangesProvider>
+      <AdminLayout>
+        <Routes>
+          <Route index element={<DashboardSection />} />
+          <Route path="products" element={<ProductsSection />} />
+          <Route path="collections" element={<CollectionsListSection />} />
+          <Route path="collections/:id" element={<CollectionDetailSection />} />
+          <Route path="pages" element={<PagesSection />} />
+          <Route path="messages" element={<MessagesSection />} />
+          <Route path="settings" element={<SiteSettingsSection />} />
+        </Routes>
+      </AdminLayout>
+    </UnsavedChangesProvider>
   );
 }
 
