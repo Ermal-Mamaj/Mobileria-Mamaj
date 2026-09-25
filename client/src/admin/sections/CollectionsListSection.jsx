@@ -1,12 +1,15 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../../lib/api.js';
+import { useConfirm } from '../useConfirm.jsx';
 
 export default function CollectionsListSection() {
   const [categories, setCategories] = useState(null);
   const [newName, setNewName] = useState('');
   const [adding, setAdding] = useState(false);
+  const [search, setSearch] = useState('');
   const navigate = useNavigate();
+  const { confirm, modal } = useConfirm();
 
   function reload() {
     api.get('/categories').then(setCategories);
@@ -31,12 +34,37 @@ export default function CollectionsListSection() {
 
   async function handleDelete(e, cat) {
     e.stopPropagation();
-    if (!confirm(`Fshij "${cat.name}" dhe të gjitha ${cat.product_count} produktet brenda? Ky veprim nuk mund të zhbëhet.`)) return;
+    const ok = await confirm({
+      title: 'Fshi koleksionin?',
+      message: `Fshij "${cat.name}" dhe të gjitha ${cat.product_count} produktet brenda? Ky veprim nuk mund të zhbëhet.`,
+      confirmLabel: 'Fshi',
+      danger: true,
+    });
+    if (!ok) return;
     await api.del(`/categories/${cat.id}`);
     reload();
   }
 
+  // Same full-renumber approach as product reordering, for the same reason
+  // (a swap silently does nothing when both values already happen to match).
+  async function move(e, cat, direction) {
+    e.stopPropagation();
+    const index = categories.findIndex((c) => c.id === cat.id);
+    const newIndex = index + direction;
+    if (newIndex < 0 || newIndex >= categories.length) return;
+
+    const reordered = [...categories];
+    [reordered[index], reordered[newIndex]] = [reordered[newIndex], reordered[index]];
+    setCategories(reordered);
+
+    await api.post('/categories/reorder', { order: reordered.map((c) => c.id) });
+  }
+
   if (!categories) return <p>Po ngarkohet...</p>;
+
+  const q = search.trim().toLowerCase();
+  const filtered = q ? categories.filter((c) => c.name?.toLowerCase().includes(q)) : categories;
+  const canReorder = !q;
 
   return (
     <div className="admin-panel">
@@ -57,11 +85,23 @@ export default function CollectionsListSection() {
         </button>
       </form>
 
-      {categories.length === 0 ? (
-        <p className="prod-empty-state">Nuk ka ende asnjë koleksion. Shtoni njërin më sipër.</p>
+      {categories.length > 3 && (
+        <input
+          type="search"
+          className="prod-search-input"
+          placeholder="Kërko koleksion..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      )}
+
+      {filtered.length === 0 ? (
+        <p className="prod-empty-state">
+          {q ? `Asnjë koleksion nuk përputhet me "${search}".` : 'Nuk ka ende asnjë koleksion. Shtoni njërin më sipër.'}
+        </p>
       ) : (
         <div className="col-list">
-          {categories.map((cat) => (
+          {filtered.map((cat, i) => (
             <div
               key={cat.id}
               className="col-row"
@@ -70,6 +110,12 @@ export default function CollectionsListSection() {
               onClick={() => navigate(`/mamaj-cms/collections/${cat.id}`)}
               onKeyDown={(e) => { if (e.key === 'Enter') navigate(`/mamaj-cms/collections/${cat.id}`); }}
             >
+              {canReorder && (
+                <div className="col-reorder">
+                  <button type="button" className="col-reorder__btn" disabled={i === 0} onClick={(e) => move(e, cat, -1)} aria-label="Lëviz lart" title="Lëviz lart">▲</button>
+                  <button type="button" className="col-reorder__btn" disabled={i === filtered.length - 1} onClick={(e) => move(e, cat, 1)} aria-label="Lëviz poshtë" title="Lëviz poshtë">▼</button>
+                </div>
+              )}
               <div className="col-row__thumb">
                 {cat.hero_image_url
                   ? <img src={cat.hero_image_url} alt="" />
@@ -94,6 +140,7 @@ export default function CollectionsListSection() {
           ))}
         </div>
       )}
+      {modal}
     </div>
   );
 }

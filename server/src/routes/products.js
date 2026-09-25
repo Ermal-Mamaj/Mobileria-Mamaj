@@ -49,11 +49,21 @@ router.get('/', asyncHandler(async (req, res) => {
 }));
 
 router.post('/', requireAdmin, asyncHandler(async (req, res) => {
-  const { category_id, name, material = '', image_url = null, badge = null, price = null, sale_price = null, stock_count = 0, featured_home = 0, sort_order = 0 } = req.body || {};
+  const { category_id, name, material = '', image_url = null, badge = null, price = null, sale_price = null, stock_count = 0, featured_home = 0, sort_order } = req.body || {};
   if (!category_id || !name) return res.status(400).json({ error: 'category_id and name required' });
+
+  // New products append to the end of their category by default, rather
+  // than all piling up at 0 — matters for reordering to feel predictable
+  // (a freshly-added product shouldn't visually jump to the front).
+  let order = sort_order;
+  if (order === undefined || order === null) {
+    const [{ m }] = await sql`SELECT COALESCE(MAX(sort_order), -1) AS m FROM products WHERE category_id = ${category_id}`;
+    order = m + 1;
+  }
+
   const [row] = await sql`
     INSERT INTO products (category_id, name, material, image_url, badge, price, sale_price, stock_count, featured_home, sort_order)
-    VALUES (${category_id}, ${name}, ${material}, ${image_url}, ${badge}, ${price}, ${sale_price}, ${stock_count}, ${featured_home ? 1 : 0}, ${sort_order})
+    VALUES (${category_id}, ${name}, ${material}, ${image_url}, ${badge}, ${price}, ${sale_price}, ${stock_count}, ${featured_home ? 1 : 0}, ${order})
     RETURNING *
   `;
   res.status(201).json({ ...row, images: [] });
@@ -99,6 +109,29 @@ router.put('/:id', requireAdmin, asyncHandler(async (req, res) => {
 
 router.delete('/:id', requireAdmin, asyncHandler(async (req, res) => {
   await sql`DELETE FROM products WHERE id = ${req.params.id}`;
+  res.json({ ok: true });
+}));
+
+// Reorder a set of products within one category — takes the full ordered
+// list of IDs (as currently shown) and renumbers sort_order 0, 1, 2... to
+// match. This is deliberately a full renumber, not a swap of two values:
+// many products share sort_order 0 by default (never manually reordered
+// before), so swapping two equal values would silently do nothing. A full
+// renumber is correct regardless of what the starting values were.
+router.post('/reorder', requireAdmin, asyncHandler(async (req, res) => {
+  const { order } = req.body || {};
+  if (!Array.isArray(order) || order.length === 0) {
+    return res.status(400).json({ error: 'order must be a non-empty array of product IDs' });
+  }
+  const values = order.map((id, i) => [id, i]);
+  const valuesSql = values.map((_, i) => `($${i * 2 + 1}::int, $${i * 2 + 2}::int)`).join(', ');
+  const params = values.flat();
+  await sql.query(
+    `UPDATE products AS p SET sort_order = v.new_order
+     FROM (VALUES ${valuesSql}) AS v(id, new_order)
+     WHERE p.id = v.id`,
+    params
+  );
   res.json({ ok: true });
 }));
 

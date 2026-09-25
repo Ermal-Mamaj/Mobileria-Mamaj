@@ -375,6 +375,57 @@
   font-weight: 600;
 }
 
+.admin-panel__unsaved {
+  font-size: 12px;
+  color: #E65100;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.admin-panel__save-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.admin-save-btn {
+  padding: 9px 18px;
+  background: var(--navy);
+  color: var(--gold);
+  border: none;
+  border-radius: 8px;
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.admin-save-btn:disabled {
+  background: #D8D3C5;
+  color: var(--muted);
+  cursor: default;
+}
+
+.settings-group {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.settings-group__title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted-2);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  margin: 0;
+}
+
 .admin-field {
   display: flex;
   flex-direction: column;
@@ -493,11 +544,6 @@
 
 /* --- Contact inbox --- */
 
-/* Read messages recede so unread enquiries are what catches the eye. */
-.admin-subcard.is-read {
-  opacity: 0.62;
-}
-
 .admin-badge {
   display: inline-block;
   margin-left: 8px;
@@ -510,26 +556,73 @@
   vertical-align: middle;
 }
 
-.admin-msg__head {
+.msg-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.msg-card {
+  position: relative;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Read messages recede so unread enquiries are what catches the eye. */
+.msg-card.is-read {
+  opacity: 0.6;
+}
+
+.msg-card__dot {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #C94B3F;
+}
+
+.msg-card__head {
   display: flex;
   align-items: baseline;
   gap: 12px;
   flex-wrap: wrap;
+  padding-right: 16px;
 }
 
-.admin-msg__date {
+.msg-card__name {
+  font-size: 14px;
+  color: var(--text);
+}
+
+.msg-card__phone {
+  font-size: 12.5px;
+  color: var(--gold-deep);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.msg-card__date {
   margin-left: auto;
-  font-size: 12px;
-  color: #8b8f94;
+  font-size: 11.5px;
+  color: var(--muted);
 }
 
-.admin-msg__body {
+.msg-card__body {
   margin: 0;
   white-space: pre-wrap;
   line-height: 1.5;
+  font-size: 13px;
+  color: var(--muted-2);
 }
 
-.admin-msg__actions {
+.msg-card__actions {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
@@ -1555,4 +1648,141 @@ button {
   display: flex;
   flex-direction: column;
   gap: 4px;
+}
+
+/* ============================================================
+   CONFIRM MODAL
+   ============================================================ */
+
+.confirm-modal__backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(22, 34, 47, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+  animation: confirm-fade-in 0.12s ease;
+}
+
+@keyframes confirm-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.confirm-modal {
+  background: var(--white);
+  border-radius: 14px;
+  padding: 22px;
+  max-width: 380px;
+  width: 100%;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+  animation: confirm-rise-in 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes confirm-rise-in {
+  from { opacity: 0; transform: translateY(10px) scale(0.98); }
+  to { opacity: 1; transform: none; }
+}
+
+.confirm-modal__title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 8px;
+}
+
+.confirm-modal__message {
+  font-size: 13px;
+  color: var(--muted-2);
+  line-height: 1.5;
+  margin: 0 0 20px;
+}
+
+.confirm-modal__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.confirm-modal__confirm {
+  padding: 10px 16px;
+  background: var(--navy);
+  color: var(--gold);
+  border: none;
+  border-radius: 8px;
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* ============================================================
+   REORDER CONTROLS
+   ============================================================ */
+
+.prod-reorder,
+.col-reorder {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.prod-reorder__btn,
+.col-reorder__btn {
+  width: 22px;
+  height: 18px;
+  border: 1px solid var(--border);
+  background: var(--white);
+  color: var(--muted-2);
+  border-radius: 4px;
+  font-size: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.prod-reorder__btn:hover:not(:disabled),
+.col-reorder__btn:hover:not(:disabled) {
+  border-color: var(--gold-deep);
+  color: var(--gold-deep);
+}
+
+.prod-reorder__btn:disabled,
+.col-reorder__btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+/* ============================================================
+   BULK IMAGE UPLOAD
+   ============================================================ */
+
+.bulk-upload {
+  margin-top: 8px;
+}
+
+.bulk-upload__btn {
+  width: 100%;
+  padding: 10px;
+  background: var(--white);
+  border: 1.5px dashed var(--border);
+  border-radius: 8px;
+  color: var(--gold-deep);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.bulk-upload__btn:hover:not(:disabled) {
+  border-color: var(--gold-deep);
+  background: rgba(201, 162, 39, 0.04);
+}
+
+.bulk-upload__btn:disabled {
+  opacity: 0.6;
+  cursor: default;
 }

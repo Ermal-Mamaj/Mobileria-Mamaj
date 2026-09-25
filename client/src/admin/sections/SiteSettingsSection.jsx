@@ -1,38 +1,63 @@
 import { useEffect, useState } from 'react';
 import { api } from '../../lib/api.js';
+import { useUnsavedChanges } from '../UnsavedChangesContext.jsx';
 import ImageUploadField from '../ImageUploadField.jsx';
 
-const FIELDS = [
+const CONTACT_FIELDS = [
   ['phone', 'Telefoni'],
   ['whatsapp', 'WhatsApp'],
   ['email', 'Email'],
-  ['address', 'Adresa (Lokacioni 1) — koordinatat ose adresa; nuk shfaqet te vizitorët, përdoret vetëm për butonin e drejtimit'],
-  ['address_2', 'Adresa (Lokacioni 2 — lëreni bosh nëse keni vetëm një sallon)'],
-  ['facebook', 'Facebook'],
-  ['instagram', 'Instagram'],
   ['business_hours', 'Orari i Punës'],
 ];
+
+const SOCIAL_FIELDS = [
+  ['facebook', 'Facebook'],
+  ['instagram', 'Instagram'],
+];
+
+const LOCATION_FIELDS = [
+  ['address', 'Adresa (Lokacioni 1) — koordinatat ose adresa; nuk shfaqet te vizitorët, përdoret vetëm për butonin e drejtimit'],
+  ['address_2', 'Adresa (Lokacioni 2) — lëreni bosh nëse keni vetëm një sallon'],
+];
+
+function FieldGroup({ title, fields, form, onChange }) {
+  return (
+    <div className="settings-group">
+      <h3 className="settings-group__title">{title}</h3>
+      {fields.map(([key, label]) => (
+        <div className="admin-field" key={key}>
+          <label className="admin-field__label">{label}</label>
+          <input value={form[key] || ''} onChange={(e) => onChange(key, e.target.value)} />
+        </div>
+      ))}
+    </div>
+  );
+}
 
 export default function SiteSettingsSection() {
   const [form, setForm] = useState(null);
   const [saving, setSaving] = useState(false);
   const [savedAt, setSavedAt] = useState(null);
+  const { isDirty, setIsDirty } = useUnsavedChanges();
 
   useEffect(() => {
     api.get('/site-settings').then(setForm);
+    return () => setIsDirty(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function set(field, value) {
     setForm((f) => ({ ...f, [field]: value }));
+    setIsDirty(true);
   }
 
-  async function handleSave(e) {
-    e.preventDefault();
+  async function handleSave() {
     setSaving(true);
     try {
       const saved = await api.put('/site-settings', form);
       setForm(saved);
       setSavedAt(Date.now());
+      setIsDirty(false);
     } finally {
       setSaving(false);
     }
@@ -41,27 +66,38 @@ export default function SiteSettingsSection() {
   if (!form) return <p>Po ngarkohet...</p>;
 
   return (
-    <form className="admin-panel" onSubmit={handleSave}>
-      <h2 className="admin-panel__heading">Cilësimet e Faqes</h2>
-      <ImageUploadField label="Logoja" value={form.logo_url} onChange={(url) => set('logo_url', url)} />
-      <label className="admin-checkbox">
-        <input
-          type="checkbox"
-          checked={!!form.sale_section_enabled}
-          onChange={(e) => set('sale_section_enabled', e.target.checked)}
-        />
-        Aktivizo Seksionin "Në Zbritje" në Ballinë
-      </label>
-      {FIELDS.map(([key, label]) => (
-        <div className="admin-field" key={key}>
-          <label className="admin-field__label">{label}</label>
-          <input value={form[key] || ''} onChange={(e) => set(key, e.target.value)} />
+    <div className="admin-panel">
+      <div className="admin-panel__header-row">
+        <h2 className="admin-panel__heading">Cilësimet e Faqes</h2>
+        <div className="admin-panel__save-controls">
+          {savedAt && !isDirty && <span className="admin-panel__saved">U ruajt ✓</span>}
+          {isDirty && <span className="admin-panel__unsaved">Ndryshime të paruajtura</span>}
+          <button type="button" className="admin-save-btn" onClick={handleSave} disabled={saving || !isDirty}>
+            {saving ? 'Po ruhet...' : 'Ruaj Ndryshimet'}
+          </button>
         </div>
-      ))}
-      <div className="admin-panel__actions">
-        <button type="submit" disabled={saving}>{saving ? 'Po ruhen ndryshimet...' : 'Ruaj Ndryshimet'}</button>
-        {savedAt && <span className="admin-panel__saved">U ruajt me sukses</span>}
       </div>
-    </form>
+
+      <div className="settings-group">
+        <h3 className="settings-group__title">Identiteti</h3>
+        <ImageUploadField label="Logoja" value={form.logo_url} onChange={(url) => set('logo_url', url)} />
+      </div>
+
+      <FieldGroup title="Kontakti" fields={CONTACT_FIELDS} form={form} onChange={set} />
+      <FieldGroup title="Vendndodhjet" fields={LOCATION_FIELDS} form={form} onChange={set} />
+      <FieldGroup title="Rrjetet Sociale" fields={SOCIAL_FIELDS} form={form} onChange={set} />
+
+      <div className="settings-group">
+        <h3 className="settings-group__title">Ballina</h3>
+        <label className="admin-checkbox">
+          <input
+            type="checkbox"
+            checked={!!form.sale_section_enabled}
+            onChange={(e) => set('sale_section_enabled', e.target.checked)}
+          />
+          Aktivizo Seksionin "Në Zbritje" në Ballinë
+        </label>
+      </div>
+    </div>
   );
 }

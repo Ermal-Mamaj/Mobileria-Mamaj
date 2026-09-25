@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import { api } from '../../lib/api.js';
 import { formatPrice, isOnSale, discountPercent } from '../../lib/price.js';
+import { useConfirm } from '../useConfirm.jsx';
 import ImageUploadField from '../ImageUploadField.jsx';
+import BulkImageUploadField from '../BulkImageUploadField.jsx';
 
 const BADGES = ['', 'E RE', 'ME POROSI'];
 
-function ProductCard({ product: p, onUpdate, onDelete, onAddPhoto, onRemovePhoto, onStockChange }) {
+function ProductCard({ product: p, canReorder, isFirst, isLast, onUpdate, onDelete, onAddPhoto, onRemovePhoto, onStockChange, onMove }) {
   const [local, setLocal] = useState(p);
   const [adjusting, setAdjusting] = useState(false);
   const [qty, setQty] = useState(1);
@@ -51,6 +53,12 @@ function ProductCard({ product: p, onUpdate, onDelete, onAddPhoto, onRemovePhoto
   return (
     <div className="prod-card">
       <div className="prod-card__header">
+        {canReorder && (
+          <div className="prod-reorder">
+            <button type="button" className="prod-reorder__btn" disabled={isFirst} onClick={() => onMove(p.id, -1)} aria-label="Lëviz lart" title="Lëviz lart">▲</button>
+            <button type="button" className="prod-reorder__btn" disabled={isLast} onClick={() => onMove(p.id, 1)} aria-label="Lëviz poshtë" title="Lëviz poshtë">▼</button>
+          </div>
+        )}
         <div className="prod-card__thumb">
           {p.image_url
             ? <img src={p.image_url} alt="" />
@@ -126,7 +134,7 @@ function ProductCard({ product: p, onUpdate, onDelete, onAddPhoto, onRemovePhoto
                 ))}
               </div>
             )}
-            <ImageUploadField value="" onChange={(url) => onAddPhoto(p.id, url)} />
+            <BulkImageUploadField onUploaded={(url) => onAddPhoto(p.id, url)} />
           </div>
 
           <div className="admin-field">
@@ -175,7 +183,7 @@ function ProductCard({ product: p, onUpdate, onDelete, onAddPhoto, onRemovePhoto
           </div>
 
           <div className="prod-card__actions">
-            <button type="button" className="admin-btn-danger" onClick={() => onDelete(p.id)}>Fshi Produktin</button>
+            <button type="button" className="admin-btn-danger" onClick={() => onDelete(p.id, p.name)}>Fshi Produktin</button>
           </div>
         </div>
       </details>
@@ -187,6 +195,7 @@ export default function ProductsPanel({ category, showTopAddButton = false }) {
   const [products, setProducts] = useState(null);
   const [search, setSearch] = useState('');
   const [stockFilter, setStockFilter] = useState('all');
+  const { confirm, modal } = useConfirm();
 
   function reload() {
     api.get(`/products?category=${category.slug}`).then(setProducts);
@@ -196,6 +205,7 @@ export default function ProductsPanel({ category, showTopAddButton = false }) {
     reload();
     setSearch('');
     setStockFilter('all');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [category.slug]);
 
   async function addProduct() {
@@ -208,8 +218,14 @@ export default function ProductsPanel({ category, showTopAddButton = false }) {
     setProducts((ps) => ps.map((p) => (p.id === id ? updated : p)));
   }
 
-  async function removeProduct(id) {
-    if (!confirm('Jeni të sigurt? Ky veprim nuk mund të zhbëhet.')) return;
+  async function removeProduct(id, name) {
+    const ok = await confirm({
+      title: 'Fshi produktin?',
+      message: `Jeni të sigurt që doni të fshini "${name || 'këtë produkt'}"? Ky veprim nuk mund të zhbëhet.`,
+      confirmLabel: 'Fshi',
+      danger: true,
+    });
+    if (!ok) return;
     await api.del(`/products/${id}`);
     setProducts((ps) => ps.filter((p) => p.id !== id));
   }
@@ -232,6 +248,22 @@ export default function ProductsPanel({ category, showTopAddButton = false }) {
     setProducts((ps) => ps.map((p) => (p.id === id ? { ...p, stock_count: result.stock_count } : p)));
   }
 
+  // Moves one product by one position and persists the new order for the
+  // whole list in a single call — a two-value swap would silently do
+  // nothing whenever the two items already share the same sort_order,
+  // which is common since new products all default to 0.
+  async function moveProduct(id, direction) {
+    const index = products.findIndex((p) => p.id === id);
+    const newIndex = index + direction;
+    if (newIndex < 0 || newIndex >= products.length) return;
+
+    const reordered = [...products];
+    [reordered[index], reordered[newIndex]] = [reordered[newIndex], reordered[index]];
+    setProducts(reordered);
+
+    await api.post('/products/reorder', { order: reordered.map((p) => p.id) });
+  }
+
   if (!products) return <p>Po ngarkohen produktet...</p>;
 
   const STOCK_FILTERS = [
@@ -249,6 +281,12 @@ export default function ProductsPanel({ category, showTopAddButton = false }) {
     const matchesSearch = !q || p.name?.toLowerCase().includes(q) || p.material?.toLowerCase().includes(q);
     return matchesSearch && activeFilter.test(p);
   });
+
+  // Reordering only makes sense (and stays correct) against the full,
+  // unfiltered, naturally-sorted list — with a search or filter active the
+  // visible order no longer matches sort_order order, so hide the arrows
+  // rather than let them do something confusing.
+  const canReorder = !q && stockFilter === 'all';
 
   return (
     <div className="admin-products-panel">
@@ -292,21 +330,26 @@ export default function ProductsPanel({ category, showTopAddButton = false }) {
           {(q || stockFilter !== 'all') && (
             <p className="prod-filter-count">{filtered.length} nga {products.length} produkte</p>
           )}
-          {filtered.map((p) => (
+          {filtered.map((p, i) => (
             <ProductCard
               key={p.id}
               product={p}
+              canReorder={canReorder}
+              isFirst={i === 0}
+              isLast={i === filtered.length - 1}
               onUpdate={updateProduct}
               onDelete={removeProduct}
               onAddPhoto={addPhoto}
               onRemovePhoto={removePhoto}
               onStockChange={adjustStock}
+              onMove={moveProduct}
             />
           ))}
         </>
       )}
 
       <button type="button" className="prod-add-btn" onClick={addProduct}>+ Shto Produkt të Ri</button>
+      {modal}
     </div>
   );
 }
